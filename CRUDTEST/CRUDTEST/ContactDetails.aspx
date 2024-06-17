@@ -48,9 +48,9 @@
                             </HeaderTemplate>
 
                             <ItemTemplate>
-                                <div class="container phone-number-container d-flex justify-content-center align-items-center gap-2 fw-bold" style="max-width: 300px">
+                                <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-2 fw-bold" style="max-width: 300px">
                                     <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
-                                    <asp:Button ID="RemoveNumberBtn" CssClass="btn-no-styling remove-number-btn" runat="server" Text="-" />
+                                    <asp:Button ID="RemoveNumberBtn" CssClass="btn-no-styling remove-number-btn" runat="server" Text="-" OnCommand="RemoveNumberBtn_Command" />
                                 </div>
 
                                 <br />

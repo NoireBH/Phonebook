@@ -110,5 +110,29 @@ namespace CRUDTEST
         {
             Response.Redirect(String.Format("~/CRUD.aspx"));
         }
+
+        protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
+        {
+            RemoveNumberBtn.COmmandArgument = Request.QueryString["Some value here"];
+
+            try
+            {
+                OracleCommand cmd = new OracleCommand();
+
+                cmd.Parameters.AddWithValue("id", Convert.ToInt32(e.CommandArgument));
+                cmd.CommandText = "DELETE FROM CONTACTS WHERE id=:id";
+                cmd.Connection = con;
+                con.Open();
+                cmd.ExecuteNonQuery();
+                cmd.Connection.Close();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
     }
 }
