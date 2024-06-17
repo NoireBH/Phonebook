@@ -1,0 +1,15 @@
+﻿body {
+    
+}
+
+
+.required-field {
+    color: red ;
+    align-self: start;
+    font-weight: bold;   
+}
+
+.contact-img{
+    max-width: 500px;
+    max-height: 300px;
+}
