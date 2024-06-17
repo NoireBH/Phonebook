@@ -1,10 +1,39 @@
 ﻿body {
-    
 }
 
 
 .required-field {
-    color: red ;
+    color: red;
     align-self: start;
-    font-weight: bold;   
+    font-weight: bold;
+}
+
+.btn-no-styling {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    font-weight: bolder;
+    font-size: 50px;
+}
+
+.remove-number-btn {
+    color: red;
+}
+
+.add-number-btn {
+    color: green;
+}
+
+.phone-number-container {
+    border: 2px solid black;
+    background-color: deepskyblue;
+    max-width: 300px;
+}
+
+.contact-details-container {
+    border: 2px solid black;
+    max-width: 500px;
 }

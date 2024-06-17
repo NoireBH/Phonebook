@@ -50,7 +50,7 @@ namespace CRUDTEST
                                 contactImg.ImageUrl = "Images/blank-pfp.png";
                             }
 
-                            contactImg.Style.Add("max-width", "500px");
+                            contactImg.Style.Add("max-width", "450px");
                             contactImg.Style.Add("max-height", "300px");
                             lblContactName.Text = dr["first_name"].ToString() + " " + dr["last_name"].ToString();
                             lblContactAge.Text = "Age:" + " " + dr["age"].ToString();
@@ -104,6 +104,11 @@ namespace CRUDTEST
         protected void ContactDetailsDataSource_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
         {
 
+        }
+
+        protected void backToContactsBtn_Click(object sender, EventArgs e)
+        {
+            Response.Redirect(String.Format("~/CRUD.aspx"));
         }
     }
 }

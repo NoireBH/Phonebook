@@ -5,49 +5,67 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Contact Details</title>
+    <link href="Styles/style.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <form id="ContactDetails" runat="server">
-        <div class="container-fluid mt-5">
-            <div class="contact-img-container container-fluid text-center">
-                <asp:Image ID="contactImg" CssClass="contact-img" runat="server" />
-            </div>
-            <div class="d-flex flex-column align-content-center text-center">
-                <h1>
-                    <asp:Label ID="lblContactName" runat="server"></asp:Label>
-                </h1>
-                <p>
-                    <asp:Label ID="lblContactAge" runat="server"></asp:Label>
-                </p>
-                <p>
-                    <asp:Label ID="lblEmailAddress" runat="server"></asp:Label>
-                </p>
-                <div class="container-fluid phone-number-container">
-
-                    <asp:Repeater ID="PhoneRepeater" runat="server" DataSourceID="PhoneNumbers">
-                        <HeaderTemplate>
-                            Phone Numbers:
-                        </HeaderTemplate>
-
-                        <ItemTemplate>
-                            <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
-                        </ItemTemplate>
-
-                        <SeparatorTemplate>  </SeparatorTemplate>
-                    </asp:Repeater>
-
-                    <asp:SqlDataSource ID="PhoneNumbers" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>" SelectCommand="SELECT &quot;PHONE_NUMBER&quot; FROM &quot;PHONENUMBERS&quot; WHERE (&quot;CONTACT_ID&quot; = :CONTACT_ID)">
-                        <SelectParameters>
-                            <asp:QueryStringParameter DefaultValue="null" Name="CONTACT_ID" QueryStringField="id" Type="Decimal" />
-                        </SelectParameters>
-                    </asp:SqlDataSource>
-
+        <div class="container-fluid mt-5 contact-details-container">
+            <div class="row">
+                <div class="back-to-contacts container-fluid text-center mb-2">
+                    <asp:Button ID="backToContactsBtn" CssClass="btn btn-info w-100" Text="Back to contacts" runat="server" OnClick="backToContactsBtn_Click" />
                 </div>
+                <div class="contact-img-container container-fluid text-center">
+                    <asp:Image ID="contactImg" CssClass="contact-img" runat="server" />
+                </div>
+                <div class="d-flex flex-column align-content-center text-center">
+                    <div class="container-fluid contact-main-info">
+                        <h1>
+                            <asp:Label ID="lblContactName" runat="server"></asp:Label>
+                        </h1>
+                        <p>
+                            <asp:Label ID="lblContactAge" runat="server"></asp:Label>
+                        </p>
+                        <p>
+                            <asp:Label ID="lblEmailAddress" runat="server"></asp:Label>
+                        </p>
+                        <div>
+                            <%--<asp:Button ID="DeleteBtn" runat="server" Text="Delete" class="btn btn-danger fw-bold text-dark" OnCommand="DeleteBtn_Command"
+                CommandArgument='<%# DataBinder.Eval
+            (Container.DataItem, "id") %>' />
+            <asp:Button ID="UpdateBtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" runat="server" Text="Update"
+                class="btn btn-warning fw-bold text-dark" OnCommand="UpdateBtn_Command"
+                CommandArgument='<%# DataBinder.Eval
+            (Container.DataItem, "id") + "," + DataBinder.Eval(Container.DataItem, "firstName") + "," + 
+            DataBinder.Eval(Container.DataItem, "lastName") + "," + DataBinder.Eval(Container.DataItem, "phoneNumber")
+            + "," + DataBinder.Eval(Container.DataItem, "emailAddress") + "," + DataBinder.Eval(Container.DataItem, "age")%>' />--%>
+                        </div>
+                        <asp:Repeater ID="PhoneRepeater" runat="server" DataSourceID="PhoneNumbers">
+                            <HeaderTemplate>
+                                <h2 class="phone-number-h2">Phone Numbers:
+                                </h2>
+                                <asp:Button ID="AddNumberBtn" runat="server" CssClass="btn-no-styling add-number-btn" Text="+" />
+                            </HeaderTemplate>
 
+                            <ItemTemplate>
+                                <div class="container phone-number-container d-flex justify-content-center align-items-center gap-2 fw-bold" style="max-width: 300px">
+                                    <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
+                                    <asp:Button ID="RemoveNumberBtn" CssClass="btn-no-styling remove-number-btn" runat="server" Text="-" />
+                                </div>
 
+                                <br />
+                            </ItemTemplate>
+                        </asp:Repeater>
+                        <asp:SqlDataSource ID="PhoneNumbers" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>" SelectCommand="SELECT &quot;PHONE_NUMBER&quot; FROM &quot;PHONENUMBERS&quot; WHERE (&quot;CONTACT_ID&quot; = :CONTACT_ID)">
+                            <SelectParameters>
+                                <asp:QueryStringParameter DefaultValue="null" Name="CONTACT_ID" QueryStringField="id" Type="Decimal" />
+                            </SelectParameters>
+                        </asp:SqlDataSource>
 
+                    </div>
+                </div>
             </div>
+
         </div>
 
         <asp:Panel ID="Panel1" runat="server" Height="361px">
