@@ -42,6 +42,33 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Label lblContactAge;
 
         /// <summary>
+        /// lblEmailAddress control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEmailAddress;
+
+        /// <summary>
+        /// PhoneRepeater control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater PhoneRepeater;
+
+        /// <summary>
+        /// PhoneNumbers control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource PhoneNumbers;
+
+        /// <summary>
         /// Panel1 control.
         /// </summary>
         /// <remarks>

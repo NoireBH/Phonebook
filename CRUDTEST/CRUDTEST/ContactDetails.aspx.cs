@@ -33,6 +33,8 @@ namespace CRUDTEST
                     if (dr.HasRows)
                     {
 
+                        List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
+
                         while (dr.Read())
                         {
 
@@ -46,12 +48,32 @@ namespace CRUDTEST
                             else
                             {
                                 contactImg.ImageUrl = "Images/blank-pfp.png";
-                                contactImg.Style.Add("max-width", "500px");
-                                contactImg.Style.Add("max-height", "300px");
                             }
 
+                            contactImg.Style.Add("max-width", "500px");
+                            contactImg.Style.Add("max-height", "300px");
                             lblContactName.Text = dr["first_name"].ToString() + " " + dr["last_name"].ToString();
+                            lblContactAge.Text = "Age:" + " " + dr["age"].ToString();
+                            lblEmailAddress.Text = "Email:" + " " + dr["email_address"].ToString();
+
                         }
+
+                        con.Close();
+
+                        OracleCommand cmdGetPhoneNums = new OracleCommand();
+                        cmd.Parameters.AddWithValue("id", id);
+                        cmd.CommandText = "select id,  phone_number from PHONENUMBERS WHERE CONTACT_ID =:id ";
+                        cmd.Connection = con;
+                        con.Open();
+                        OracleDataReader dr2 = cmd.ExecuteReader();
+
+                        while (dr2.Read())
+                        {
+                            phoneNumbers.Add(new PhoneNumber(dr2["phone_number"].ToString()));
+                        }
+
+                       // PhoneRepeater.DataSource = phoneNumbers.OrderBy(x => x.Id);
+                        //PhoneRepeater.DataBind();
 
                     }
                     else

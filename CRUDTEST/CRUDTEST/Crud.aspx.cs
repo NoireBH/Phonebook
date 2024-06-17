@@ -75,10 +75,13 @@ namespace CRUDTEST
             string emailAddress = txtEmailAddress.Text;
             int age = default;
             byte[] profilePicture = null;
+            bool fileUploaded = ImageUpload.HasFile;
+            var dbNull = DBNull.Value;
 
-            if (ImageUpload.HasFile)
+            if (fileUploaded)
             {
                 profilePicture = ImageUpload.FileBytes;
+
 
             }
 
@@ -110,7 +113,17 @@ namespace CRUDTEST
                         command.Parameters.AddWithValue("phone_number", phoneNumber);
                         command.Parameters.AddWithValue("email_address", emailAddress);
                         command.Parameters.AddWithValue("age", age);
-                        command.Parameters.AddWithValue("profile_picture", profilePicture);
+
+                        if (fileUploaded)
+                        {
+                            command.Parameters.AddWithValue("profile_picture", profilePicture);
+                        }
+                        else
+                        {
+                            command.Parameters.AddWithValue("profile_picture", dbNull);
+                        }
+
+
                         command.Connection.Open();
                         command.ExecuteNonQuery();
                         command.Connection.Close();
@@ -152,6 +165,16 @@ namespace CRUDTEST
                         command.Parameters.AddWithValue("phone_number", phoneNumber);
                         command.Parameters.AddWithValue("email_address", emailAddress);
                         command.Parameters.AddWithValue("age", age);
+
+                        if (fileUploaded)
+                        {
+                            command.Parameters.AddWithValue("profile_picture", profilePicture);
+                        }
+                        else
+                        {
+                            command.Parameters.AddWithValue("profile_picture", dbNull);
+                        }
+
                         command.Connection.Open();
                         command.ExecuteNonQuery();
                         command.Connection.Close();
