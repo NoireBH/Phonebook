@@ -50,13 +50,13 @@
                             <ItemTemplate>
                                 <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-2 fw-bold" style="max-width: 300px">
                                     <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
-                                    <asp:Button ID="RemoveNumberBtn" CssClass="btn-no-styling remove-number-btn" runat="server" Text="-" OnCommand="RemoveNumberBtn_Command" />
+                                    <asp:Button ID="RemoveNumberBtn" CssClass="btn-no-styling remove-number-btn" runat="server" Text="-" 
+                                        OnCommand="RemoveNumberBtn_Command" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>' />
                                 </div>
-
                                 <br />
                             </ItemTemplate>
                         </asp:Repeater>
-                        <asp:SqlDataSource ID="PhoneNumbers" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>" SelectCommand="SELECT &quot;PHONE_NUMBER&quot; FROM &quot;PHONENUMBERS&quot; WHERE (&quot;CONTACT_ID&quot; = :CONTACT_ID)">
+                        <asp:SqlDataSource ID="PhoneNumbers" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT &quot;PHONE_NUMBER&quot;, &quot;ID&quot; FROM &quot;PHONENUMBERS&quot; WHERE (&quot;CONTACT_ID&quot; = :CONTACT_ID) ORDER BY &quot;ID&quot;">
                             <SelectParameters>
                                 <asp:QueryStringParameter DefaultValue="null" Name="CONTACT_ID" QueryStringField="id" Type="Decimal" />
                             </SelectParameters>

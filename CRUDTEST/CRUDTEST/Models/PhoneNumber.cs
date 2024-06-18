@@ -7,9 +7,10 @@ namespace CRUDTEST.Models
 {
     public class PhoneNumber
     {
-        public PhoneNumber(string phoneNumber)
+        public PhoneNumber(int id, string phoneNumber)
         {
             this.Number = phoneNumber;
+            this.Id = id;
         }
 
         public int Id { get; set; }

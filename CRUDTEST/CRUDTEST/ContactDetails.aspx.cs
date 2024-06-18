@@ -33,7 +33,7 @@ namespace CRUDTEST
                     if (dr.HasRows)
                     {
 
-                        List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
+                        //List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
 
                         while (dr.Read())
                         {
@@ -60,19 +60,19 @@ namespace CRUDTEST
 
                         con.Close();
 
-                        OracleCommand cmdGetPhoneNums = new OracleCommand();
-                        cmd.Parameters.AddWithValue("id", id);
-                        cmd.CommandText = "select id,  phone_number from PHONENUMBERS WHERE CONTACT_ID =:id ";
-                        cmd.Connection = con;
-                        con.Open();
-                        OracleDataReader dr2 = cmd.ExecuteReader();
+                        //OracleCommand cmdGetPhoneNums = new OracleCommand();
+                        //cmd.Parameters.AddWithValue("id", id);
+                        //cmd.CommandText = "select id,  phone_number from PHONENUMBERS WHERE CONTACT_ID =:id ";
+                        //cmd.Connection = con;
+                        //con.Open();
+                        //OracleDataReader dr2 = cmd.ExecuteReader();
 
-                        while (dr2.Read())
-                        {
-                            phoneNumbers.Add(new PhoneNumber(dr2["phone_number"].ToString()));
-                        }
+                        //while (dr2.Read())
+                        //{
+                        //    phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
+                        //}
 
-                       // PhoneRepeater.DataSource = phoneNumbers.OrderBy(x => x.Id);
+                        //PhoneRepeater.DataSource = phoneNumbers.OrderBy(x => x.Id);
                         //PhoneRepeater.DataBind();
 
                     }
@@ -113,14 +113,13 @@ namespace CRUDTEST
 
         protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
         {
-            RemoveNumberBtn.COmmandArgument = Request.QueryString["Some value here"];
 
             try
             {
                 OracleCommand cmd = new OracleCommand();
 
                 cmd.Parameters.AddWithValue("id", Convert.ToInt32(e.CommandArgument));
-                cmd.CommandText = "DELETE FROM CONTACTS WHERE id=:id";
+                cmd.CommandText = "DELETE FROM PHONENUMBERS WHERE id=:id";
                 cmd.Connection = con;
                 con.Open();
                 cmd.ExecuteNonQuery();

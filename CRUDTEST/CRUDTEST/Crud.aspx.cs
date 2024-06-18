@@ -274,7 +274,6 @@ namespace CRUDTEST
             }
             catch (Exception)
             {
-
                 throw;
             }
 
