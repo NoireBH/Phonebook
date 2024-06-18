@@ -151,6 +151,8 @@ namespace CRUDTEST
             ContactDetailsDataSource.DataBind();
             PhoneRepeater.DataBind();
 
+            ContactInfoUpdatePanel.Update();
+
         }
 
         protected void submitBtn_Click(object sender, EventArgs e)
@@ -269,7 +271,7 @@ namespace CRUDTEST
                 emailAddress = txtFormEmailAddress.Text;
             }
 
-            if (contactImg.ImageUrl != CommonConstants.DefaultContactImageUrl)
+            if (contactImg.ImageUrl != CommonConstants.DefaultContactImageUrl || hasImageUploadedInForm)
             {
                 profilePicture = ImageUpload.FileBytes;
 
@@ -318,6 +320,8 @@ namespace CRUDTEST
             }
 
             EmptySubmitForm();
+
+            LoadContactDetails();
         }
 
         private bool IsDefaultProfilePicture()
