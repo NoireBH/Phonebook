@@ -29,7 +29,48 @@
                         <p>
                             <asp:Label ID="lblEmailAddress" runat="server"></asp:Label>
                         </p>
-                        <div>
+                        <div class="container-fluid mb-2">
+                            <div class="row  d-flex flex-column align-items-center">
+                                <div>
+                                    <h2 class="phone-number-h2">Phone Numbers:
+                                    </h2>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                        Add a contact</button>
+                                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <div class="text-center form-container container-fluid">
+                                                        <asp:ScriptManager ID="FormScriptManager" runat="server">
+                                                        </asp:ScriptManager>
+                                                        <asp:UpdatePanel ID="FormUpdatePanel" runat="server" UpdateMode="Conditional">
+                                                            <ContentTemplate>
+                                                                <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
+                                                                    <div class="form-group d-flex flex-column">
+                                                                        <asp:Label ID="lblPhoneNumber" CssClass="fw-bold" runat="server" Text="Phone number:"></asp:Label>
+                                                                        <p class="required-field">Field is required*</p>
+                                                                        <asp:TextBox ID="txtPhoneNumber" runat="server" CssClass="form-control"></asp:TextBox>
+                                                                        <asp:RequiredFieldValidator ControlToValidate="txtPhoneNumber" runat="server" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="d-flex justify-content-center gap-2">
+                                                                    <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="submitBtn_Click" data-bs-dismiss="modal" />
+                                                                    <asp:Button runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="Unnamed_Click" Text="Cancel" data-bs-dismiss="modal"></asp:Button>
+                                                                </div>
+                                                            </ContentTemplate>
+                                                            <Triggers>
+                                                                <asp:PostBackTrigger ControlID="submitBtn" />
+                                                            </Triggers>
+                                                        </asp:UpdatePanel>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <%--<asp:Button ID="DeleteBtn" runat="server" Text="Delete" class="btn btn-danger fw-bold text-dark" OnCommand="DeleteBtn_Command"
                 CommandArgument='<%# DataBinder.Eval
             (Container.DataItem, "id") %>' />
@@ -40,22 +81,21 @@
             DataBinder.Eval(Container.DataItem, "lastName") + "," + DataBinder.Eval(Container.DataItem, "phoneNumber")
             + "," + DataBinder.Eval(Container.DataItem, "emailAddress") + "," + DataBinder.Eval(Container.DataItem, "age")%>' />--%>
                         </div>
-                        <asp:Repeater ID="PhoneRepeater" runat="server" DataSourceID="PhoneNumbers">
-                            <HeaderTemplate>
-                                <h2 class="phone-number-h2">Phone Numbers:
-                                </h2>
-                                <asp:Button ID="AddNumberBtn" runat="server" CssClass="btn-no-styling add-number-btn" Text="+" />
-                            </HeaderTemplate>
+                        <asp:UpdatePanel ID="PhoneNumbersUpdatePanel" runat="server">
+                            <ContentTemplate>
+                                <asp:Repeater ID="PhoneRepeater" runat="server" DataSourceID="PhoneNumbers">
+                                    <ItemTemplate>
+                                        <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-2 fw-bold" style="max-width: 300px">
+                                            <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
+                                            <asp:Button ID="RemoveNumberBtn" CssClass="btn-no-styling remove-number-btn" runat="server" Text="-"
+                                                OnCommand="RemoveNumberBtn_Command" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>' />
+                                        </div>
+                                        <br />
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
 
-                            <ItemTemplate>
-                                <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-2 fw-bold" style="max-width: 300px">
-                                    <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
-                                    <asp:Button ID="RemoveNumberBtn" CssClass="btn-no-styling remove-number-btn" runat="server" Text="-" 
-                                        OnCommand="RemoveNumberBtn_Command" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>' />
-                                </div>
-                                <br />
-                            </ItemTemplate>
-                        </asp:Repeater>
                         <asp:SqlDataSource ID="PhoneNumbers" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT &quot;PHONE_NUMBER&quot;, &quot;ID&quot; FROM &quot;PHONENUMBERS&quot; WHERE (&quot;CONTACT_ID&quot; = :CONTACT_ID) ORDER BY &quot;ID&quot;">
                             <SelectParameters>
                                 <asp:QueryStringParameter DefaultValue="null" Name="CONTACT_ID" QueryStringField="id" Type="Decimal" />
@@ -68,7 +108,7 @@
 
         </div>
 
-        <asp:Panel ID="Panel1" runat="server" Height="361px">
+        <asp:Panel ID="PhoneNumberPanel" runat="server" Height="361px">
             <asp:SqlDataSource ID="ContactDetailsDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>" SelectCommand="SELECT &quot;FIRST_NAME&quot;, &quot;LAST_NAME&quot;, &quot;PROFILE_PICTURE&quot; FROM &quot;CONTACTS&quot; WHERE (&quot;ID&quot; = :ID)" OnSelecting="ContactDetailsDataSource_Selecting">
                 <SelectParameters>
                     <asp:QueryStringParameter DefaultValue="null" Name="ID" QueryStringField="id" Type="Decimal" />
