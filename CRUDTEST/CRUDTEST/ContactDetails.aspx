@@ -20,15 +20,74 @@
                 </div>
                 <div class="d-flex flex-column align-content-center text-center">
                     <div class="container-fluid contact-main-info">
-                        <h1>
-                            <asp:Label ID="lblContactName" runat="server"></asp:Label>
-                        </h1>
-                        <p>
-                            <asp:Label ID="lblContactAge" runat="server"></asp:Label>
-                        </p>
-                        <p>
-                            <asp:Label ID="lblEmailAddress" runat="server"></asp:Label>
-                        </p>
+                        <asp:ScriptManager ID="ScriptManager" runat="server">
+                        </asp:ScriptManager>
+                        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                            <ContentTemplate>
+                                <h1>
+                                    <asp:Label ID="lblContactName" runat="server"></asp:Label>
+                                </h1>
+                                <p>
+                                    <span>Age: </span>
+                                    <asp:Label ID="lblContactAge" runat="server"></asp:Label>
+                                </p>
+                                <p>
+                                    <span>Email: </span>
+                                    <asp:Label ID="lblEmailAddress" runat="server"></asp:Label>
+                                </p>
+                                <div class="contact-info-btn-container">
+                                    <asp:Button ID="UpdateBtn" data-bs-toggle="modal" data-bs-target="#updateModal" runat="server" Text="Update"
+                                        class="btn btn-warning fw-bold text-dark" OnClick="UpdateBtn_Click" />
+                                    <asp:Button ID="DeleteBtn" runat="server" Text="Delete" class="btn btn-danger fw-bold text-dark" OnClick="DeleteBtn_Click" />
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+
+                        <div class="modal fade" id="updateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="text-center form-container container-fluid">
+                                            <asp:UpdatePanel ID="ContactInfoUpdatePanel" runat="server" UpdateMode="Conditional">
+                                                <ContentTemplate>
+                                                    <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
+                                                        <div class="form-group d-flex flex-column">
+                                                            <asp:Label ID="lblFirstName" CssClass="fw-bold" runat="server" Text="First Name:"></asp:Label>
+                                                            <p class="required-field">Field is required*</p>
+                                                            <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control"></asp:TextBox>
+                                                        </div>
+                                                        <div class="form-group d-flex flex-column">
+                                                            <asp:Label ID="lblLastName" CssClass="fw-bold" runat="server" Text="Last Name:"></asp:Label>
+                                                            <p class="required-field">Field is required*</p>
+                                                            <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control"></asp:TextBox>
+                                                        </div>
+                                                        <div class="form-group d-flex flex-column">
+                                                            <asp:Label ID="lblFormAge" CssClass="fw-bold" runat="server" Text="Age:"></asp:Label>
+                                                            <asp:TextBox ID="txtAge" runat="server" CssClass="form-control"></asp:TextBox>
+                                                        </div>
+                                                        <div class="form-group d-flex flex-column">
+                                                            <asp:Label ID="lblFormEmailAddress" CssClass="fw-bold" runat="server" Text="Email Address:"></asp:Label>
+                                                            <asp:TextBox ID="txtFormEmailAddress" runat="server" CssClass="form-control"></asp:TextBox>
+                                                        </div>
+                                                        <div class="form-group d-flex flex-column">
+                                                            <asp:Label ID="lblProfilePicture" runat="server" CssClass="fw-bold mb-3" Text="Profile Picture:"></asp:Label>
+                                                            <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex justify-content-center gap-2">
+                                                        <asp:Button ID="SubmitContactInfo" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="SubmitContactInfo_Click" data-bs-dismiss="modal" />
+                                                        <asp:Button ID="CancelUpdateBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelBtn_Click" Text="Cancel" data-bs-dismiss="modal"></asp:Button>
+                                                    </div>
+                                                </ContentTemplate>
+                                                <Triggers>
+                                                    <asp:PostBackTrigger ControlID="SubmitContactInfo" />
+                                                </Triggers>
+                                            </asp:UpdatePanel>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="container-fluid mb-2">
                             <div class="row  d-flex flex-column align-items-center">
                                 <div>
@@ -37,15 +96,13 @@
                                 </div>
                                 <div>
                                     <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                        Add a contact</button>
+                                        Add a number</button>
                                     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-body">
                                                     <div class="text-center form-container container-fluid">
-                                                        <asp:ScriptManager ID="FormScriptManager" runat="server">
-                                                        </asp:ScriptManager>
-                                                        <asp:UpdatePanel ID="FormUpdatePanel" runat="server" UpdateMode="Conditional">
+                                                        <asp:UpdatePanel ID="PhoneFormUpdatePanel" runat="server" UpdateMode="Conditional">
                                                             <ContentTemplate>
                                                                 <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
                                                                     <div class="form-group d-flex flex-column">
@@ -57,7 +114,7 @@
                                                                 </div>
                                                                 <div class="d-flex justify-content-center gap-2">
                                                                     <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="submitBtn_Click" data-bs-dismiss="modal" />
-                                                                    <asp:Button runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="Unnamed_Click" Text="Cancel" data-bs-dismiss="modal"></asp:Button>
+                                                                    <asp:Button ID="CancelBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelBtn_Click" Text="Cancel" data-bs-dismiss="modal"></asp:Button>
                                                                 </div>
                                                             </ContentTemplate>
                                                             <Triggers>
@@ -71,15 +128,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <%--<asp:Button ID="DeleteBtn" runat="server" Text="Delete" class="btn btn-danger fw-bold text-dark" OnCommand="DeleteBtn_Command"
-                CommandArgument='<%# DataBinder.Eval
-            (Container.DataItem, "id") %>' />
-            <asp:Button ID="UpdateBtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" runat="server" Text="Update"
-                class="btn btn-warning fw-bold text-dark" OnCommand="UpdateBtn_Command"
-                CommandArgument='<%# DataBinder.Eval
-            (Container.DataItem, "id") + "," + DataBinder.Eval(Container.DataItem, "firstName") + "," + 
-            DataBinder.Eval(Container.DataItem, "lastName") + "," + DataBinder.Eval(Container.DataItem, "phoneNumber")
-            + "," + DataBinder.Eval(Container.DataItem, "emailAddress") + "," + DataBinder.Eval(Container.DataItem, "age")%>' />--%>
                         </div>
                         <asp:UpdatePanel ID="PhoneNumbersUpdatePanel" runat="server">
                             <ContentTemplate>

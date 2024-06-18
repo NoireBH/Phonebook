@@ -190,6 +190,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Common\CommonConstants.cs" />
     <Compile Include="Common\ValidationConstants.cs" />
     <Compile Include="ContactDetails.aspx.cs">
       <DependentUpon>ContactDetails.aspx</DependentUpon>

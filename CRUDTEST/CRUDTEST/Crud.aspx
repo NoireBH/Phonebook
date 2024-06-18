@@ -76,21 +76,16 @@
                                                             ValidationExpression="\d+">
                                                         </asp:RegularExpressionValidator>
                                                     </div>
-
                                                     <%--<asp:Button ID="UploadImgBtn" runat="server" Text="Upload Image" OnClick="UploadImgBtn_Click" />--%>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblProfilePicture" runat="server" CssClass="fw-bold mb-3" Text="Profile Picture:"></asp:Label>
                                                         <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server" />
-
                                                     </div>
-
-
                                                 </div>
                                                 <div class="d-flex justify-content-center gap-2">
                                                     <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="Submit_Click" data-bs-dismiss="modal" />
                                                     <asp:Button runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelUpdBtn_Click" Text="Cancel" data-bs-dismiss="modal"></asp:Button>
                                                 </div>
-
                                                 <asp:HiddenField ID="BtnHiddenFIeld" Value="1" runat="server" OnValueChanged="BtnHiddenFIeld_ValueChanged" />
                                                 <asp:HiddenField ID="HiddenIdField" runat="server" OnValueChanged="HiddenIdField_ValueChanged" />
                                                 <asp:HiddenField ID="HiddenEmailAddressField" runat="server" OnValueChanged="HiddenEmailAddressField_ValueChanged" />
@@ -98,9 +93,7 @@
                                                 <asp:HiddenField ID="HiddenPictureField" runat="server" OnValueChanged="HiddenPictureField_ValueChanged" />
                                             </ContentTemplate>
                                             <Triggers>
-
                                                 <asp:PostBackTrigger ControlID="submitBtn" />
-
                                             </Triggers>
                                         </asp:UpdatePanel>
                                     </div>
@@ -121,7 +114,7 @@
 
                 <div class="d-flex justify-content-center mb-3">
 
-                    <asp:UpdatePanel ID="RepeaterUpdatePanel" runat="server">
+                    <asp:UpdatePanel ID="RepeaterUpdatePanel" runat="server" UpdateMode="Conditional">
                         <ContentTemplate>
                             <asp:Repeater ID="Repeater" runat="server" OnItemCommand="Repeater_ItemCommand">
                                 <HeaderTemplate>

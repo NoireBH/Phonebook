@@ -69,16 +69,16 @@ namespace CRUDTEST
 
         protected void Submit_Click(object sender, EventArgs e)
         {
-            string firstName = txtFirstName.Text;
-            string lastName = txtLastName.Text;
-            string phoneNumber = txtPhoneNumber.Text;
-            string emailAddress = txtEmailAddress.Text;
+            string firstName = txtFirstName.Text.Trim();
+            string lastName = txtLastName.Text.Trim();
+            string phoneNumber = txtPhoneNumber.Text.Trim();
+            string emailAddress = txtEmailAddress.Text.Trim();
             int age = default;
             byte[] profilePicture = null;
-            bool fileUploaded = ImageUpload.HasFile;
+            bool hasImage = ImageUpload.HasFile;
             var dbNull = DBNull.Value;
 
-            if (fileUploaded)
+            if (hasImage)
             {
                 profilePicture = ImageUpload.FileBytes;
 
@@ -87,7 +87,7 @@ namespace CRUDTEST
 
             if (!string.IsNullOrWhiteSpace(txtAge.Text))
             {
-                age = Convert.ToInt32(txtAge.Text);
+                age = Convert.ToInt32(txtAge.Text.Trim());
             }
 
 
@@ -114,7 +114,7 @@ namespace CRUDTEST
                         command.Parameters.AddWithValue("email_address", emailAddress);
                         command.Parameters.AddWithValue("age", age);
 
-                        if (fileUploaded)
+                        if (hasImage)
                         {
                             command.Parameters.AddWithValue("profile_picture", profilePicture);
                         }
@@ -141,7 +141,7 @@ namespace CRUDTEST
 
             }
 
-            else
+            else if(BtnHiddenFIeld.Value == "0")
             {
 
                 if (ImageUpload.HasFile)
@@ -166,7 +166,7 @@ namespace CRUDTEST
                         command.Parameters.AddWithValue("email_address", emailAddress);
                         command.Parameters.AddWithValue("age", age);
 
-                        if (fileUploaded)
+                        if (hasImage)
                         {
                             command.Parameters.AddWithValue("profile_picture", profilePicture);
                         }
@@ -190,7 +190,7 @@ namespace CRUDTEST
             }
 
 
-
+            RepeaterUpdatePanel.Update();
             ShowBtn_Click(sender, e);
         }
 
@@ -241,7 +241,7 @@ namespace CRUDTEST
             catch (Exception)
             {
                 throw;
-            }
+            }           
 
         }
 
@@ -333,17 +333,6 @@ namespace CRUDTEST
             submitBtn.Text = "Submit";
             submitBtn.BackColor = ColorTranslator.FromHtml("#198754");
             submitBtn.ForeColor = Color.White;
-        }
-
-        private byte[] ConvertImageToByteArray(string filePath)
-        {
-            byte[] data = null;
-            FileInfo fInfo = new FileInfo(filePath);
-            long numBytes = fInfo.Length;
-            FileStream fStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            BinaryReader br = new BinaryReader(fStream);
-            data = br.ReadBytes((int)numBytes);
-            return data;
         }
 
         protected void UploadImgBtn_Click(object sender, EventArgs e)
