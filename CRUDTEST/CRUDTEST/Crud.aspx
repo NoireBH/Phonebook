@@ -116,7 +116,7 @@
 
                     <asp:UpdatePanel ID="RepeaterUpdatePanel" runat="server" UpdateMode="Conditional">
                         <ContentTemplate>
-                            <asp:Repeater ID="Repeater" runat="server" OnItemCommand="Repeater_ItemCommand">
+                            <asp:Repeater ID="Repeater" runat="server" OnItemCommand="Repeater_ItemCommand" >
                                 <HeaderTemplate>
                                     <table border="1" style="max-width: 500px;">
                                         <tr>

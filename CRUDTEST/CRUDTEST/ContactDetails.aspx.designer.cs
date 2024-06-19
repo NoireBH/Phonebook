@@ -42,13 +42,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.ScriptManager ScriptManager;
 
         /// <summary>
-        /// UpdatePanel1 control.
+        /// ContactMainInfoUpdatePanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+        protected global::System.Web.UI.UpdatePanel ContactMainInfoUpdatePanel;
 
         /// <summary>
         /// lblContactName control.
@@ -96,13 +96,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Button DeleteBtn;
 
         /// <summary>
-        /// ContactInfoUpdatePanel control.
+        /// FormUpdatePanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel ContactInfoUpdatePanel;
+        protected global::System.Web.UI.UpdatePanel FormUpdatePanel;
 
         /// <summary>
         /// lblFirstName control.

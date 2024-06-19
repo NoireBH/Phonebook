@@ -190,7 +190,6 @@ namespace CRUDTEST
             }
 
 
-            RepeaterUpdatePanel.Update();
             ShowBtn_Click(sender, e);
         }
 
@@ -241,7 +240,9 @@ namespace CRUDTEST
             catch (Exception)
             {
                 throw;
-            }           
+            }
+
+            FormUpdatePanel.Update();
 
         }
 

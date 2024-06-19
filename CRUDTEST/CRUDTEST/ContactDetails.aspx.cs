@@ -151,7 +151,7 @@ namespace CRUDTEST
             ContactDetailsDataSource.DataBind();
             PhoneRepeater.DataBind();
 
-            ContactInfoUpdatePanel.Update();
+            //FormUpdatePanel.Update();
 
         }
 
@@ -245,7 +245,7 @@ namespace CRUDTEST
             txtAge.Text = age;
             txtFormEmailAddress.Text = emailAddress;
 
-            ContactInfoUpdatePanel.Update();
+            FormUpdatePanel.Update();
 
         }
 
@@ -255,7 +255,7 @@ namespace CRUDTEST
             string firstName = txtFirstName.Text;
             string lastName = txtLastName.Text;
             int age = default;
-            string emailAddress = null;
+            string emailAddress = string.Empty;
             byte[] profilePicture = null;
             bool isDefaultProfilePicture = IsDefaultProfilePicture();
             bool hasImageUploadedInForm = ImageUpload.HasFile;
@@ -271,7 +271,7 @@ namespace CRUDTEST
                 emailAddress = txtFormEmailAddress.Text;
             }
 
-            if (contactImg.ImageUrl != CommonConstants.DefaultContactImageUrl || hasImageUploadedInForm)
+            if (contactImg.ImageUrl != CommonConstants.DefaultContactImageUrl && hasImageUploadedInForm)
             {
                 profilePicture = ImageUpload.FileBytes;
 
@@ -300,6 +300,7 @@ namespace CRUDTEST
                         {
                             cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
                                 "EMAIL_ADDRESS =:email_address WHERE ID =:id";
+                            command.CommandText = cmdText;
                         }
                         else
                         {

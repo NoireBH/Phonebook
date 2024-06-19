@@ -22,7 +22,7 @@
                     <div class="container-fluid contact-main-info">
                         <asp:ScriptManager ID="ScriptManager" runat="server">
                         </asp:ScriptManager>
-                        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                        <asp:UpdatePanel ID="ContactMainInfoUpdatePanel" runat="server">
                             <ContentTemplate>
                                 <h1>
                                     <asp:Label ID="lblContactName" runat="server"></asp:Label>
@@ -48,7 +48,7 @@
                                 <div class="modal-content">
                                     <div class="modal-body">
                                         <div class="text-center form-container container-fluid">
-                                            <asp:UpdatePanel ID="ContactInfoUpdatePanel" runat="server" UpdateMode="Conditional">
+                                            <asp:UpdatePanel ID="FormUpdatePanel" runat="server" UpdateMode="Conditional">
                                                 <ContentTemplate>
                                                     <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
                                                         <div class="form-group d-flex flex-column">
