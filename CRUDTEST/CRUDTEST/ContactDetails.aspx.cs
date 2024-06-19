@@ -114,6 +114,7 @@ namespace CRUDTEST
                             lblEmailAddress.Text = dr["email_address"].ToString();
                         }
 
+                        lblMainPhoneNumber.Text = dr["main_phone_number"].ToString();
 
 
                     }
@@ -163,25 +164,56 @@ namespace CRUDTEST
                 "(phone_number, contact_id)" +
                 " VALUES (:phone_number, :contact_id)";
 
-            try
+
+
+            if (BtnHiddenFIeld.Value == "1")
             {
-                int contact_id = Convert.ToInt32(Request.QueryString["id"]);
+                try
+                {
+                    int contact_id = Convert.ToInt32(Request.QueryString["id"]);
 
-                OracleCommand cmd = new OracleCommand();
+                    OracleCommand cmd = new OracleCommand();
 
-                cmd.Parameters.AddWithValue("contact_id", contact_id);
-                cmd.Parameters.AddWithValue("phone_number", phoneNumber);
-                cmd.CommandText = cmdText;
-                cmd.Connection = con;
-                con.Open();
-                cmd.ExecuteNonQuery();
-                cmd.Connection.Close();
+                    cmd.Parameters.AddWithValue("contact_id", contact_id);
+                    cmd.Parameters.AddWithValue("phone_number", phoneNumber);
+                    cmd.CommandText = cmdText;
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    cmd.Connection.Close();
 
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
-            catch (Exception)
+            else if (BtnHiddenFIeld.Value == "0")
             {
-                throw;
+                cmdText = "UPDATE PHONENUMBERS SET PHONE_NUMBER =:phone_number WHERE ID =:id";
+
+                try
+                {
+                    int id = 1000;
+
+                    OracleCommand cmd = new OracleCommand();
+
+                    cmd.Parameters.AddWithValue("contact_id", id);
+                    cmd.Parameters.AddWithValue("phone_number", phoneNumber);
+                    cmd.CommandText = cmdText;
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    cmd.Connection.Close();
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
+
+            
 
             txtPhoneNumber.Text = string.Empty;
             LoadContactDetails();
@@ -334,5 +366,25 @@ namespace CRUDTEST
 
             return false;
         }
+
+        protected void UpdatePhoneNumberBtn_Command(object sender, CommandEventArgs e)
+        {
+            string[] cmdArg = e.CommandArgument.ToString().Split(new char[] { ',' });
+            int id = Convert.ToInt32(cmdArg[0]);
+            string phoneNumber = cmdArg[1];
+
+
+            BtnHiddenFIeld.Value = "0";
+            txtPhoneNumber.Text = phoneNumber;
+
+
+
+        }
+
+        protected void BtnHiddenFIeld_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+        
     }
 }

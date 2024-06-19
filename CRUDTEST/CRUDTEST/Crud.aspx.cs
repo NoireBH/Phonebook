@@ -377,5 +377,27 @@ namespace CRUDTEST
         {
 
         }
+
+        protected void UpdateBtn_Command1(object sender, CommandEventArgs e)
+        {
+
+        }
+
+        protected void TextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void SearchContactBtn_Command(object sender, CommandEventArgs e)
+        {
+
+        }
+
+        protected void SearchContactBtn_Click(object sender, EventArgs e)
+        {
+            string searchInput = txtSearchContact.Text;
+
+
+        }
     }
 }

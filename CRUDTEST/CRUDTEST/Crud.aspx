@@ -7,6 +7,7 @@
 <head runat="server">
     <link href="Styles/style.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Crud Operations</title>
     <style type="text/css">
         .auto-style1 {
@@ -24,8 +25,23 @@
     <form id="form1" runat="server">
         <div class="container-fluid">
             <div class="container-fluid" style="max-width: 800px; border: 1px solid black; background-color: white">
-                <h1 class="text-center">PhoneBook
-                </h1>
+                <header class="d-flex justify-content-center align-items-baseline gap-1">
+                    <i class="fa-solid fa-address-book fa-2xl" style="color: #004080;"></i>
+                    <h1 class="text-center" style="color: #004080;">PhoneBook
+                    </h1>
+                </header>
+                <div class="container-fluid text-center search-contact-container mb-3">
+                    <h3>Search for a contact</h3>
+                    <div class="container-fluid d-flex justify-content-center align-items-baseline gap-2">
+                        <asp:TextBox ID="txtSearchContact" runat="server"></asp:TextBox>
+                        <asp:LinkButton ID="SearchContactBtn" runat="server" OnClick="SearchContactBtn_Click">
+                        <i class="fa-solid fa-magnifying-glass fa-lg" style="color: #004080;"></i>
+                        </asp:LinkButton>
+                    </div>
+
+
+                </div>
+
                 <div class="phonebook-container container-fluid text-center mb-2">
                     <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                         Add a contact</button>
@@ -36,7 +52,6 @@
                                     <div class="text-center form-container container-fluid">
                                         <asp:ScriptManager ID="FormScriptManager" runat="server">
                                         </asp:ScriptManager>
-
                                         <asp:UpdatePanel ID="FormUpdatePanel" runat="server" UpdateMode="Conditional">
                                             <ContentTemplate>
                                                 <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
@@ -66,6 +81,7 @@
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblEmailAddress" runat="server" CssClass="fw-bold mb-3" Text="Email Address:"></asp:Label>
                                                         <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="form-control"></asp:TextBox>
+                                                        <asp:RegularExpressionValidator ErrorMessage="Invalid email address" ControlToValidate="txtEmailAddress" runat="server" />
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblAge" runat="server" CssClass="fw-bold mb-3" Text="Age:"></asp:Label>
@@ -101,8 +117,6 @@
                             </div>
                         </div>
                     </div>
-
-
                     <h1>My Contacts:
                     </h1>
                     <%--<asp:UpdatePanel ID="ShowContactsUpdatePanel" runat="server">
@@ -111,12 +125,10 @@
                         </ContentTemplate>
                     </asp:UpdatePanel>--%>
                 </div>
-
                 <div class="d-flex justify-content-center mb-3">
-
                     <asp:UpdatePanel ID="RepeaterUpdatePanel" runat="server" UpdateMode="Conditional">
                         <ContentTemplate>
-                            <asp:Repeater ID="Repeater" runat="server" OnItemCommand="Repeater_ItemCommand" >
+                            <asp:Repeater ID="Repeater" runat="server" OnItemCommand="Repeater_ItemCommand">
                                 <HeaderTemplate>
                                     <table border="1" style="max-width: 500px;">
                                         <tr>
@@ -125,7 +137,6 @@
                                             <td class="text-center"><b>Phone Number</b></td>
                                         </tr>
                                 </HeaderTemplate>
-
                                 <ItemTemplate>
                                     <tr>
                                         <td class="text-center"><%# DataBinder.Eval(Container.DataItem, "firstName") %> </td>
@@ -150,22 +161,19 @@
                                         </td>
                                     </tr>
                                 </ItemTemplate>
-
                                 <FooterTemplate>
                                     </table>
                                 </FooterTemplate>
-
                             </asp:Repeater>
                         </ContentTemplate>
                     </asp:UpdatePanel>
-
-
                     <br />
                 </div>
             </div>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/nBWZtZD4r4AX6YOt5ynLN2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <asp:SqlDataSource ID="PLSQLDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT * FROM &quot;CONTACTS&quot; ORDER BY &quot;ID&quot;"></asp:SqlDataSource>
 
     </form>

@@ -1,5 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ContactDetails.aspx.cs" Inherits="CRUDTEST.ContactDetails" %>
 
+<%@ Register Src="~/UserControls/AddOrEditPhoneNumberUserControl.ascx" TagPrefix="uc1" TagName="PhoneNumberAddOrEdit" %>
+
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -7,6 +9,7 @@
     <title>Contact Details</title>
     <link href="Styles/style.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <form id="ContactDetails" runat="server">
@@ -62,12 +65,12 @@
                                                             <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control"></asp:TextBox>
                                                         </div>
                                                         <div class="form-group d-flex flex-column">
-                                                            <asp:Label ID="lblFormAge" CssClass="fw-bold" runat="server" Text="Age:"></asp:Label>
-                                                            <asp:TextBox ID="txtAge" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        </div>
-                                                        <div class="form-group d-flex flex-column">
                                                             <asp:Label ID="lblFormEmailAddress" CssClass="fw-bold" runat="server" Text="Email Address:"></asp:Label>
                                                             <asp:TextBox ID="txtFormEmailAddress" runat="server" CssClass="form-control"></asp:TextBox>
+                                                        </div>
+                                                        <div class="form-group d-flex flex-column">
+                                                            <asp:Label ID="lblFormAge" CssClass="fw-bold" runat="server" Text="Age:"></asp:Label>
+                                                            <asp:TextBox ID="txtAge" runat="server" CssClass="form-control"></asp:TextBox>
                                                         </div>
                                                         <div class="form-group d-flex flex-column">
                                                             <asp:Label ID="lblProfilePicture" runat="server" CssClass="fw-bold mb-3" Text="Profile Picture:"></asp:Label>
@@ -88,11 +91,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="container-fluid contact-main-phone-number-container mt-1">
+                            <h2>Main Phone number:</h2>
+                            <asp:Label ID="lblMainPhoneNumber" runat="server" CssClass="fw-bolder">
+                            </asp:Label>
+                        </div>
                         <div class="container-fluid mb-2">
                             <div class="row  d-flex flex-column align-items-center">
-                                <div>
-                                    <h2 class="phone-number-h2">Phone Numbers:
-                                    </h2>
+                                <div class="mb-1">
+                                    <h3 class="phone-number-h2">Secondary phone numbers:
+                                    </h3>
                                 </div>
                                 <div>
                                     <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -133,17 +141,28 @@
                             <ContentTemplate>
                                 <asp:Repeater ID="PhoneRepeater" runat="server" DataSourceID="PhoneNumbers">
                                     <ItemTemplate>
-                                        <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-2 fw-bold" style="max-width: 300px">
+                                        <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-4 fw-bold"
+                                            style="max-width: 300px">
                                             <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
-                                            <asp:Button ID="RemoveNumberBtn" CssClass="btn-no-styling remove-number-btn" runat="server" Text="-"
-                                                OnCommand="RemoveNumberBtn_Command" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>' />
+                                            <div class="phone-number-buttons d-flex gap-4 align-items-baseline ">
+                                                <asp:LinkButton ID="RemoveNumberBtn" runat="server" OnCommand="RemoveNumberBtn_Command"
+                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'>
+                                                    <i class="fa-solid fa-trash" style="color: #FF0000;"></i>
+                                                </asp:LinkButton>
+                                                <asp:LinkButton ID="UpdatePhoneNumberBtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                    runat="server" OnCommand="UpdatePhoneNumberBtn_Command"
+                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") + "," 
+                                                        + DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>'>
+                                                    <i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i>
+                                                </asp:LinkButton>
+                                            </div>
                                         </div>
                                         <br />
                                     </ItemTemplate>
                                 </asp:Repeater>
                             </ContentTemplate>
                         </asp:UpdatePanel>
-
+                        <asp:HiddenField ID="BtnHiddenFIeld" Value="1" runat="server" OnValueChanged="BtnHiddenFIeld_ValueChanged" />
                         <asp:SqlDataSource ID="PhoneNumbers" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT &quot;PHONE_NUMBER&quot;, &quot;ID&quot; FROM &quot;PHONENUMBERS&quot; WHERE (&quot;CONTACT_ID&quot; = :CONTACT_ID) ORDER BY &quot;ID&quot;">
                             <SelectParameters>
                                 <asp:QueryStringParameter DefaultValue="null" Name="CONTACT_ID" QueryStringField="id" Type="Decimal" />
@@ -163,8 +182,10 @@
                 </SelectParameters>
             </asp:SqlDataSource>
         </asp:Panel>
+
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/nBWZtZD4r4AX6YOt5ynLN2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 </html>
