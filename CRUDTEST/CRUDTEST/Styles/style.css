@@ -29,8 +29,8 @@
 }
 
 .phone-number-container {
-    border: 2px solid black;
     max-width: 300px;
+    border-bottom: 4px solid #004080;
 }
 
 .contact-details-container {

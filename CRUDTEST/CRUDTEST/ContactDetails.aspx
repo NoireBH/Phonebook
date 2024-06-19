@@ -93,8 +93,15 @@
                         </div>
                         <div class="container-fluid contact-main-phone-number-container mt-1">
                             <h2>Main Phone number:</h2>
-                            <asp:Label ID="lblMainPhoneNumber" runat="server" CssClass="fw-bolder">
-                            </asp:Label>
+                            <div class="container d-flex justify-content-center align-items-baseline gap-2">
+                                <asp:Label ID="lblMainPhoneNumber" runat="server" CssClass="fw-bolder">
+                                </asp:Label>
+                                <asp:LinkButton ID="UpdateMainPhoneNumberBtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                    runat="server">
+                                    <i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i>
+                                </asp:LinkButton>
+                            </div>
+
                         </div>
                         <div class="container-fluid mb-2">
                             <div class="row  d-flex flex-column align-items-center">
@@ -141,10 +148,10 @@
                             <ContentTemplate>
                                 <asp:Repeater ID="PhoneRepeater" runat="server" DataSourceID="PhoneNumbers">
                                     <ItemTemplate>
-                                        <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-4 fw-bold"
+                                        <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-3 fw-bold"
                                             style="max-width: 300px">
                                             <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
-                                            <div class="phone-number-buttons d-flex gap-4 align-items-baseline ">
+                                            <div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
                                                 <asp:LinkButton ID="RemoveNumberBtn" runat="server" OnCommand="RemoveNumberBtn_Command"
                                                     CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'>
                                                     <i class="fa-solid fa-trash" style="color: #FF0000;"></i>
