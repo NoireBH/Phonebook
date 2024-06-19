@@ -141,12 +141,17 @@ namespace CRUDTEST
 
             }
 
-            else if(BtnHiddenFIeld.Value == "0")
+            else if (BtnHiddenFIeld.Value == "0")
             {
 
                 if (ImageUpload.HasFile)
                 {
-                    profilePicture = ImageUpload.FileBytes;
+                    string fileExtension = Path.GetExtension(ImageUpload.FileName).ToLower();
+
+                    if (fileExtension == "jpg" || fileExtension == "gif" || fileExtension == "jpeg" || fileExtension == "png")
+                    {
+                        profilePicture = ImageUpload.FileBytes;
+                    }                   
 
                 }
 
