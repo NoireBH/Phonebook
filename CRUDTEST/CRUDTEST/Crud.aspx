@@ -42,7 +42,7 @@
                                     <i class="fa-solid fa-magnifying-glass fa-lg" style="color: #004080;"></i>
                                 </asp:LinkButton>
                             </div>
-                            <asp:Label ID="lblNoContactFound" runat="server" Text="No contact found"></asp:Label>
+                            <asp:Label ID="lblNoContactFound" runat="server" CssClass="no-contact-found d-none" Text="No contact found!"></asp:Label>
                         </div>
                     </ContentTemplate>
                 </asp:UpdatePanel>

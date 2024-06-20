@@ -38,18 +38,18 @@
                                     <span>Email: </span>
                                     <asp:Label ID="lblEmailAddress" runat="server"></asp:Label>
                                 </p>
-                                <div class="contact-info-btn-container">
+                                <%--<div class="contact-info-btn-container">
                                     <asp:Button ID="UpdateContactBtn" data-bs-toggle="modal" data-bs-target="#contactUpdatePanel" runat="server" Text="Update"
                                         class="btn btn-warning fw-bold text-dark" OnClick="UpdateContactBtn_Click" />
                                     <asp:Button ID="DeleteBtn" runat="server" Text="Delete" class="btn btn-danger fw-bold text-dark" OnClick="DeleteBtn_Click" />
-                                </div>
+                                </div>--%>
                             </ContentTemplate>
                             <%--<Triggers>
                                 <asp:AsyncPostBackTrigger ControlID="UpdateContactBtn" EventName="Click" /> 
                             </Triggers>--%>
                         </asp:UpdatePanel>
 
-                        <div class="modal fade" id="contactUpdatePanel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <%--<div class="modal fade" id="contactUpdatePanel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-body">
@@ -93,8 +93,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="container-fluid contact-main-phone-number-container mt-1">
+                        </div>--%>
+                        <%--<div class="container-fluid contact-main-phone-number-container mt-1">
                             <h2>Main Phone number:</h2>
                             <asp:UpdatePanel ID="MainPhoneNumUpdatePanel" runat="server">
                                 <ContentTemplate>
@@ -108,14 +108,14 @@
                             </asp:UpdatePanel>
 
 
-                        </div>
+                        </div>--%>
                         <div class="container-fluid mb-2">
                             <div class="row  d-flex flex-column align-items-center">
                                 <div class="mb-1">
-                                    <h3 class="phone-number-h2">Secondary phone numbers:
-                                    </h3>
+                                    <h1 class="phone-number-h2">Phone numbers:
+                                    </h1>
                                 </div>
-                                <div>
+                                <%--<div>
                                     <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#phoneNumModal">
                                         Add a number</button>
                                     <div class="modal fade" id="phoneNumModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -141,13 +141,13 @@
                                                             <%--<Triggers>
                                                                 <asp:PostBackTrigger ControlID="submitPhoneNumBtn" />
                                                             </Triggers>--%>
-                                                        </asp:UpdatePanel>
+                                                        <%--</asp:UpdatePanel>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>--%>
                             </div>
                         </div>
                         <asp:UpdatePanel ID="PhoneNumbersUpdatePanel" runat="server">
@@ -157,7 +157,7 @@
                                         <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-3 fw-bold"
                                             style="max-width: 300px">
                                             <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
-                                            <div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
+                                            <%--<div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
                                                 <asp:LinkButton ID="RemoveNumberBtn" runat="server" OnCommand="RemoveNumberBtn_Command"
                                                     CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'>
                                                     <i class="fa-solid fa-trash" style="color: #FF0000;"></i>
@@ -165,13 +165,13 @@
                                                 <asp:Button ID="UpdatePhoneNumBtn" data-bs-toggle="modal" data-bs-target="#phoneNumModal" Text="Update" class="btn btn-warning fw-bold text-dark" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
                                                     CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") + "," 
                                                         + DataBinder.Eval(Container.DataItem, "ID") %>' />
-                                            </div>
+                                            </div>--%>
                                         </div>
                                         <br />
                                     </ItemTemplate>
                                 </asp:Repeater>
-                                <asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" Value="1" runat="server" />
-                                <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />
+                                <%--<asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" Value="1" runat="server" />
+                                <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />--%>
                             </ContentTemplate>
                         </asp:UpdatePanel>
                         <asp:SqlDataSource ID="PhoneNumbers" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT &quot;PHONE_NUMBER&quot;, &quot;ID&quot; FROM &quot;PHONENUMBERS&quot; WHERE (&quot;CONTACT_ID&quot; = :CONTACT_ID) ORDER BY &quot;ID&quot;">

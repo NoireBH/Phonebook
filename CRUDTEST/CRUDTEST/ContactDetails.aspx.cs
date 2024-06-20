@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.OracleClient;
+using System.Linq;
 using System.Net.Mail;
 using System.Web.UI.WebControls;
 using CRUDTEST.Common;
+using CRUDTEST.Models;
 
 namespace CRUDTEST
 {
@@ -20,10 +23,10 @@ namespace CRUDTEST
 
         }
 
-        protected void DetailsView1_PageIndexChanging(object sender, DetailsViewPageEventArgs e)
-        {
+        //protected void DetailsView1_PageIndexChanging(object sender, DetailsViewPageEventArgs e)
+        //{
 
-        }
+        //}
 
         protected void ContactDetailsDataSource_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
         {
@@ -35,30 +38,30 @@ namespace CRUDTEST
             Response.Redirect(String.Format("~/CRUD.aspx"));
         }
 
-        protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
-        {
+        //protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
+        //{
 
-            try
-            {
-                OracleCommand cmd = new OracleCommand();
+        //    try
+        //    {
+        //        OracleCommand cmd = new OracleCommand();
 
-                cmd.Parameters.AddWithValue("id", Convert.ToInt32(e.CommandArgument));
-                cmd.CommandText = "DELETE FROM PHONENUMBERS WHERE id=:id";
-                cmd.Connection = con;
-                con.Open();
-                cmd.ExecuteNonQuery();
-                cmd.Connection.Close();
+        //        cmd.Parameters.AddWithValue("id", Convert.ToInt32(e.CommandArgument));
+        //        cmd.CommandText = "DELETE FROM PHONENUMBERS WHERE id=:id";
+        //        cmd.Connection = con;
+        //        con.Open();
+        //        cmd.ExecuteNonQuery();
+        //        cmd.Connection.Close();
 
-            }
-            catch (Exception)
-            {
+        //    }
+        //    catch (Exception)
+        //    {
 
-                throw;
-            }
+        //        throw;
+        //    }
 
-            LoadContactDetails();
+        //    LoadContactDetails();
 
-        }
+        //}
 
         private void LoadContactDetails()
         {
@@ -75,7 +78,7 @@ namespace CRUDTEST
                 if (dr.HasRows)
                 {
 
-                    //List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
+                    List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
 
                     while (dr.Read())
                     {
@@ -114,27 +117,24 @@ namespace CRUDTEST
                             lblEmailAddress.Text = dr["email_address"].ToString();
                         }
 
-                        lblMainPhoneNumber.Text = dr["main_phone_number"].ToString();
-
-
                     }
 
                     con.Close();
 
-                    //OracleCommand cmdGetPhoneNums = new OracleCommand();
-                    //cmd.Parameters.AddWithValue("id", id);
-                    //cmd.CommandText = "select id,  phone_number from PHONENUMBERS WHERE CONTACT_ID =:id ";
-                    //cmd.Connection = con;
-                    //con.Open();
-                    //OracleDataReader dr2 = cmd.ExecuteReader();
+                    OracleCommand cmdGetPhoneNums = new OracleCommand();
+                    cmd.Parameters.AddWithValue("id", id);
+                    cmd.CommandText = "select id,  phone_number from PHONENUMBERS WHERE CONTACT_ID =:id ";
+                    cmd.Connection = con;
+                    con.Open();
+                    OracleDataReader dr2 = cmd.ExecuteReader();
 
-                    //while (dr2.Read())
-                    //{
-                    //    phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
-                    //}
+                    while (dr2.Read())
+                    {
+                        phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
+                    }
 
                     //PhoneRepeater.DataSource = phoneNumbers.OrderBy(x => x.Id);
-                    //PhoneRepeater.DataBind();
+                    PhoneRepeater.DataBind();
 
                 }
                 else
@@ -154,264 +154,264 @@ namespace CRUDTEST
 
         }
 
-        private void EmptySubmitForm()
-        {
-            txtPhoneNumber.Text = string.Empty;
-        }
+        //private void EmptySubmitForm()
+        //{
+        //    //txtPhoneNumber.Text = string.Empty;
+        //}
 
-        protected void CancelBtn_Click(object sender, EventArgs e)
-        {
+        //protected void CancelBtn_Click(object sender, EventArgs e)
+        //{
 
-        }
-
-
-        protected void DeleteBtn_Click(object sender, EventArgs e)
-        {
-
-            try
-            {
-                OracleCommand cmd = new OracleCommand();
-
-                cmd.Parameters.AddWithValue("id", Convert.ToInt32(Request.QueryString["id"]));
-                cmd.CommandText = "DELETE FROM CONTACTS WHERE id=:id";
-                cmd.Connection = con;
-                con.Open();
-                cmd.ExecuteNonQuery();
-                cmd.Connection.Close();
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            Response.Redirect(String.Format("~/CRUD.aspx"));
-
-        }
-
-        protected void UpdateContactBtn_Click(object sender, EventArgs e)
-        {
-            string fullName = lblContactName.Text;
-            string firstName = fullName.Split(' ')[0];
-            string lastName = fullName.Split(' ')[1];
-            string age = null;
-            string emailAddress = string.Empty;
-
-            if (lblContactAge.Text != "Not specified")
-            {
-                age = lblContactAge.Text;
-            }
-
-            if (lblEmailAddress.Text != "Not specified")
-            {
-                emailAddress = lblEmailAddress.Text;
-            }
-
-            txtFirstName.Text = firstName;
-            txtLastName.Text = lastName;
-            txtAge.Text = age;
-            txtFormEmailAddress.Text = emailAddress;
-
-            FormUpdatePanel.Update();
+        //}
 
 
-        }
+        //protected void DeleteBtn_Click(object sender, EventArgs e)
+        //{
 
-        protected void SubmitContactInfo_Click(object sender, EventArgs e)
-        {
-            int id = Convert.ToInt32(Request.QueryString["id"]);
-            string firstName = txtFirstName.Text;
-            string lastName = txtLastName.Text;
-            int age = default;
-            string emailAddress = string.Empty;
-            byte[] profilePicture = null;
-            bool isDefaultProfilePicture = IsDefaultProfilePicture();
-            bool hasImageUploadedInForm = ImageUpload.HasFile;
-            var dbNull = DBNull.Value;
+        //    try
+        //    {
+        //        OracleCommand cmd = new OracleCommand();
 
-            if (!string.IsNullOrWhiteSpace(txtAge.Text))
-            {
-                age = Convert.ToInt32(txtAge.Text.Trim());
-            }
+        //        cmd.Parameters.AddWithValue("id", Convert.ToInt32(Request.QueryString["id"]));
+        //        cmd.CommandText = "DELETE FROM CONTACTS WHERE id=:id";
+        //        cmd.Connection = con;
+        //        con.Open();
+        //        cmd.ExecuteNonQuery();
+        //        cmd.Connection.Close();
 
-            if (!string.IsNullOrWhiteSpace(txtFormEmailAddress.Text))
-            {
-                emailAddress = txtFormEmailAddress.Text;
-            }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
 
-            if (hasImageUploadedInForm)
-            {
-                profilePicture = ImageUpload.FileBytes;
-            }
+        //    Response.Redirect(String.Format("~/CRUD.aspx"));
 
-            string cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
-                "EMAIL_ADDRESS =:email_address, PROFILE_PICTURE =:profile_picture  WHERE ID =:id";
+        //}
 
-            try
-            {
-                using (OracleCommand command = new OracleCommand(cmdText, con))
-                {
-                    command.Parameters.AddWithValue("id", id);
-                    command.Parameters.AddWithValue("first_name", firstName);
-                    command.Parameters.AddWithValue("last_name", lastName);
-                    command.Parameters.AddWithValue("age", age);
-                    command.Parameters.AddWithValue("email_address", emailAddress);
+        //protected void UpdateContactBtn_Click(object sender, EventArgs e)
+        //{
+        //    string fullName = lblContactName.Text;
+        //    string firstName = fullName.Split(' ')[0];
+        //    string lastName = fullName.Split(' ')[1];
+        //    string age = null;
+        //    string emailAddress = string.Empty;
 
-                    if (hasImageUploadedInForm)
-                    {
-                        command.Parameters.AddWithValue("profile_picture", profilePicture);
-                    }
-                    else
-                    {
-                        if (!isDefaultProfilePicture)
-                        {
-                            cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
-                                "EMAIL_ADDRESS =:email_address WHERE ID =:id";
-                            command.CommandText = cmdText;
-                        }
-                        else
-                        {
-                            command.Parameters.AddWithValue("profile_picture", dbNull);
-                        }
+        //    if (lblContactAge.Text != "Not specified")
+        //    {
+        //        age = lblContactAge.Text;
+        //    }
+
+        //    if (lblEmailAddress.Text != "Not specified")
+        //    {
+        //        emailAddress = lblEmailAddress.Text;
+        //    }
+
+        //    txtFirstName.Text = firstName;
+        //    txtLastName.Text = lastName;
+        //    txtAge.Text = age;
+        //    txtFormEmailAddress.Text = emailAddress;
+
+        //    FormUpdatePanel.Update();
 
 
-                    }
+        //}
 
-                    command.Connection.Open();
-                    command.ExecuteNonQuery();
-                    command.Connection.Close();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+        //protected void SubmitContactInfo_Click(object sender, EventArgs e)
+        //{
+        //    int id = Convert.ToInt32(Request.QueryString["id"]);
+        //    string firstName = txtFirstName.Text;
+        //    string lastName = txtLastName.Text;
+        //    int age = default;
+        //    string emailAddress = string.Empty;
+        //    byte[] profilePicture = null;
+        //    bool isDefaultProfilePicture = IsDefaultProfilePicture();
+        //    bool hasImageUploadedInForm = ImageUpload.HasFile;
+        //    var dbNull = DBNull.Value;
 
-            EmptySubmitForm();
+        //    if (!string.IsNullOrWhiteSpace(txtAge.Text))
+        //    {
+        //        age = Convert.ToInt32(txtAge.Text.Trim());
+        //    }
 
-            LoadContactDetails();
-        }
+        //    if (!string.IsNullOrWhiteSpace(txtFormEmailAddress.Text))
+        //    {
+        //        emailAddress = txtFormEmailAddress.Text;
+        //    }
 
-        private bool IsDefaultProfilePicture()
-        {
-            if (contactImg.ImageUrl == CommonConstants.DefaultContactImageUrl)
-            {
-                return true;
-            }
+        //    if (hasImageUploadedInForm)
+        //    {
+        //        profilePicture = ImageUpload.FileBytes;
+        //    }
 
-            return false;
-        }
-        protected void BtnHiddenFIeld_ValueChanged(object sender, EventArgs e)
-        {
+        //    string cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
+        //        "EMAIL_ADDRESS =:email_address, PROFILE_PICTURE =:profile_picture  WHERE ID =:id";
 
-        }
+        //    try
+        //    {
+        //        using (OracleCommand command = new OracleCommand(cmdText, con))
+        //        {
+        //            command.Parameters.AddWithValue("id", id);
+        //            command.Parameters.AddWithValue("first_name", firstName);
+        //            command.Parameters.AddWithValue("last_name", lastName);
+        //            command.Parameters.AddWithValue("age", age);
+        //            command.Parameters.AddWithValue("email_address", emailAddress);
 
-        protected void submitPhoneNumBtn_Command(object sender, CommandEventArgs e)
-        {
-            string phoneNumber = txtPhoneNumber.Text;
+        //            if (hasImageUploadedInForm)
+        //            {
+        //                command.Parameters.AddWithValue("profile_picture", profilePicture);
+        //            }
+        //            else
+        //            {
+        //                if (!isDefaultProfilePicture)
+        //                {
+        //                    cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
+        //                        "EMAIL_ADDRESS =:email_address WHERE ID =:id";
+        //                    command.CommandText = cmdText;
+        //                }
+        //                else
+        //                {
+        //                    command.Parameters.AddWithValue("profile_picture", dbNull);
+        //                }
 
-            string cmdText = "insert into PHONENUMBERS " +
-                "(phone_number, contact_id)" +
-                " VALUES (:phone_number, :contact_id)";
 
+        //            }
 
+        //            command.Connection.Open();
+        //            command.ExecuteNonQuery();
+        //            command.Connection.Close();
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
 
-            if (AddOrUpdatePhoneNumHiddenField.Value == "1")
-            {
-                try
-                {
-                    int contact_id = Convert.ToInt32(Request.QueryString["id"]);
+        //    EmptySubmitForm();
 
-                    OracleCommand cmd = new OracleCommand();
+        //    LoadContactDetails();
+        //}
 
-                    cmd.Parameters.AddWithValue("contact_id", contact_id);
-                    cmd.Parameters.AddWithValue("phone_number", phoneNumber);
-                    cmd.CommandText = cmdText;
-                    cmd.Connection = con;
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    cmd.Connection.Close();
+        //private bool IsDefaultProfilePicture()
+        //{
+        //    if (contactImg.ImageUrl == CommonConstants.DefaultContactImageUrl)
+        //    {
+        //        return true;
+        //    }
 
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
-            else if (AddOrUpdatePhoneNumHiddenField.Value == "0")
-            {
+        //    return false;
+        //}
+        //protected void BtnHiddenFIeld_ValueChanged(object sender, EventArgs e)
+        //{
 
-                cmdText = "UPDATE PHONENUMBERS SET PHONE_NUMBER =:phone_number WHERE ID =:id";
+        //}
 
-                try
-                {
-                    int id = Convert.ToInt32(PhoneNumberIdHiddenField.Value);
+        //protected void submitPhoneNumBtn_Command(object sender, CommandEventArgs e)
+        //{
+        //    string phoneNumber = txtPhoneNumber.Text;
 
-                    OracleCommand cmd = new OracleCommand();
-
-                    cmd.Parameters.AddWithValue("id", id);
-                    cmd.Parameters.AddWithValue("phone_number", phoneNumber);
-                    cmd.CommandText = cmdText;
-                    cmd.Connection = con;
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    cmd.Connection.Close();
-
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
-            else
-            {
-                cmdText = "UPDATE CONTACTS SET MAIN_PHONE_NUMBER =:phone_number WHERE ID =:id";
-
-                try
-                {
-                    int id = Convert.ToInt32(Request.QueryString["id"]);
-
-                    OracleCommand cmd = new OracleCommand();
-
-                    cmd.Parameters.AddWithValue("id", id);
-                    cmd.Parameters.AddWithValue("phone_number", phoneNumber);
-                    cmd.CommandText = cmdText;
-                    cmd.Connection = con;
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    cmd.Connection.Close();
-
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
+        //    string cmdText = "insert into PHONENUMBERS " +
+        //        "(phone_number, contact_id)" +
+        //        " VALUES (:phone_number, :contact_id)";
 
 
 
-            txtPhoneNumber.Text = string.Empty;
-            AddOrUpdatePhoneNumHiddenField.Value = "1";
-            LoadContactDetails();
-        }
+        //    if (AddOrUpdatePhoneNumHiddenField.Value == "1")
+        //    {
+        //        try
+        //        {
+        //            int contact_id = Convert.ToInt32(Request.QueryString["id"]);
+
+        //            OracleCommand cmd = new OracleCommand();
+
+        //            cmd.Parameters.AddWithValue("contact_id", contact_id);
+        //            cmd.Parameters.AddWithValue("phone_number", phoneNumber);
+        //            cmd.CommandText = cmdText;
+        //            cmd.Connection = con;
+        //            con.Open();
+        //            cmd.ExecuteNonQuery();
+        //            cmd.Connection.Close();
+
+        //        }
+        //        catch (Exception)
+        //        {
+        //            throw;
+        //        }
+        //    }
+        //    else if (AddOrUpdatePhoneNumHiddenField.Value == "0")
+        //    {
+
+        //        cmdText = "UPDATE PHONENUMBERS SET PHONE_NUMBER =:phone_number WHERE ID =:id";
+
+        //        try
+        //        {
+        //            int id = Convert.ToInt32(PhoneNumberIdHiddenField.Value);
+
+        //            OracleCommand cmd = new OracleCommand();
+
+        //            cmd.Parameters.AddWithValue("id", id);
+        //            cmd.Parameters.AddWithValue("phone_number", phoneNumber);
+        //            cmd.CommandText = cmdText;
+        //            cmd.Connection = con;
+        //            con.Open();
+        //            cmd.ExecuteNonQuery();
+        //            cmd.Connection.Close();
+
+        //        }
+        //        catch (Exception)
+        //        {
+        //            throw;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        cmdText = "UPDATE CONTACTS SET MAIN_PHONE_NUMBER =:phone_number WHERE ID =:id";
+
+        //        try
+        //        {
+        //            int id = Convert.ToInt32(Request.QueryString["id"]);
+
+        //            OracleCommand cmd = new OracleCommand();
+
+        //            cmd.Parameters.AddWithValue("id", id);
+        //            cmd.Parameters.AddWithValue("phone_number", phoneNumber);
+        //            cmd.CommandText = cmdText;
+        //            cmd.Connection = con;
+        //            con.Open();
+        //            cmd.ExecuteNonQuery();
+        //            cmd.Connection.Close();
+
+        //        }
+        //        catch (Exception)
+        //        {
+        //            throw;
+        //        }
+        //    }
 
 
-        protected void UpdatePhoneNumBtn_Command(object sender, CommandEventArgs e)
-        {
-            string[] commandArgs = e.CommandArgument.ToString().Split(new char[] { ',' });
-            string phoneNumber = commandArgs[0].ToString();
-            string id = commandArgs[1].ToString();
 
-            AddOrUpdatePhoneNumHiddenField.Value = "0";
-            PhoneNumberIdHiddenField.Value = id;
-            txtPhoneNumber.Text = phoneNumber;
+        //    txtPhoneNumber.Text = string.Empty;
+        //    AddOrUpdatePhoneNumHiddenField.Value = "1";
+        //    LoadContactDetails();
+        //}
 
-        }
 
-        protected void UpdateMainPhoneNumBtn_Click(object sender, EventArgs e)
-        {
-            txtPhoneNumber.Text = lblMainPhoneNumber.Text;
-            AddOrUpdatePhoneNumHiddenField.Value = "2";
-        }
+        //protected void UpdatePhoneNumBtn_Command(object sender, CommandEventArgs e)
+        //{
+        //    string[] commandArgs = e.CommandArgument.ToString().Split(new char[] { ',' });
+        //    string phoneNumber = commandArgs[0].ToString();
+        //    string id = commandArgs[1].ToString();
+
+        //    AddOrUpdatePhoneNumHiddenField.Value = "0";
+        //    PhoneNumberIdHiddenField.Value = id;
+        //    txtPhoneNumber.Text = phoneNumber;
+
+        //}
+
+        //protected void UpdateMainPhoneNumBtn_Click(object sender, EventArgs e)
+        //{
+        //    txtPhoneNumber.Text = lblMainPhoneNumber.Text;
+        //    AddOrUpdatePhoneNumHiddenField.Value = "2";
+        //}
     }
 }
