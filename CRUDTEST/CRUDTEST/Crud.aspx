@@ -126,7 +126,7 @@
                     </asp:UpdatePanel>--%>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
-                    <asp:UpdatePanel ID="RepeaterUpdatePanel" runat="server" UpdateMode="Conditional">
+                    <asp:UpdatePanel ID="RepeaterUpdatePanel" runat="server">
                         <ContentTemplate>
                             <asp:Repeater ID="Repeater" runat="server" OnItemCommand="Repeater_ItemCommand">
                                 <HeaderTemplate>

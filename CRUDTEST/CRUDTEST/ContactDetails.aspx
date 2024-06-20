@@ -25,7 +25,7 @@
                     <div class="container-fluid contact-main-info">
                         <asp:ScriptManager ID="ScriptManager" runat="server">
                         </asp:ScriptManager>
-                        <asp:UpdatePanel ID="ContactMainInfoUpdatePanel" runat="server">
+                        <asp:UpdatePanel ID="ContactMainInfoUpdatePanel" ChildrenAsTriggers="true" runat="server">
                             <ContentTemplate>
                                 <h1>
                                     <asp:Label ID="lblContactName" runat="server"></asp:Label>
@@ -39,14 +39,17 @@
                                     <asp:Label ID="lblEmailAddress" runat="server"></asp:Label>
                                 </p>
                                 <div class="contact-info-btn-container">
-                                    <asp:Button ID="UpdateContactBtn" data-bs-toggle="modal" data-bs-target="#updateModal" runat="server" Text="Update"
+                                    <asp:Button ID="UpdateContactBtn" data-bs-toggle="modal" data-bs-target="#contactUpdatePanel" runat="server" Text="Update"
                                         class="btn btn-warning fw-bold text-dark" OnClick="UpdateContactBtn_Click" />
                                     <asp:Button ID="DeleteBtn" runat="server" Text="Delete" class="btn btn-danger fw-bold text-dark" OnClick="DeleteBtn_Click" />
                                 </div>
                             </ContentTemplate>
+                            <%--<Triggers>
+                                <asp:AsyncPostBackTrigger ControlID="UpdateContactBtn" EventName="Click" /> 
+                            </Triggers>--%>
                         </asp:UpdatePanel>
 
-                        <div class="modal fade" id="updateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal fade" id="contactUpdatePanel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-body">
@@ -120,7 +123,7 @@
                                             <div class="modal-content">
                                                 <div class="modal-body">
                                                     <div class="text-center form-container container-fluid">
-                                                        <asp:UpdatePanel ID="PhoneFormUpdatePanel" runat="server" UpdateMode="Conditional">
+                                                        <asp:UpdatePanel ID="PhoneFormUpdatePanel" runat="server">
                                                             <ContentTemplate>
                                                                 <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
                                                                     <div class="form-group d-flex flex-column">
@@ -135,9 +138,9 @@
                                                                     <asp:Button ID="CancelBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelBtn_Click" Text="Cancel" data-bs-dismiss="modal"></asp:Button>
                                                                 </div>
                                                             </ContentTemplate>
-                                                            <Triggers>
+                                                            <%--<Triggers>
                                                                 <asp:PostBackTrigger ControlID="submitPhoneNumBtn" />
-                                                            </Triggers>
+                                                            </Triggers>--%>
                                                         </asp:UpdatePanel>
                                                     </div>
                                                 </div>
@@ -167,7 +170,7 @@
                                         <br />
                                     </ItemTemplate>
                                 </asp:Repeater>
-                                <asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" runat="server" />
+                                <asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" Value="1" runat="server" />
                                 <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />
                             </ContentTemplate>
                         </asp:UpdatePanel>

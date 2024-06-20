@@ -152,8 +152,6 @@ namespace CRUDTEST
             ContactDetailsDataSource.DataBind();
             PhoneRepeater.DataBind();
 
-            //FormUpdatePanel.Update();
-
         }
 
         private void EmptySubmitForm()
@@ -216,6 +214,7 @@ namespace CRUDTEST
 
             FormUpdatePanel.Update();
 
+
         }
 
         protected void SubmitContactInfo_Click(object sender, EventArgs e)
@@ -240,10 +239,9 @@ namespace CRUDTEST
                 emailAddress = txtFormEmailAddress.Text;
             }
 
-            if (contactImg.ImageUrl != CommonConstants.DefaultContactImageUrl && hasImageUploadedInForm)
+            if (hasImageUploadedInForm)
             {
                 profilePicture = ImageUpload.FileBytes;
-
             }
 
             string cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
@@ -408,14 +406,12 @@ namespace CRUDTEST
             PhoneNumberIdHiddenField.Value = id;
             txtPhoneNumber.Text = phoneNumber;
 
-            PhoneFormUpdatePanel.Update();
         }
 
         protected void UpdateMainPhoneNumBtn_Click(object sender, EventArgs e)
         {
             txtPhoneNumber.Text = lblMainPhoneNumber.Text;
             AddOrUpdatePhoneNumHiddenField.Value = "2";
-            PhoneFormUpdatePanel.Update();
         }
     }
 }
