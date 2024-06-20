@@ -9,19 +9,28 @@ namespace CRUDTEST.Models
 {
     public class PhoneContact
     {
-        public PhoneContact(int id, string firstName, string lastName, string PhoneNumber, string emailAddress, int age)
+        public PhoneContact(int id, string firstName, string lastName, string emailAddress, int age, string profilePicture)
         {
             this.Id = id;
             this.FirstName = firstName;
             this.LastName = lastName;
-            this.PhoneNumber = PhoneNumber;
             this.EmailAddress = emailAddress;
             this.Age = age;
+            this.ProfilePicture = profilePicture;
         }
 
         public PhoneContact()
         {
                 
+        }
+
+        public PhoneContact(int id, string firstName, string lastName, string emailAddress, int age)
+        {
+            this.Id = id;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.EmailAddress = emailAddress;
+            this.Age = age;
         }
 
         [Required]       
@@ -37,12 +46,11 @@ namespace CRUDTEST.Models
 
         [Required]
         [StringLength(PhoneNumberMaxLength, ErrorMessage = "The phonenumber cannot be more than 10 characters long!")]
-        public string PhoneNumber { get; set; }
 
         public string EmailAddress { get; set; }
 
         public int Age { get; set; }
 
-        public byte[] ProfilePicture { get; set; }
+        public string ProfilePicture { get; set; }
     }
 }

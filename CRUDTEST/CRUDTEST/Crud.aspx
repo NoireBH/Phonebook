@@ -23,8 +23,8 @@
 <body>
 
     <form id="form1" runat="server">
-        <div class="container-fluid">
-            <div class="container-fluid" style="max-width: 800px; border: 1px solid black; background-color: white">
+        <div class="container-fluid" style="max-width: 800px; border: 1px solid black; background-color: white">
+            <div class="container-fluid">
                 <header class="d-flex justify-content-center align-items-baseline gap-1">
                     <i class="fa-solid fa-address-book fa-2xl" style="color: #004080;"></i>
                     <h1 class="text-center" style="color: #004080;">PhoneBook
@@ -73,14 +73,13 @@
                                                         <asp:RequiredFieldValidator ControlToValidate="txtLastName" runat="server" ValidationGroup="contactValGroup" />
 
                                                     </div>
-                                                    <div class="form-group d-flex flex-column">
+                                                    <%--<div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblPhoneNumber" CssClass="fw-bold" runat="server" Text="Phone Number:"></asp:Label>
                                                         <p class="required-field">Field is required*</p>
                                                         <asp:TextBox ID="txtPhoneNumber" runat="server" CssClass="form-control"></asp:TextBox>
                                                         <%--<asp:RegularExpressionValidator ID="PhoneNumberRegex" ValidationExpression="^\+?[0-9]+$" runat="server" 
                                                             ErrorMessage="Phone number must contain only numbers or a start with a country code ex. +359" 
                                                             ControlToValidate="txtPhoneNumber"></asp:RegularExpressionValidator>--%>
-                                                    </div>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblEmailAddress" runat="server" CssClass="fw-bold mb-3" Text="Email Address:"></asp:Label>
                                                         <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="form-control"></asp:TextBox>
@@ -96,20 +95,34 @@
                                                         </asp:RegularExpressionValidator>
                                                     </div>
                                                     <%--<asp:Button ID="UploadImgBtn" runat="server" Text="Upload Image" OnClick="UploadImgBtn_Click" />--%>
+                                                    <div class="form-group d-flex flex-column phone-numbers-container">
+                                                        <asp:Label ID="lblPhoneNumbers" runat="server" CssClass="fw-bold mb-3" Text="Phone numbers:"></asp:Label>
+                                                        <asp:TextBox ID="txtPhoneNumber" runat="server"></asp:TextBox>
+                                                        <asp:Button ID="AddPhoneNumBtn" CssClass="btn btn-success" runat="server" Text="Add" />
+                                                        <asp:Repeater ID="PhoneNumRepeater" runat="server" DataSourceID="PhoneNumbers">
+
+                                                        </asp:Repeater>
+                                                    </div>
                                                     <div class="form-group d-flex flex-column">
-                                                        <asp:Label ID="lblProfilePicture" runat="server" CssClass="fw-bold mb-3" Text="Profile Picture:"></asp:Label>
-                                                        <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server" />
+                                                        <asp:Label ID="lblContactImage" runat="server" CssClass="fw-bold mb-3" Text="Profile Picture:"></asp:Label>
+                                                        <div class="contact-img-container container-fluid text-center">
+                                                            <asp:Image ID="contactImg" ImageUrl="Images/blank-pfp.png" CssClass="contact-img" runat="server" />
+                                                        </div>
+                                                        <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server" on />
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center gap-2">
                                                     <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="Submit_Click" data-bs-dismiss="modal" />
-                                                    <asp:Button runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelUpdBtn_Click" Text="Cancel" data-bs-dismiss="modal"></asp:Button>
+                                                    <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelUpdBtn_Click" Text="Cancel" data-bs-dismiss="modal"></asp:Button>
                                                 </div>
+                                                <%--</div>--%>
+
                                                 <asp:HiddenField ID="BtnHiddenFIeld" Value="1" runat="server" OnValueChanged="BtnHiddenFIeld_ValueChanged" />
                                                 <asp:HiddenField ID="HiddenIdField" runat="server" OnValueChanged="HiddenIdField_ValueChanged" />
                                                 <asp:HiddenField ID="HiddenEmailAddressField" runat="server" OnValueChanged="HiddenEmailAddressField_ValueChanged" />
                                                 <asp:HiddenField ID="HiddenAgeField" runat="server" OnValueChanged="HiddenAgeField_ValueChanged" />
                                                 <asp:HiddenField ID="HiddenPictureField" runat="server" OnValueChanged="HiddenPictureField_ValueChanged" />
+                                                <asp:HiddenField ID="HiddenImgField" runat="server" />
                                             </ContentTemplate>
                                             <Triggers>
                                                 <asp:PostBackTrigger ControlID="submitBtn" />
@@ -120,7 +133,7 @@
                             </div>
                         </div>
                     </div>
-                    <h1>My Contacts:
+                    <h1 class="text-center">My Contacts:
                     </h1>
                     <%--<asp:UpdatePanel ID="ShowContactsUpdatePanel" runat="server">
                         <ContentTemplate>
@@ -129,7 +142,7 @@
                     </asp:UpdatePanel>--%>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
-                    <asp:UpdatePanel ID="RepeaterUpdatePanel" runat="server">
+                    <asp:UpdatePanel ID="RepeaterUpdatePanel" runat="server" UpdateMode="Conditional">
                         <ContentTemplate>
                             <asp:Repeater ID="Repeater" runat="server" OnItemCommand="Repeater_ItemCommand">
                                 <HeaderTemplate>
@@ -137,26 +150,27 @@
                                         <tr>
                                             <td class="text-center"><b>First Name</b></td>
                                             <td class="text-center"><b>Last Name</b></td>
-                                            <td class="text-center"><b>Phone Number</b></td>
+                                            <%--<td class="text-center"><b>Phone Number</b></td>--%>
                                         </tr>
                                 </HeaderTemplate>
                                 <ItemTemplate>
                                     <tr>
                                         <td class="text-center"><%# DataBinder.Eval(Container.DataItem, "firstName") %> </td>
                                         <td class="text-center"><%# DataBinder.Eval(Container.DataItem, "lastName") %> </td>
-                                        <td class="text-center"><%# DataBinder.Eval(Container.DataItem, "phoneNumber") %> </td>
+                                        <%--<td class="text-center"><%# DataBinder.Eval(Container.DataItem, "phoneNumber") %> </td>--%>
                                         <td class="text-center">
                                             <asp:Button ID="DeleteBtn" runat="server" Text="Delete" class="btn btn-danger fw-bold text-dark" OnCommand="DeleteBtn_Command"
                                                 CommandArgument='<%# DataBinder.Eval
-                  (Container.DataItem, "id") %>' />
+                                            (Container.DataItem, "id") %>' />
                                         </td>
                                         <td class="text-center">
                                             <asp:Button ID="UpdateBtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" runat="server" Text="Update"
                                                 class="btn btn-warning fw-bold text-dark" OnCommand="UpdateBtn_Command"
                                                 CommandArgument='<%# DataBinder.Eval
-                  (Container.DataItem, "id") + "," + DataBinder.Eval(Container.DataItem, "firstName") + "," + 
-                  DataBinder.Eval(Container.DataItem, "lastName") + "," + DataBinder.Eval(Container.DataItem, "phoneNumber")
-                  + "," + DataBinder.Eval(Container.DataItem, "emailAddress") + "," + DataBinder.Eval(Container.DataItem, "age")%>' />
+                                          (Container.DataItem, "id") + "," + DataBinder.Eval(Container.DataItem, "firstName") + "," +
+                                          DataBinder.Eval(Container.DataItem, "lastName") + "," /*+ DataBinder.Eval(Container.DataItem, "phoneNumber")*/
+                                          + "," + DataBinder.Eval(Container.DataItem, "emailAddress") + "," + DataBinder.Eval(Container.DataItem, "age") +
+                                           "," + DataBinder.Eval(Container.DataItem, "profilePicture")%>' />
                                         </td>
                                         <td class="text-center">
                                             <asp:Button ID="DetailsBtn" runat="server" class="btn btn-info fw-bold text-dark" Text="Details"
@@ -177,8 +191,13 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/nBWZtZD4r4AX6YOt5ynLN2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <asp:SqlDataSource ID="PLSQLDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT * FROM &quot;CONTACTS&quot; ORDER BY &quot;ID&quot;"></asp:SqlDataSource>
-
+        <asp:SqlDataSource ID="PLSQLDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT * FROM &quot;CONTACTS&quot; ORDER BY &quot;ID&quot;" OnSelecting="PLSQLDataSource_Selecting"></asp:SqlDataSource>
+        <asp:SqlDataSource ID="PhoneNumbers" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>" SelectCommand="SELECT &quot;ID&quot;, &quot;PHONE_NUMBER&quot; FROM &quot;PHONENUMBERS&quot; WHERE (&quot;CONTACT_ID&quot; = :CONTACT_ID) ORDER BY &quot;ID&quot;">
+            <SelectParameters>
+                <asp:ControlParameter ControlID="HiddenIdField" Name="CONTACT_ID" PropertyName="Value" Type="Decimal" />
+            </SelectParameters>
+        </asp:SqlDataSource>
+        <%--<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT * FROM &quot;CONTACTS&quot; ORDER BY &quot;ID&quot;"></asp:SqlDataSource>--%>
     </form>
 </body>
 </html>

@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using CRUDTEST.ViewModels;
 using System.Windows.Forms;
 using System.IO;
+using CRUDTEST.Common;
 
 namespace CRUDTEST
 {
@@ -22,6 +23,9 @@ namespace CRUDTEST
 
             if (!IsPostBack)
             {
+
+                contactImg.Style.Add("max-width", "450px");
+                contactImg.Style.Add("max-height", "300px");
 
                 try
                 {
@@ -36,8 +40,21 @@ namespace CRUDTEST
 
                         while (dr.Read())
                         {
+                            string pfp = null;
+
+                            if (dr["profile_picture"] != DBNull.Value)
+                            {
+                                byte[] pfpBytes = (byte[])(dr["profile_picture"]);
+                                pfp = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(pfpBytes));
+                                //contactImg.ImageUrl = String.Format("data:image/jpg;base64,{0}", pfp);
+                            }
+                            else
+                            {
+                                pfp = CommonConstants.DefaultContactImageUrl;
+                            }
+
                             values.Add(new PhoneContact(int.Parse(dr["id"].ToString()), dr["first_name"].ToString(), dr["last_name"].ToString(),
-                                dr["main_phone_number"].ToString(), dr["email_address"].ToString(), Convert.ToInt32(dr["age"])));
+                                dr["email_address"].ToString(), Convert.ToInt32(dr["age"]), pfp));
                         }
 
                         Repeater.DataSource = values.OrderBy(x => x.Id);
@@ -71,7 +88,7 @@ namespace CRUDTEST
         {
             string firstName = txtFirstName.Text.Trim();
             string lastName = txtLastName.Text.Trim();
-            string phoneNumber = txtPhoneNumber.Text.Trim();
+            //string phoneNumber = txtPhoneNumber.Text.Trim();
             string emailAddress = txtEmailAddress.Text.Trim();
             int age = default;
             byte[] profilePicture = null;
@@ -81,7 +98,9 @@ namespace CRUDTEST
             if (hasImage)
             {
                 profilePicture = ImageUpload.FileBytes;
-
+                //string pfp = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(profilePicture));
+                //contactImg.ImageUrl = String.Format("data:image/jpg;base64,{0}", pfp);
+                //RepeaterUpdatePanel.Update();
 
             }
 
@@ -92,8 +111,8 @@ namespace CRUDTEST
 
 
             string cmdText = "insert into CONTACTS " +
-                "(first_Name, last_Name, main_phone_number, email_address, age, profile_picture)" +
-                " VALUES (:first_name, :last_Name, :phone_number, :email_address, :age, :profile_picture)";
+                "(first_Name, last_Name, email_address, age, profile_picture)" +
+                " VALUES (:first_name, :last_Name, :email_address, :age, :profile_picture)";
 
             //if (!IsValid)
             //{
@@ -110,7 +129,7 @@ namespace CRUDTEST
                     {
                         command.Parameters.AddWithValue("first_name", firstName);
                         command.Parameters.AddWithValue("last_name", lastName);
-                        command.Parameters.AddWithValue("phone_number", phoneNumber);
+                        //command.Parameters.AddWithValue("phone_number", phoneNumber);
                         command.Parameters.AddWithValue("email_address", emailAddress);
                         command.Parameters.AddWithValue("age", age);
 
@@ -155,7 +174,7 @@ namespace CRUDTEST
 
                 }
 
-                cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, MAIN_PHONE_NUMBER =:phone_number, EMAIL_ADDRESS =:email_address, AGE =:age, PROFILE_PICTURE=:profile_picture WHERE ID =:id";
+                cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, EMAIL_ADDRESS =:email_address, AGE =:age, PROFILE_PICTURE=:profile_picture WHERE ID =:id";
                 int id = Convert.ToInt32(HiddenIdField.Value);
 
                 ChangeSubmitBtnTxtAndColor();
@@ -167,7 +186,7 @@ namespace CRUDTEST
                         command.Parameters.AddWithValue("id", id);
                         command.Parameters.AddWithValue("first_name", firstName);
                         command.Parameters.AddWithValue("last_name", lastName);
-                        command.Parameters.AddWithValue("phone_number", phoneNumber);
+                        //command.Parameters.AddWithValue("phone_number", phoneNumber);
                         command.Parameters.AddWithValue("email_address", emailAddress);
                         command.Parameters.AddWithValue("age", age);
 
@@ -202,7 +221,7 @@ namespace CRUDTEST
         {
             txtFirstName.Text = string.Empty;
             txtLastName.Text = string.Empty;
-            txtPhoneNumber.Text = string.Empty;
+            //txtPhoneNumber.Text = string.Empty;
             txtEmailAddress.Text = string.Empty;
             txtAge.Text = string.Empty;
         }
@@ -227,8 +246,7 @@ namespace CRUDTEST
                     while (dr.Read())
                     {
                         values.Add(new PhoneContact(int.Parse(dr["id"].ToString()), dr["first_name"].ToString(),
-                            dr["last_name"].ToString(), dr["main_phone_number"].ToString(), dr["email_address"].ToString(),
-                            Convert.ToInt32(dr["age"])));
+                            dr["last_name"].ToString(), dr["email_address"].ToString(), Convert.ToInt32(dr["age"])));
                     }
 
                     Repeater.DataSource = values.OrderBy(x => x.Id);
@@ -296,9 +314,21 @@ namespace CRUDTEST
 
             txtFirstName.Text = commandArgs[1];
             txtLastName.Text = commandArgs[2];
-            txtPhoneNumber.Text = commandArgs[3];
+            //txtPhoneNumber.Text = commandArgs[3];
             txtEmailAddress.Text = commandArgs[4];
             txtAge.Text = commandArgs[5];
+            contactImg.ImageUrl = commandArgs[6];
+
+            if (commandArgs[6] != null)
+            {
+                //byte[] pfpBytes = (byte[])commandArgs[6];
+                //string pfp = Convert.ToBase64String(pfpBytes);
+                //contactImg.ImageUrl = String.Format("data:image/jpg;base64,{0}", pfp);
+            }
+            else
+            {
+                contactImg.ImageUrl = CommonConstants.DefaultContactImageUrl;
+            }
 
             BtnHiddenFIeld.Value = "0";
             HiddenIdField.Value = commandArgs[0].ToString();
@@ -406,7 +436,7 @@ namespace CRUDTEST
             {
                 OracleCommand cmd = new OracleCommand();
                 cmd.Parameters.AddWithValue("search_input", searchInput);
-                cmd.CommandText = "SELECT * FROM CONTACTS WHERE LOWER(FIRST_NAME) LIKE '%' || LOWER(:search_input) || '%' OR LOWER(LAST_NAME) LIKE '%' || LOWER(:search_input) || '%' OR LOWER(MAIN_PHONE_NUMBER) LIKE '%' || LOWER(:search_input) || '%'";
+                cmd.CommandText = "SELECT * FROM CONTACTS WHERE LOWER(FIRST_NAME) LIKE '%' || LOWER(:search_input) || '%' OR LOWER(LAST_NAME) LIKE '%' || LOWER(:search_input) || '%'";
                 cmd.Connection = con;
                 con.Open();
                 OracleDataReader dr = cmd.ExecuteReader();
@@ -429,6 +459,11 @@ namespace CRUDTEST
             }
 
 
+
+        }
+
+        protected void PLSQLDataSource_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
+        {
 
         }
     }

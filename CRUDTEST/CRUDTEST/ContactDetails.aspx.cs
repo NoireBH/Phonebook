@@ -257,25 +257,25 @@ namespace CRUDTEST
         //            command.Parameters.AddWithValue("age", age);
         //            command.Parameters.AddWithValue("email_address", emailAddress);
 
-        //            if (hasImageUploadedInForm)
-        //            {
-        //                command.Parameters.AddWithValue("profile_picture", profilePicture);
-        //            }
-        //            else
-        //            {
-        //                if (!isDefaultProfilePicture)
-        //                {
-        //                    cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
-        //                        "EMAIL_ADDRESS =:email_address WHERE ID =:id";
-        //                    command.CommandText = cmdText;
-        //                }
-        //                else
-        //                {
-        //                    command.Parameters.AddWithValue("profile_picture", dbNull);
-        //                }
+        //                    if (hasImageUploadedInForm)
+        //                    {
+        //                        command.Parameters.AddWithValue("profile_picture", profilePicture);
+        //                    }
+        //                    else
+        //                    {
+        //                        if (!isDefaultProfilePicture)
+        //                        {
+        //                            cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
+        //                                "EMAIL_ADDRESS =:email_address WHERE ID =:id";
+        //                            command.CommandText = cmdText;
+        //                        }
+        //                        else
+        //{
+        //    command.Parameters.AddWithValue("profile_picture", dbNull);
+        //}
 
 
-        //            }
+        //                    }
 
         //            command.Connection.Open();
         //            command.ExecuteNonQuery();
