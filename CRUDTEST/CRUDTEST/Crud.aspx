@@ -30,17 +30,22 @@
                     <h1 class="text-center" style="color: #004080;">PhoneBook
                     </h1>
                 </header>
-                <div class="container-fluid text-center search-contact-container mb-3">
-                    <h3>Search for a contact</h3>
-                    <div class="container-fluid d-flex justify-content-center align-items-baseline gap-2">
-                        <asp:TextBox ID="txtSearchContact" runat="server"></asp:TextBox>
-                        <asp:LinkButton ID="SearchContactBtn" runat="server" OnClick="SearchContactBtn_Click">
-                        <i class="fa-solid fa-magnifying-glass fa-lg" style="color: #004080;"></i>
-                        </asp:LinkButton>
-                    </div>
-
-
-                </div>
+                <asp:ScriptManager ID="FormScriptManager" runat="server">
+                </asp:ScriptManager>
+                <asp:UpdatePanel ID="SearchUpdatePanel" runat="server">
+                    <ContentTemplate>
+                        <div class="container-fluid text-center search-contact-container mb-3">
+                            <h3>Search for a contact</h3>
+                            <div class="container-fluid d-flex justify-content-center align-items-baseline gap-2">
+                                <asp:TextBox ID="txtSearchContact" runat="server"></asp:TextBox>
+                                <asp:LinkButton ID="SearchContactBtn" runat="server" OnClick="SearchContactBtn_Click">
+                                    <i class="fa-solid fa-magnifying-glass fa-lg" style="color: #004080;"></i>
+                                </asp:LinkButton>
+                            </div>
+                            <asp:Label ID="lblNoContactFound" runat="server" Text="No contact found"></asp:Label>
+                        </div>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
 
                 <div class="phonebook-container container-fluid text-center mb-2">
                     <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -50,8 +55,6 @@
                             <div class="modal-content">
                                 <div class="modal-body">
                                     <div class="text-center form-container container-fluid">
-                                        <asp:ScriptManager ID="FormScriptManager" runat="server">
-                                        </asp:ScriptManager>
                                         <asp:UpdatePanel ID="FormUpdatePanel" runat="server" UpdateMode="Conditional">
                                             <ContentTemplate>
                                                 <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
@@ -60,7 +63,7 @@
                                                         <asp:Label ID="lblFirstName" CssClass="fw-bold" runat="server" Text="First Name:"></asp:Label>
                                                         <p class="required-field">Field is required*</p>
                                                         <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        <asp:RequiredFieldValidator ControlToValidate="txtFirstName" runat="server" ValidationGroup="contactValGroup" />                                      
+                                                        <asp:RequiredFieldValidator ControlToValidate="txtFirstName" runat="server" ValidationGroup="contactValGroup" />
 
                                                     </div>
                                                     <div class="form-group d-flex flex-column">

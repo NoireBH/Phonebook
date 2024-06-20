@@ -24,6 +24,24 @@ namespace CRUDTEST
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
+        /// FormScriptManager control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.ScriptManager FormScriptManager;
+
+        /// <summary>
+        /// SearchUpdatePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel SearchUpdatePanel;
+
+        /// <summary>
         /// txtSearchContact control.
         /// </summary>
         /// <remarks>
@@ -42,13 +60,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.LinkButton SearchContactBtn;
 
         /// <summary>
-        /// FormScriptManager control.
+        /// lblNoContactFound control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.ScriptManager FormScriptManager;
+        protected global::System.Web.UI.WebControls.Label lblNoContactFound;
 
         /// <summary>
         /// FormUpdatePanel control.

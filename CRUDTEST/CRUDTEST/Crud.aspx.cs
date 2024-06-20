@@ -420,10 +420,6 @@ namespace CRUDTEST
                     }
 
                 }
-                else
-                {
-                    Response.Write("No Contacts In DataBase");
-                }
 
                 con.Close();
             }
