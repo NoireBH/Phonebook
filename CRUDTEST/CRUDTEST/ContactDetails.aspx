@@ -39,8 +39,8 @@
                                     <asp:Label ID="lblEmailAddress" runat="server"></asp:Label>
                                 </p>
                                 <div class="contact-info-btn-container">
-                                    <asp:Button ID="UpdateBtn" data-bs-toggle="modal" data-bs-target="#updateModal" runat="server" Text="Update"
-                                        class="btn btn-warning fw-bold text-dark" OnClick="UpdateBtn_Click" />
+                                    <asp:Button ID="UpdateContactBtn" data-bs-toggle="modal" data-bs-target="#updateModal" runat="server" Text="Update"
+                                        class="btn btn-warning fw-bold text-dark" OnClick="UpdateContactBtn_Click" />
                                     <asp:Button ID="DeleteBtn" runat="server" Text="Delete" class="btn btn-danger fw-bold text-dark" OnClick="DeleteBtn_Click" />
                                 </div>
                             </ContentTemplate>
@@ -93,14 +93,17 @@
                         </div>
                         <div class="container-fluid contact-main-phone-number-container mt-1">
                             <h2>Main Phone number:</h2>
-                            <div class="container d-flex justify-content-center align-items-baseline gap-2">
-                                <asp:Label ID="lblMainPhoneNumber" runat="server" CssClass="fw-bolder">
-                                </asp:Label>
-                                <asp:LinkButton ID="UpdateMainPhoneNumberBtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                    runat="server">
-                                    <i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i>
-                                </asp:LinkButton>
-                            </div>
+                            <asp:UpdatePanel ID="MainPhoneNumUpdatePanel" runat="server">
+                                <ContentTemplate>
+                                    <div class="container d-flex justify-content-center align-items-baseline gap-2">
+                                        <asp:Label ID="lblMainPhoneNumber" runat="server" CssClass="fw-bolder">
+                                        </asp:Label>
+                                        <asp:Button ID="UpdateMainPhoneNumBtn" data-bs-toggle="modal" data-bs-target="#phoneNumModal" runat="server" Text="Update"
+                                            class="btn btn-warning fw-bold text-dark" OnClick="UpdateMainPhoneNumBtn_Click" />
+                                    </div>
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+
 
                         </div>
                         <div class="container-fluid mb-2">
@@ -110,9 +113,9 @@
                                     </h3>
                                 </div>
                                 <div>
-                                    <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#phoneNumModal">
                                         Add a number</button>
-                                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal fade" id="phoneNumModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-body">
@@ -128,12 +131,12 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="d-flex justify-content-center gap-2">
-                                                                    <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="submitBtn_Click" data-bs-dismiss="modal" />
+                                                                    <asp:Button ID="submitPhoneNumBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnCommand="submitPhoneNumBtn_Command" data-bs-dismiss="modal" />
                                                                     <asp:Button ID="CancelBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelBtn_Click" Text="Cancel" data-bs-dismiss="modal"></asp:Button>
                                                                 </div>
                                                             </ContentTemplate>
                                                             <Triggers>
-                                                                <asp:PostBackTrigger ControlID="submitBtn" />
+                                                                <asp:PostBackTrigger ControlID="submitPhoneNumBtn" />
                                                             </Triggers>
                                                         </asp:UpdatePanel>
                                                     </div>
@@ -156,20 +159,18 @@
                                                     CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'>
                                                     <i class="fa-solid fa-trash" style="color: #FF0000;"></i>
                                                 </asp:LinkButton>
-                                                <asp:LinkButton ID="UpdatePhoneNumberBtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                                    runat="server" OnCommand="UpdatePhoneNumberBtn_Command"
-                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") + "," 
-                                                        + DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>'>
-                                                    <i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i>
-                                                </asp:LinkButton>
+                                                <asp:Button ID="UpdatePhoneNumBtn" data-bs-toggle="modal" data-bs-target="#phoneNumModal" Text="Update" class="btn btn-warning fw-bold text-dark" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
+                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") + "," 
+                                                        + DataBinder.Eval(Container.DataItem, "ID") %>' />
                                             </div>
                                         </div>
                                         <br />
                                     </ItemTemplate>
                                 </asp:Repeater>
+                                <asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" runat="server" />
+                                <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />
                             </ContentTemplate>
                         </asp:UpdatePanel>
-                        <asp:HiddenField ID="BtnHiddenFIeld" Value="1" runat="server" OnValueChanged="BtnHiddenFIeld_ValueChanged" />
                         <asp:SqlDataSource ID="PhoneNumbers" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT &quot;PHONE_NUMBER&quot;, &quot;ID&quot; FROM &quot;PHONENUMBERS&quot; WHERE (&quot;CONTACT_ID&quot; = :CONTACT_ID) ORDER BY &quot;ID&quot;">
                             <SelectParameters>
                                 <asp:QueryStringParameter DefaultValue="null" Name="CONTACT_ID" QueryStringField="id" Type="Decimal" />

@@ -78,13 +78,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Label lblEmailAddress;
 
         /// <summary>
-        /// UpdateBtn control.
+        /// UpdateContactBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button UpdateBtn;
+        protected global::System.Web.UI.WebControls.Button UpdateContactBtn;
 
         /// <summary>
         /// DeleteBtn control.
@@ -213,6 +213,15 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Button CancelUpdateBtn;
 
         /// <summary>
+        /// MainPhoneNumUpdatePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel MainPhoneNumUpdatePanel;
+
+        /// <summary>
         /// lblMainPhoneNumber control.
         /// </summary>
         /// <remarks>
@@ -222,13 +231,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Label lblMainPhoneNumber;
 
         /// <summary>
-        /// UpdateMainPhoneNumberBtn control.
+        /// UpdateMainPhoneNumBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton UpdateMainPhoneNumberBtn;
+        protected global::System.Web.UI.WebControls.Button UpdateMainPhoneNumBtn;
 
         /// <summary>
         /// PhoneFormUpdatePanel control.
@@ -258,13 +267,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.TextBox txtPhoneNumber;
 
         /// <summary>
-        /// submitBtn control.
+        /// submitPhoneNumBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button submitBtn;
+        protected global::System.Web.UI.WebControls.Button submitPhoneNumBtn;
 
         /// <summary>
         /// CancelBtn control.
@@ -294,13 +303,22 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Repeater PhoneRepeater;
 
         /// <summary>
-        /// BtnHiddenFIeld control.
+        /// AddOrUpdatePhoneNumHiddenField control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField BtnHiddenFIeld;
+        protected global::System.Web.UI.WebControls.HiddenField AddOrUpdatePhoneNumHiddenField;
+
+        /// <summary>
+        /// PhoneNumberIdHiddenField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField PhoneNumberIdHiddenField;
 
         /// <summary>
         /// PhoneNumbers control.
