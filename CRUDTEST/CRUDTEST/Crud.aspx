@@ -60,14 +60,14 @@
                                                         <asp:Label ID="lblFirstName" CssClass="fw-bold" runat="server" Text="First Name:"></asp:Label>
                                                         <p class="required-field">Field is required*</p>
                                                         <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        <asp:RequiredFieldValidator ControlToValidate="txtFirstName" runat="server" />
+                                                        <asp:RequiredFieldValidator ControlToValidate="txtFirstName" runat="server" ValidationGroup="contactValGroup" />                                      
 
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblLastName" CssClass="fw-bold" runat="server" Text="Last Name:"></asp:Label>
                                                         <p class="required-field">Field is required*</p>
                                                         <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        <asp:RequiredFieldValidator ControlToValidate="txtLastName" runat="server" />
+                                                        <asp:RequiredFieldValidator ControlToValidate="txtLastName" runat="server" ValidationGroup="contactValGroup" />
 
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
@@ -81,7 +81,7 @@
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblEmailAddress" runat="server" CssClass="fw-bold mb-3" Text="Email Address:"></asp:Label>
                                                         <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        <asp:RegularExpressionValidator ErrorMessage="Invalid email address" ControlToValidate="txtEmailAddress" runat="server" />
+                                                        <asp:RegularExpressionValidator ErrorMessage="Invalid email address" ControlToValidate="txtEmailAddress" runat="server" ValidationGroup="contactValGroup" />
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblAge" runat="server" CssClass="fw-bold mb-3" Text="Age:"></asp:Label>
@@ -89,7 +89,7 @@
                                                         <asp:RegularExpressionValidator ID="regexNumbersOnly"
                                                             ControlToValidate="txtAge" runat="server"
                                                             ErrorMessage="Only Numbers allowed"
-                                                            ValidationExpression="\d+">
+                                                            ValidationExpression="\d+" ValidationGroup="contactValGroup">
                                                         </asp:RegularExpressionValidator>
                                                     </div>
                                                     <%--<asp:Button ID="UploadImgBtn" runat="server" Text="Upload Image" OnClick="UploadImgBtn_Click" />--%>

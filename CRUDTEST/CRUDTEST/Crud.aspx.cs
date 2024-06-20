@@ -151,7 +151,7 @@ namespace CRUDTEST
                     if (fileExtension == "jpg" || fileExtension == "gif" || fileExtension == "jpeg" || fileExtension == "png")
                     {
                         profilePicture = ImageUpload.FileBytes;
-                    }                   
+                    }
 
                 }
 
@@ -401,6 +401,37 @@ namespace CRUDTEST
         protected void SearchContactBtn_Click(object sender, EventArgs e)
         {
             string searchInput = txtSearchContact.Text;
+
+            try
+            {
+                OracleCommand cmd = new OracleCommand();
+                cmd.Parameters.AddWithValue("search_input", searchInput);
+                cmd.CommandText = "SELECT * FROM CONTACTS WHERE LOWER(FIRST_NAME) LIKE '%' || LOWER(:search_input) || '%' OR LOWER(LAST_NAME) LIKE '%' || LOWER(:search_input) || '%' OR LOWER(MAIN_PHONE_NUMBER) LIKE '%' || LOWER(:search_input) || '%'";
+                cmd.Connection = con;
+                con.Open();
+                OracleDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows)
+                {
+                    List<PhoneContact> values = new List<PhoneContact>();
+
+                    while (dr.Read())
+                    {
+                        var name = dr["first_name"].ToString();
+                    }
+
+                }
+                else
+                {
+                    Response.Write("No Contacts In DataBase");
+                }
+
+                con.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
 
 
         }
