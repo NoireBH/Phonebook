@@ -374,8 +374,8 @@ namespace CRUDTEST
                 phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
             }
 
-            //PhoneNumRepeater.DataSourceID = "PhoneNumbers";
-            //PhoneNumRepeater.DataBind();
+            PhoneNumRepeater.DataSourceID = "PhoneNumbers";
+            PhoneNumRepeater.DataBind();
             con.Close();
 
             //CancelUpdBtn.Attributes.Clear();
@@ -533,8 +533,8 @@ namespace CRUDTEST
                 throw;
             }
 
-            // PhoneNumRepeater.DataSourceID = "PhoneNumbers";
-            //PhoneNumRepeater.DataBind();
+            PhoneNumRepeater.DataSourceID = "PhoneNumbers";
+            PhoneNumRepeater.DataBind();
             con.Close();
 
             FormUpdatePanel.Update();
@@ -626,8 +626,8 @@ namespace CRUDTEST
             //    phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
             //}
 
-            //PhoneNumRepeater.DataSourceID = "PhoneNumbers";
-            //PhoneNumRepeater.DataBind();
+            PhoneNumRepeater.DataSourceID = "PhoneNumbers";
+            PhoneNumRepeater.DataBind();
             con.Close();
 
             //AddOrEditPhoneNumBtn.Text = "Add";
@@ -648,9 +648,9 @@ namespace CRUDTEST
             //AddOrEditPhoneNumBtn.ForeColor = Color.White;
             AddOrUpdatePhoneNumHiddenField.Value = "2";
 
-            //PhoneNumRepeater.DataSource = null;
-            //PhoneNumRepeater.DataSourceID = null;
-            //PhoneNumRepeater.DataBind();
+            PhoneNumRepeater.DataSource = null;
+            PhoneNumRepeater.DataSourceID = null;
+            PhoneNumRepeater.DataBind();
 
             FormUpdatePanel.Update();
         }

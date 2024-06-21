@@ -18,6 +18,16 @@
             height: 27px;
         }
     </style>
+    <script>
+        function img() {
+            var url = inputToURL(document.getElementById("<%=ImageUpload.ClientID %>"));
+            document.getElementById("<%=contactImg.ClientID %>").src = url;
+        }
+        function inputToURL(inputElement) {
+            var file = inputElement.files[0];
+            return window.URL.createObjectURL(file);
+        }
+    </script>
 
 </head>
 <body>
@@ -109,26 +119,25 @@
                                                                 <asp:TextBox ID="txtPhoneNumber" runat="server"></asp:TextBox>
                                                                 <asp:Button ID="AddOrEditPhoneNumBtn" CssClass="btn btn-success mb-2" runat="server"
                                                                     Text="Save" OnCommand="AddOrEditPhoneNumBtn_Command" />
-                                                                <%--<asp:Repeater ID="PhoneNumRepeater" runat="server" DataSourceID="PhoneNumbers" OnItemDataBound="PhoneNumRepeater_ItemDataBound">
-                                                                    <ItemTemplate>--%>
+                                                                <asp:Repeater ID="PhoneNumRepeater" runat="server" DataSourceID="PhoneNumbers" OnItemDataBound="PhoneNumRepeater_ItemDataBound">
+                                                                    <ItemTemplate>
                                                                         <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-3 fw-bold"
                                                                             style="max-width: 300px">
                                                                             <asp:Label ID="lblPhoneNumber" runat="server">
-                                                                                <%--<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>--%>
+                                                                                <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
                                                                             </asp:Label>
-                                                                            <%--<div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
+                                                                            <div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
                                                                                 <asp:Button ID="RemoveNumberBtn" class="btn btn-danger fw-bold text-dark" runat="server" Text="Delete"
                                                                                     OnCommand="RemoveNumberBtn_Command"
-                                                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'>
-                                                                                </asp:Button>
+                                                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'></asp:Button>
                                                                                 <asp:Button ID="UpdatePhoneNumBtn" Text="Update"
                                                                                     class="btn btn-warning fw-bold text-dark" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
                                                                                     CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") + "," 
                                                                                         + DataBinder.Eval(Container.DataItem, "ID") %>' />
-                                                                            </div>--%>
+                                                                            </div>
                                                                         </div>
-                                                                    <%--</ItemTemplate>
-                                                                </asp:Repeater>--%>
+                                                                    </ItemTemplate>
+                                                                </asp:Repeater>
                                                             </div>
                                                             <asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" Value="1" runat="server" />
                                                             <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />
@@ -143,7 +152,7 @@
                                                         <div class="contact-img-container container-fluid text-center mb-2">
                                                             <asp:Image ID="contactImg" ImageUrl="Images/blank-pfp.png" CssClass="contact-img" runat="server" />
                                                         </div>
-                                                        <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server" />
+                                                        <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server" onchange="img()" />
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center gap-2">
@@ -233,23 +242,7 @@
                 <asp:ControlParameter ControlID="HiddenIdField" Name="CONTACT_ID" PropertyName="Value" Type="Decimal" />
             </SelectParameters>
         </asp:SqlDataSource>
-        <%--<script>
-            function readURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
 
-                    reader.onload = function (e) {
-                        $('#image_upload_preview').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-
-            $("#inputFile").change(function () {
-                readURL(this);
-            });
-        </script>--%>
         <%--<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT * FROM &quot;CONTACTS&quot; ORDER BY &quot;ID&quot;"></asp:SqlDataSource>--%>
     </form>
 </body>

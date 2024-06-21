@@ -204,13 +204,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Button AddOrEditPhoneNumBtn;
 
         /// <summary>
-        /// lblPhoneNumber control.
+        /// PhoneNumRepeater control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPhoneNumber;
+        protected global::System.Web.UI.WebControls.Repeater PhoneNumRepeater;
 
         /// <summary>
         /// AddOrUpdatePhoneNumHiddenField control.
