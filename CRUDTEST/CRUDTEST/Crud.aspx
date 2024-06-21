@@ -48,14 +48,21 @@
                 </asp:UpdatePanel>
 
                 <div class="phonebook-container container-fluid text-center mb-2">
-                    <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                        Add a contact</button>
+                    <%--<button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        Add a contact</button>--%>
+                    <asp:UpdatePanel ID="AddContactBtnUpdatePanel" runat="server">
+                        <ContentTemplate>
+                            <asp:Button ID="AddContactBtn" runat="server" Text="Add a contact" OnClick="AddContactBtn_Click"
+                                class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop" />
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+
                     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-body">
                                     <div class="text-center form-container container-fluid">
-                                        <asp:UpdatePanel ID="FormUpdatePanel" runat="server" UpdateMode="Conditional">
+                                        <asp:UpdatePanel ID="FormUpdatePanel" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="false">
                                             <ContentTemplate>
                                                 <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
 
@@ -95,20 +102,46 @@
                                                         </asp:RegularExpressionValidator>
                                                     </div>
                                                     <%--<asp:Button ID="UploadImgBtn" runat="server" Text="Upload Image" OnClick="UploadImgBtn_Click" />--%>
-                                                    <div class="form-group d-flex flex-column phone-numbers-container">
-                                                        <asp:Label ID="lblPhoneNumbers" runat="server" CssClass="fw-bold mb-3" Text="Phone numbers:"></asp:Label>
-                                                        <asp:TextBox ID="txtPhoneNumber" runat="server"></asp:TextBox>
-                                                        <asp:Button ID="AddPhoneNumBtn" CssClass="btn btn-success" runat="server" Text="Add" />
-                                                        <asp:Repeater ID="PhoneNumRepeater" runat="server" DataSourceID="PhoneNumbers">
+                                                    <asp:UpdatePanel ID="PhoneNumUpdatePanel" runat="server" UpdateMode="Conditional">
+                                                        <ContentTemplate>
+                                                            <div class="form-group d-flex flex-column phone-numbers-container">
+                                                                <asp:Label ID="lblPhoneNumbers" runat="server" CssClass="fw-bold mb-3" Text="Phone numbers:"></asp:Label>
+                                                                <asp:TextBox ID="txtPhoneNumber" runat="server"></asp:TextBox>
+                                                                <asp:Button ID="AddOrEditPhoneNumBtn" CssClass="btn btn-success mb-2" runat="server"
+                                                                    Text="Add" OnCommand="AddOrEditPhoneNumBtn_Command" />
+                                                                <asp:Repeater ID="PhoneNumRepeater" runat="server" DataSourceID="PhoneNumbers">
+                                                                    <ItemTemplate>
+                                                                        <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-3 fw-bold"
+                                                                            style="max-width: 300px">
+                                                                            <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
+                                                                            <div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
+                                                                                <asp:LinkButton ID="RemoveNumberBtn" runat="server" OnCommand="RemoveNumberBtn_Command"
+                                                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'>
+                                                                                <i class="fa-solid fa-trash" style="color: #FF0000;"></i>
+                                                                                </asp:LinkButton>
+                                                                                <asp:Button ID="UpdatePhoneNumBtn" Text="Update"
+                                                                                    class="btn btn-warning fw-bold text-dark" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
+                                                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") + "," 
+                                                                                        + DataBinder.Eval(Container.DataItem, "ID") %>' />
+                                                                            </div>
+                                                                        </div>
+                                                                    </ItemTemplate>
+                                                                </asp:Repeater>
+                                                            </div>
+                                                            <asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" Value="1" runat="server" />
+                                                            <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />
+                                                        </ContentTemplate>
+                                                        <%--<Triggers>
+                                                            <asp:PostBackTrigger ControlID="AddOrEditPhoneNumBtn" />
+                                                        </Triggers>--%>
+                                                    </asp:UpdatePanel>
 
-                                                        </asp:Repeater>
-                                                    </div>
                                                     <div class="form-group d-flex flex-column">
-                                                        <asp:Label ID="lblContactImage" runat="server" CssClass="fw-bold mb-3" Text="Profile Picture:"></asp:Label>
+                                                        <asp:Label ID="lblContactImagePreview" runat="server" CssClass="fw-bold mb-3" Text="Profile Picture:"></asp:Label>
                                                         <div class="contact-img-container container-fluid text-center">
                                                             <asp:Image ID="contactImg" ImageUrl="Images/blank-pfp.png" CssClass="contact-img" runat="server" />
                                                         </div>
-                                                        <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server" on />
+                                                        <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server" />
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center gap-2">
@@ -123,6 +156,7 @@
                                                 <asp:HiddenField ID="HiddenAgeField" runat="server" OnValueChanged="HiddenAgeField_ValueChanged" />
                                                 <asp:HiddenField ID="HiddenPictureField" runat="server" OnValueChanged="HiddenPictureField_ValueChanged" />
                                                 <asp:HiddenField ID="HiddenImgField" runat="server" />
+
                                             </ContentTemplate>
                                             <Triggers>
                                                 <asp:PostBackTrigger ControlID="submitBtn" />
@@ -167,10 +201,10 @@
                                             <asp:Button ID="UpdateBtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" runat="server" Text="Update"
                                                 class="btn btn-warning fw-bold text-dark" OnCommand="UpdateBtn_Command"
                                                 CommandArgument='<%# DataBinder.Eval
-                                          (Container.DataItem, "id") + "," + DataBinder.Eval(Container.DataItem, "firstName") + "," +
-                                          DataBinder.Eval(Container.DataItem, "lastName") + "," /*+ DataBinder.Eval(Container.DataItem, "phoneNumber")*/
-                                          + "," + DataBinder.Eval(Container.DataItem, "emailAddress") + "," + DataBinder.Eval(Container.DataItem, "age") +
-                                           "," + DataBinder.Eval(Container.DataItem, "profilePicture")%>' />
+                                          (Container.DataItem, "id") + ",," + DataBinder.Eval(Container.DataItem, "firstName") + ",," +
+                                          DataBinder.Eval(Container.DataItem, "lastName") + ",," 
+                                          + DataBinder.Eval(Container.DataItem, "emailAddress") + ",," + DataBinder.Eval(Container.DataItem, "age") +
+                                           ",," + DataBinder.Eval(Container.DataItem, "profilePicture")%>' />
                                         </td>
                                         <td class="text-center">
                                             <asp:Button ID="DetailsBtn" runat="server" class="btn btn-info fw-bold text-dark" Text="Details"
@@ -197,6 +231,23 @@
                 <asp:ControlParameter ControlID="HiddenIdField" Name="CONTACT_ID" PropertyName="Value" Type="Decimal" />
             </SelectParameters>
         </asp:SqlDataSource>
+        <%--<script>
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#image_upload_preview').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#inputFile").change(function () {
+                readURL(this);
+            });
+        </script>--%>
         <%--<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT * FROM &quot;CONTACTS&quot; ORDER BY &quot;ID&quot;"></asp:SqlDataSource>--%>
     </form>
 </body>

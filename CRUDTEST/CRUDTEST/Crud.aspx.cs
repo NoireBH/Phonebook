@@ -210,6 +210,7 @@ namespace CRUDTEST
                 }
 
                 BtnHiddenFIeld.Value = "1";
+                AddOrUpdatePhoneNumHiddenField.Value = "1";
                 EmptySubmitForm();
             }
 
@@ -221,9 +222,9 @@ namespace CRUDTEST
         {
             txtFirstName.Text = string.Empty;
             txtLastName.Text = string.Empty;
-            //txtPhoneNumber.Text = string.Empty;
             txtEmailAddress.Text = string.Empty;
             txtAge.Text = string.Empty;
+            txtPhoneNumber.Text = string.Empty;
         }
 
         protected void ShowBtn_Click(object sender, EventArgs e)
@@ -309,21 +310,32 @@ namespace CRUDTEST
             submitBtn.Text = "Update";
             submitBtn.BackColor = ColorTranslator.FromHtml("#ffc107");
             submitBtn.ForeColor = Color.White;
+            AddOrEditPhoneNumBtn.Text = "Add";
+            AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
+            AddOrEditPhoneNumBtn.ForeColor = Color.White;
 
-            string[] commandArgs = e.CommandArgument.ToString().Split(new char[] { ',' });
-
+            string[] commandArgs = e.CommandArgument.ToString().Split(
+                new[] { ",," },
+                StringSplitOptions.RemoveEmptyEntries
+            );
             txtFirstName.Text = commandArgs[1];
             txtLastName.Text = commandArgs[2];
             //txtPhoneNumber.Text = commandArgs[3];
             txtEmailAddress.Text = commandArgs[4];
-            txtAge.Text = commandArgs[5];
-            contactImg.ImageUrl = commandArgs[6];
 
-            if (commandArgs[6] != null)
+            if (commandArgs[4] == "0")
             {
-                //byte[] pfpBytes = (byte[])commandArgs[6];
-                //string pfp = Convert.ToBase64String(pfpBytes);
-                //contactImg.ImageUrl = String.Format("data:image/jpg;base64,{0}", pfp);
+                txtAge.Text = string.Empty;
+            }
+            else
+            {
+                txtAge.Text = commandArgs[4];
+            }
+
+                      
+            if (commandArgs[5] != null)
+            {
+                contactImg.ImageUrl = commandArgs[5];
             }
             else
             {
@@ -332,6 +344,24 @@ namespace CRUDTEST
 
             BtnHiddenFIeld.Value = "0";
             HiddenIdField.Value = commandArgs[0].ToString();
+
+            List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
+
+            OracleCommand cmdGetPhoneNums = new OracleCommand();
+            cmdGetPhoneNums.Parameters.AddWithValue("id", HiddenIdField.Value);
+            cmdGetPhoneNums.CommandText = "select id,  phone_number from PHONENUMBERS WHERE CONTACT_ID =:id ";
+            cmdGetPhoneNums.Connection = con;
+            con.Open();
+            OracleDataReader dr2 = cmdGetPhoneNums.ExecuteReader();
+
+            while (dr2.Read())
+            {
+                phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
+            }
+
+            PhoneNumRepeater.DataSourceID = "PhoneNumbers";
+            PhoneNumRepeater.DataBind();
+            con.Close();
 
             //CancelUpdBtn.Attributes.Clear();
             //CancelUpdBtn.Attributes.Add("style", "display:block");
@@ -465,6 +495,127 @@ namespace CRUDTEST
         protected void PLSQLDataSource_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
         {
 
+        }
+
+        protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
+        {
+
+            try
+            {
+                OracleCommand cmd = new OracleCommand();
+
+                cmd.Parameters.AddWithValue("id", Convert.ToInt32(e.CommandArgument));
+                cmd.CommandText = "DELETE FROM PHONENUMBERS WHERE id=:id";
+                cmd.Connection = con;
+                con.Open();
+                cmd.ExecuteNonQuery();
+                cmd.Connection.Close();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+        protected void UpdatePhoneNumBtn_Command(object sender, CommandEventArgs e)
+        {
+            string[] commandArgs = e.CommandArgument.ToString().Split(new char[] { ',' });
+            string phoneNumber = commandArgs[0].ToString();
+            string id = commandArgs[1].ToString();
+            AddOrEditPhoneNumBtn.Text = "Update";
+            AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#ffc107");
+            AddOrUpdatePhoneNumHiddenField.Value = "0";
+            PhoneNumberIdHiddenField.Value = id;
+            txtPhoneNumber.Text = phoneNumber;
+
+            PhoneNumUpdatePanel.Update();
+
+        }
+
+        protected void AddOrEditPhoneNumBtn_Command(object sender, CommandEventArgs e)
+        {
+            string phoneNumber = txtPhoneNumber.Text;
+            string cmdText = "insert into PHONENUMBERS " +
+                    "(phone_number, contact_id)" +
+                    " VALUES (:phone_number, :contact_id)";
+
+            if (AddOrUpdatePhoneNumHiddenField.Value == "1")
+            {
+                try
+                {
+                    int contact_id = Convert.ToInt32(HiddenIdField.Value);
+
+                    OracleCommand cmd = new OracleCommand();
+
+                    cmd.Parameters.AddWithValue("contact_id", contact_id);
+                    cmd.Parameters.AddWithValue("phone_number", phoneNumber);
+                    cmd.CommandText = cmdText;
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    cmd.Connection.Close();
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else if(AddOrUpdatePhoneNumHiddenField.Value == "0")
+            {
+                cmdText = "UPDATE PHONENUMBERS SET PHONE_NUMBER =:phone_number WHERE ID =:id";
+
+                try
+                {
+                    int id = Convert.ToInt32(PhoneNumberIdHiddenField.Value);
+
+                    OracleCommand cmd = new OracleCommand();
+
+                    cmd.Parameters.AddWithValue("id", id);
+                    cmd.Parameters.AddWithValue("phone_number", phoneNumber);
+                    cmd.CommandText = cmdText;
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    cmd.Connection.Close();
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                
+            }
+
+            AddOrEditPhoneNumBtn.Text = "Add";
+            AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
+            AddOrEditPhoneNumBtn.ForeColor = Color.White;
+            txtPhoneNumber.Text = string.Empty;
+
+            PhoneNumUpdatePanel.Update();
+        }
+
+        protected void AddContactBtn_Click(object sender, EventArgs e)
+        {
+            EmptySubmitForm();
+            contactImg.ImageUrl = Common.CommonConstants.DefaultContactImageUrl;
+            AddOrEditPhoneNumBtn.Text = "Add";
+            AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
+            AddOrEditPhoneNumBtn.ForeColor = Color.White;
+            AddOrUpdatePhoneNumHiddenField.Value = "2";
+
+            PhoneNumRepeater.DataSource = null;
+            PhoneNumRepeater.DataSourceID = null;
+            PhoneNumRepeater.DataBind();
+
+            PhoneNumUpdatePanel.Update();
+            FormUpdatePanel.Update();
         }
     }
 }
