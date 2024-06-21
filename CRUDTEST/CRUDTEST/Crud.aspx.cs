@@ -24,7 +24,7 @@ namespace CRUDTEST
             if (!IsPostBack)
             {
 
-                contactImg.Style.Add("max-width", "450px");
+                contactImg.Style.Add("max-width", "400px");
                 contactImg.Style.Add("max-height", "300px");
 
                 try
@@ -92,6 +92,7 @@ namespace CRUDTEST
             string emailAddress = txtEmailAddress.Text.Trim();
             int age = default;
             byte[] profilePicture = null;
+            bool isDefaultProfilePicture = IsDefaultProfilePicture();
             bool hasImage = ImageUpload.HasFile;
             var dbNull = DBNull.Value;
 
@@ -155,9 +156,6 @@ namespace CRUDTEST
                 }
 
 
-                EmptySubmitForm();
-                FormUpdatePanel.Update();
-
             }
 
             else if (BtnHiddenFIeld.Value == "0")
@@ -167,9 +165,9 @@ namespace CRUDTEST
                 {
                     string fileExtension = Path.GetExtension(ImageUpload.FileName).ToLower();
 
-                    if (fileExtension == "jpg" || fileExtension == "gif" || fileExtension == "jpeg" || fileExtension == "png")
+                    if (fileExtension != ".jpg" || fileExtension == ".gif" || fileExtension != ".jpeg" || fileExtension != ".png")
                     {
-                        profilePicture = ImageUpload.FileBytes;
+                        hasImage = false;
                     }
 
                 }
@@ -196,7 +194,18 @@ namespace CRUDTEST
                         }
                         else
                         {
-                            command.Parameters.AddWithValue("profile_picture", dbNull);
+                            if (!isDefaultProfilePicture)
+                            {
+                                cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
+                                    "EMAIL_ADDRESS =:email_address WHERE ID =:id";
+                                command.CommandText = cmdText;
+                            }
+                            else
+                            {
+                                command.Parameters.AddWithValue("profile_picture", dbNull);
+                            }
+
+
                         }
 
                         command.Connection.Open();
@@ -212,8 +221,13 @@ namespace CRUDTEST
                 BtnHiddenFIeld.Value = "1";
                 AddOrUpdatePhoneNumHiddenField.Value = "1";
                 EmptySubmitForm();
+                FormUpdatePanel.Update();
+                Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", id));
             }
 
+
+            EmptySubmitForm();
+            FormUpdatePanel.Update();
 
             ShowBtn_Click(sender, e);
         }
@@ -232,6 +246,7 @@ namespace CRUDTEST
 
             //ShowContactsBtn.Attributes.Clear();
             //ShowContactsBtn.Attributes.Add("style", "display:none");
+
 
             try
             {
@@ -332,7 +347,7 @@ namespace CRUDTEST
                 txtAge.Text = commandArgs[4];
             }
 
-                      
+
             if (commandArgs[5] != null)
             {
                 contactImg.ImageUrl = commandArgs[5];
@@ -531,8 +546,6 @@ namespace CRUDTEST
             PhoneNumberIdHiddenField.Value = id;
             txtPhoneNumber.Text = phoneNumber;
 
-            PhoneNumUpdatePanel.Update();
-
         }
 
         protected void AddOrEditPhoneNumBtn_Command(object sender, CommandEventArgs e)
@@ -564,7 +577,7 @@ namespace CRUDTEST
                     throw;
                 }
             }
-            else if(AddOrUpdatePhoneNumHiddenField.Value == "0")
+            else if (AddOrUpdatePhoneNumHiddenField.Value == "0")
             {
                 cmdText = "UPDATE PHONENUMBERS SET PHONE_NUMBER =:phone_number WHERE ID =:id";
 
@@ -590,7 +603,7 @@ namespace CRUDTEST
             }
             else
             {
-                
+
             }
 
             AddOrEditPhoneNumBtn.Text = "Add";
@@ -598,7 +611,8 @@ namespace CRUDTEST
             AddOrEditPhoneNumBtn.ForeColor = Color.White;
             txtPhoneNumber.Text = string.Empty;
 
-            PhoneNumUpdatePanel.Update();
+            FormUpdatePanel.Update();
+
         }
 
         protected void AddContactBtn_Click(object sender, EventArgs e)
@@ -614,8 +628,17 @@ namespace CRUDTEST
             PhoneNumRepeater.DataSourceID = null;
             PhoneNumRepeater.DataBind();
 
-            PhoneNumUpdatePanel.Update();
             FormUpdatePanel.Update();
+        }
+
+        private bool IsDefaultProfilePicture()
+        {
+            if (contactImg.ImageUrl == CommonConstants.DefaultContactImageUrl)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

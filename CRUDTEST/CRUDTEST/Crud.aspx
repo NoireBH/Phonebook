@@ -102,7 +102,7 @@
                                                         </asp:RegularExpressionValidator>
                                                     </div>
                                                     <%--<asp:Button ID="UploadImgBtn" runat="server" Text="Upload Image" OnClick="UploadImgBtn_Click" />--%>
-                                                    <asp:UpdatePanel ID="PhoneNumUpdatePanel" runat="server" UpdateMode="Conditional">
+                                                    <asp:UpdatePanel ID="PhoneNumUpdatePanel" runat="server">
                                                         <ContentTemplate>
                                                             <div class="form-group d-flex flex-column phone-numbers-container">
                                                                 <asp:Label ID="lblPhoneNumbers" runat="server" CssClass="fw-bold mb-3" Text="Phone numbers:"></asp:Label>
@@ -138,10 +138,10 @@
 
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblContactImagePreview" runat="server" CssClass="fw-bold mb-3" Text="Profile Picture:"></asp:Label>
-                                                        <div class="contact-img-container container-fluid text-center">
+                                                        <div class="contact-img-container container-fluid text-center mb-2">
                                                             <asp:Image ID="contactImg" ImageUrl="Images/blank-pfp.png" CssClass="contact-img" runat="server" />
                                                         </div>
-                                                        <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server" />
+                                                        <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server"  />
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center gap-2">
