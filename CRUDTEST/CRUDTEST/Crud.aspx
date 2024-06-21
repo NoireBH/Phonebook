@@ -105,28 +105,30 @@
                                                     <asp:UpdatePanel ID="PhoneNumUpdatePanel" runat="server">
                                                         <ContentTemplate>
                                                             <div class="form-group d-flex flex-column phone-numbers-container">
-                                                                <asp:Label ID="lblPhoneNumbers" runat="server" CssClass="fw-bold mb-3" Text="Phone numbers:"></asp:Label>
+                                                                <h4 class="fw-bold mb-3">Phone numbers:</h4>
                                                                 <asp:TextBox ID="txtPhoneNumber" runat="server"></asp:TextBox>
                                                                 <asp:Button ID="AddOrEditPhoneNumBtn" CssClass="btn btn-success mb-2" runat="server"
-                                                                    Text="Add" OnCommand="AddOrEditPhoneNumBtn_Command" />
-                                                                <asp:Repeater ID="PhoneNumRepeater" runat="server" DataSourceID="PhoneNumbers">
-                                                                    <ItemTemplate>
+                                                                    Text="Save" OnCommand="AddOrEditPhoneNumBtn_Command" />
+                                                                <%--<asp:Repeater ID="PhoneNumRepeater" runat="server" DataSourceID="PhoneNumbers" OnItemDataBound="PhoneNumRepeater_ItemDataBound">
+                                                                    <ItemTemplate>--%>
                                                                         <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-3 fw-bold"
                                                                             style="max-width: 300px">
-                                                                            <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
-                                                                            <div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
-                                                                                <asp:LinkButton ID="RemoveNumberBtn" runat="server" OnCommand="RemoveNumberBtn_Command"
+                                                                            <asp:Label ID="lblPhoneNumber" runat="server">
+                                                                                <%--<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>--%>
+                                                                            </asp:Label>
+                                                                            <%--<div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
+                                                                                <asp:Button ID="RemoveNumberBtn" class="btn btn-danger fw-bold text-dark" runat="server" Text="Delete"
+                                                                                    OnCommand="RemoveNumberBtn_Command"
                                                                                     CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'>
-                                                                                <i class="fa-solid fa-trash" style="color: #FF0000;"></i>
-                                                                                </asp:LinkButton>
+                                                                                </asp:Button>
                                                                                 <asp:Button ID="UpdatePhoneNumBtn" Text="Update"
                                                                                     class="btn btn-warning fw-bold text-dark" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
                                                                                     CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") + "," 
                                                                                         + DataBinder.Eval(Container.DataItem, "ID") %>' />
-                                                                            </div>
+                                                                            </div>--%>
                                                                         </div>
-                                                                    </ItemTemplate>
-                                                                </asp:Repeater>
+                                                                    <%--</ItemTemplate>
+                                                                </asp:Repeater>--%>
                                                             </div>
                                                             <asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" Value="1" runat="server" />
                                                             <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />
@@ -141,7 +143,7 @@
                                                         <div class="contact-img-container container-fluid text-center mb-2">
                                                             <asp:Image ID="contactImg" ImageUrl="Images/blank-pfp.png" CssClass="contact-img" runat="server" />
                                                         </div>
-                                                        <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server"  />
+                                                        <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server" />
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center gap-2">

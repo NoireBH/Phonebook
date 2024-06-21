@@ -11,6 +11,7 @@ using CRUDTEST.ViewModels;
 using System.Windows.Forms;
 using System.IO;
 using CRUDTEST.Common;
+using Label = System.Web.UI.WebControls.Label;
 
 namespace CRUDTEST
 {
@@ -322,12 +323,11 @@ namespace CRUDTEST
 
         protected void UpdateBtn_Command(object sender, CommandEventArgs e)
         {
-            submitBtn.Text = "Update";
-            submitBtn.BackColor = ColorTranslator.FromHtml("#ffc107");
-            submitBtn.ForeColor = Color.White;
-            AddOrEditPhoneNumBtn.Text = "Add";
-            AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
-            AddOrEditPhoneNumBtn.ForeColor = Color.White;
+            //submitBtn.BackColor = ColorTranslator.FromHtml("#ffc107");
+            //submitBtn.ForeColor = Color.White;
+            //AddOrEditPhoneNumBtn.Text = "Add";
+            //AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
+            //AddOrEditPhoneNumBtn.ForeColor = Color.White;
 
             string[] commandArgs = e.CommandArgument.ToString().Split(
                 new[] { ",," },
@@ -374,8 +374,8 @@ namespace CRUDTEST
                 phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
             }
 
-            PhoneNumRepeater.DataSourceID = "PhoneNumbers";
-            PhoneNumRepeater.DataBind();
+            //PhoneNumRepeater.DataSourceID = "PhoneNumbers";
+            //PhoneNumRepeater.DataBind();
             con.Close();
 
             //CancelUpdBtn.Attributes.Clear();
@@ -533,6 +533,12 @@ namespace CRUDTEST
                 throw;
             }
 
+            // PhoneNumRepeater.DataSourceID = "PhoneNumbers";
+            //PhoneNumRepeater.DataBind();
+            con.Close();
+
+            FormUpdatePanel.Update();
+
         }
 
         protected void UpdatePhoneNumBtn_Command(object sender, CommandEventArgs e)
@@ -540,8 +546,8 @@ namespace CRUDTEST
             string[] commandArgs = e.CommandArgument.ToString().Split(new char[] { ',' });
             string phoneNumber = commandArgs[0].ToString();
             string id = commandArgs[1].ToString();
-            AddOrEditPhoneNumBtn.Text = "Update";
-            AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#ffc107");
+            //AddOrEditPhoneNumBtn.Text = "Update";
+            //AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#ffc107");
             AddOrUpdatePhoneNumHiddenField.Value = "0";
             PhoneNumberIdHiddenField.Value = id;
             txtPhoneNumber.Text = phoneNumber;
@@ -606,10 +612,29 @@ namespace CRUDTEST
 
             }
 
-            AddOrEditPhoneNumBtn.Text = "Add";
-            AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
-            AddOrEditPhoneNumBtn.ForeColor = Color.White;
+            //List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
+
+            //OracleCommand cmdGetPhoneNums = new OracleCommand();
+            //cmdGetPhoneNums.Parameters.AddWithValue("id", HiddenIdField.Value);
+            //cmdGetPhoneNums.CommandText = "select id,  phone_number from PHONENUMBERS WHERE CONTACT_ID =:id ";
+            //cmdGetPhoneNums.Connection = con;
+            //con.Open();
+            //OracleDataReader dr2 = cmdGetPhoneNums.ExecuteReader();
+
+            //while (dr2.Read())
+            //{
+            //    phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
+            //}
+
+            //PhoneNumRepeater.DataSourceID = "PhoneNumbers";
+            //PhoneNumRepeater.DataBind();
+            con.Close();
+
+            //AddOrEditPhoneNumBtn.Text = "Add";
+            //AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
+            //AddOrEditPhoneNumBtn.ForeColor = Color.White;
             txtPhoneNumber.Text = string.Empty;
+            AddOrUpdatePhoneNumHiddenField.Value = "1";
 
             FormUpdatePanel.Update();
 
@@ -619,14 +644,13 @@ namespace CRUDTEST
         {
             EmptySubmitForm();
             contactImg.ImageUrl = Common.CommonConstants.DefaultContactImageUrl;
-            AddOrEditPhoneNumBtn.Text = "Add";
-            AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
-            AddOrEditPhoneNumBtn.ForeColor = Color.White;
+            //AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
+            //AddOrEditPhoneNumBtn.ForeColor = Color.White;
             AddOrUpdatePhoneNumHiddenField.Value = "2";
 
-            PhoneNumRepeater.DataSource = null;
-            PhoneNumRepeater.DataSourceID = null;
-            PhoneNumRepeater.DataBind();
+            //PhoneNumRepeater.DataSource = null;
+            //PhoneNumRepeater.DataSourceID = null;
+            //PhoneNumRepeater.DataBind();
 
             FormUpdatePanel.Update();
         }
@@ -639,6 +663,24 @@ namespace CRUDTEST
             }
 
             return false;
+        }
+
+        protected void PhoneNumRepeater_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            //if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            //{
+            //    // Find the Label control
+            //    Label lblDynamic = (Label)e.Item.FindControl("lblPhoneNumber");
+
+            //    // Get the data item bound to this RepeaterItem
+            //    var dataItem = e.Item.DataItem as PhoneNumber;
+
+            //    if (dataItem != null && lblDynamic != null)
+            //    {
+            //        // Assign the unique ID from the data source to the Label's ID
+            //        lblDynamic.ID = "lblPhoneNumber_" + dataItem.Id;
+            //    }
+            //}
         }
     }
 }
