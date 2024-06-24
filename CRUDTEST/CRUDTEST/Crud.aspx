@@ -42,7 +42,7 @@
                 </header>
                 <asp:ScriptManager ID="FormScriptManager" runat="server">
                 </asp:ScriptManager>
-                <asp:UpdatePanel ID="SearchUpdatePanel" runat="server">
+                <%--<asp:UpdatePanel ID="SearchUpdatePanel" runat="server">
                     <ContentTemplate>
                         <div class="container-fluid text-center search-contact-container mb-3">
                             <h3>Search for a contact</h3>
@@ -55,7 +55,7 @@
                             <asp:Label ID="lblNoContactFound" runat="server" CssClass="no-contact-found d-none" Text="No contact found!"></asp:Label>
                         </div>
                     </ContentTemplate>
-                </asp:UpdatePanel>
+                </asp:UpdatePanel>--%>
 
                 <div class="phonebook-container container-fluid text-center mb-2">
                     <%--<button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -120,13 +120,10 @@
                                                                 <asp:Button ID="AddOrEditPhoneNumBtn" CssClass="btn btn-success mb-2" runat="server"
                                                                     Text="Save" OnCommand="AddOrEditPhoneNumBtn_Command" />
                                                                 <asp:Repeater ID="PhoneNumRepeater" runat="server" DataSourceID="PhoneNumbers" OnItemDataBound="PhoneNumRepeater_ItemDataBound">
-                                                                    <ItemTemplate>
-                                                                        <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-3 fw-bold"
-                                                                            style="max-width: 300px">
-                                                                            <asp:Label ID="lblPhoneNumber" runat="server">
-                                                                                <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
-                                                                            </asp:Label>
-                                                                            <div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
+                                                                    <ItemTemplate>                                                                      
+                                                                            <asp:TextBox ID="txtAddOrEditphoneNum" runat="server" CssClass="text-center" Text='<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>'>
+                                                                            </asp:TextBox>
+                                                                            <%--<div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
                                                                                 <asp:Button ID="RemoveNumberBtn" class="btn btn-danger fw-bold text-dark" runat="server" Text="Delete"
                                                                                     OnCommand="RemoveNumberBtn_Command"
                                                                                     CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'></asp:Button>
@@ -134,10 +131,12 @@
                                                                                     class="btn btn-warning fw-bold text-dark" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
                                                                                     CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") + "," 
                                                                                         + DataBinder.Eval(Container.DataItem, "ID") %>' />
-                                                                            </div>
-                                                                        </div>
+                                                                            </div>--%>                                                                       
                                                                     </ItemTemplate>
                                                                 </asp:Repeater>
+                                                                <div id="newPhoneNumsContainer" class="container-fluid d-flex flex-column" runat="server">
+
+                                                                </div>
                                                             </div>
                                                             <asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" Value="1" runat="server" />
                                                             <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />

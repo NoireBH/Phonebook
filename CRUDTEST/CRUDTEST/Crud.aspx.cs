@@ -12,19 +12,42 @@ using System.Windows.Forms;
 using System.IO;
 using CRUDTEST.Common;
 using Label = System.Web.UI.WebControls.Label;
+using TextBox = System.Web.UI.WebControls.TextBox;
+using System.Web.UI;
+using Button = System.Web.UI.WebControls.Button;
+using System.Data.SqlClient;
+using System.Web.UI.HtmlControls;
+using Microsoft.Ajax.Utilities;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CRUDTEST
 {
+
     public partial class Crud : System.Web.UI.Page
     {
         OracleConnection con = new OracleConnection(@"Data Source=oratest19/odbms;USER ID=EMustafov; password=manager;");
+
+        private List<string> DynamicPhoneNumbers
+        {
+            get
+            {
+                if (ViewState["PhoneNumbers"] == null)
+                {
+                    ViewState["PhoneNumbers"] = new List<string>();
+                }
+                return (List<string>)ViewState["PhoneNumbers"];
+            }
+            set
+            {
+                ViewState["PhoneNumbers"] = value;
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
 
             if (!IsPostBack)
             {
-
                 contactImg.Style.Add("max-width", "400px");
                 contactImg.Style.Add("max-height", "300px");
 
@@ -75,9 +98,25 @@ namespace CRUDTEST
                 }
             }
 
+            else
+            {
+                RecreateTextboxes();
+            }
+        }
 
-
-
+        private void RecreateTextboxes()
+        {
+            newPhoneNumsContainer.Controls.Clear();
+            int controlsCount = 0;
+            foreach (var phoneNumber in DynamicPhoneNumbers)
+            {
+                TextBox dynamicTextBox = new TextBox();
+                dynamicTextBox.ID = "ControlID_" + controlsCount.ToString();
+                dynamicTextBox.Text = phoneNumber;
+                dynamicTextBox.Attributes["class"] = "text-center";
+                newPhoneNumsContainer.Controls.Add(dynamicTextBox);
+                controlsCount++;
+            }
         }
 
         protected void TextBox4_TextChanged(object sender, EventArgs e)
@@ -149,13 +188,52 @@ namespace CRUDTEST
                         command.ExecuteNonQuery();
                         command.Connection.Close();
                     }
+
+                    List<string> txtBoxPhoneNums = new List<string>();
+
+                    foreach (RepeaterItem item in PhoneNumRepeater.Items)
+                    {
+
+                        TextBox txtPhoneNumber = (TextBox)item.FindControl("txtAddOrEditphoneNum");
+
+                        if (txtPhoneNumber != null)
+                        {
+                            txtBoxPhoneNums.Add(txtPhoneNumber.Text);
+                        }
+                    }
+
+                    string getLastInsertedPhoneNumId = "SELECT SCOPE_IDENTITY();";
+                    int lastInsertedID = -1;
+
+                    using (OracleCommand command = new OracleCommand(getLastInsertedPhoneNumId, con))
+                    {
+                        lastInsertedID = Convert.ToInt32(command.ExecuteScalar());
+                    }
+
+                    cmdText = "insert into PHONENUMBERS " +
+                   "(phone_number, contact_id)" +
+                   " VALUES (:phone_number, :contact_id)";
+
+                    foreach (var phoneNum in txtBoxPhoneNums)
+                    {
+                        using (OracleCommand command = new OracleCommand(cmdText, con))
+                        {
+                            command.Parameters.AddWithValue("phone_number", phoneNum);
+                            command.Parameters.AddWithValue("contact_id", lastInsertedID);
+
+                            command.Connection.Open();
+                            command.ExecuteNonQuery();
+                            command.Connection.Close();
+                        }
+                    }
+
+
                 }
                 catch (Exception)
                 {
 
                     throw;
                 }
-
 
             }
 
@@ -473,39 +551,39 @@ namespace CRUDTEST
 
         }
 
-        protected void SearchContactBtn_Click(object sender, EventArgs e)
-        {
-            string searchInput = txtSearchContact.Text;
+        //protected void SearchContactBtn_Click(object sender, EventArgs e)
+        //{
+        //    string searchInput = txtSearchContact.Text;
 
-            try
-            {
-                OracleCommand cmd = new OracleCommand();
-                cmd.Parameters.AddWithValue("search_input", searchInput);
-                cmd.CommandText = "SELECT * FROM CONTACTS WHERE LOWER(FIRST_NAME) LIKE '%' || LOWER(:search_input) || '%' OR LOWER(LAST_NAME) LIKE '%' || LOWER(:search_input) || '%'";
-                cmd.Connection = con;
-                con.Open();
-                OracleDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
-                {
-                    List<PhoneContact> values = new List<PhoneContact>();
+        //    try
+        //    {
+        //        OracleCommand cmd = new OracleCommand();
+        //        cmd.Parameters.AddWithValue("search_input", searchInput);
+        //        cmd.CommandText = "SELECT * FROM CONTACTS WHERE LOWER(FIRST_NAME) LIKE '%' || LOWER(:search_input) || '%' OR LOWER(LAST_NAME) LIKE '%' || LOWER(:search_input) || '%'";
+        //        cmd.Connection = con;
+        //        con.Open();
+        //        OracleDataReader dr = cmd.ExecuteReader();
+        //        if (dr.HasRows)
+        //        {
+        //            List<PhoneContact> values = new List<PhoneContact>();
 
-                    while (dr.Read())
-                    {
-                        var name = dr["first_name"].ToString();
-                    }
+        //            while (dr.Read())
+        //            {
+        //                var name = dr["first_name"].ToString();
+        //            }
 
-                }
+        //        }
 
-                con.Close();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+        //        con.Close();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
 
 
 
-        }
+        //}
 
         protected void PLSQLDataSource_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
         {
@@ -563,53 +641,70 @@ namespace CRUDTEST
 
             if (AddOrUpdatePhoneNumHiddenField.Value == "1")
             {
-                try
+                //try
+                //{
+                //    int contact_id = Convert.ToInt32(HiddenIdField.Value);
+
+                //    OracleCommand cmd = new OracleCommand();
+
+                //    cmd.Parameters.AddWithValue("contact_id", contact_id);
+                //    cmd.Parameters.AddWithValue("phone_number", phoneNumber);
+                //    cmd.CommandText = cmdText;
+                //    cmd.Connection = con;
+                //    con.Open();
+                //    cmd.ExecuteNonQuery();
+                //    cmd.Connection.Close();
+
+                //}
+                //catch (Exception)
+                //{
+                //    throw;
+                //}
+
+                if (!string.IsNullOrWhiteSpace(phoneNumber))
                 {
-                    int contact_id = Convert.ToInt32(HiddenIdField.Value);
-
-                    OracleCommand cmd = new OracleCommand();
-
-                    cmd.Parameters.AddWithValue("contact_id", contact_id);
-                    cmd.Parameters.AddWithValue("phone_number", phoneNumber);
-                    cmd.CommandText = cmdText;
-                    cmd.Connection = con;
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    cmd.Connection.Close();
+                    DynamicPhoneNumbers.Add(phoneNumber);
+                    RecreateTextboxes();
 
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
+
+
             }
             else if (AddOrUpdatePhoneNumHiddenField.Value == "0")
             {
-                cmdText = "UPDATE PHONENUMBERS SET PHONE_NUMBER =:phone_number WHERE ID =:id";
 
-                try
-                {
-                    int id = Convert.ToInt32(PhoneNumberIdHiddenField.Value);
 
-                    OracleCommand cmd = new OracleCommand();
+                //cmdText = "UPDATE PHONENUMBERS SET PHONE_NUMBER =:phone_number WHERE ID =:id";
 
-                    cmd.Parameters.AddWithValue("id", id);
-                    cmd.Parameters.AddWithValue("phone_number", phoneNumber);
-                    cmd.CommandText = cmdText;
-                    cmd.Connection = con;
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    cmd.Connection.Close();
+                //try
+                //{
+                //    int id = Convert.ToInt32(PhoneNumberIdHiddenField.Value);
 
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                //    OracleCommand cmd = new OracleCommand();
+
+                //    cmd.Parameters.AddWithValue("id", id);
+                //    cmd.Parameters.AddWithValue("phone_number", phoneNumber);
+                //    cmd.CommandText = cmdText;
+                //    cmd.Connection = con;
+                //    con.Open();
+                //    cmd.ExecuteNonQuery();
+                //    cmd.Connection.Close();
+
+                //}
+                //catch (Exception)
+                //{
+                //    throw;
+                //}
+
+                //RepeaterItem item = (RepeaterItem)((Button)sender).NamingContainer;
+                //TextBox txtAddOrEditphoneNum = (TextBox)item.FindControl("txtAddOrEditphoneNum");
+                //string phoneNumberFromTextBox = txtAddOrEditphoneNum.Text;
+
+
             }
             else
             {
-
+                //BulletedList1.Items.add
             }
 
             //List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
@@ -626,9 +721,9 @@ namespace CRUDTEST
             //    phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
             //}
 
-            PhoneNumRepeater.DataSourceID = "PhoneNumbers";
-            PhoneNumRepeater.DataBind();
-            con.Close();
+            //PhoneNumRepeater.DataSourceID = "PhoneNumbers";
+            //PhoneNumRepeater.DataBind();
+            //con.Close();
 
             //AddOrEditPhoneNumBtn.Text = "Add";
             //AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
@@ -640,13 +735,31 @@ namespace CRUDTEST
 
         }
 
+        //private void LoadPhoneNumTextBoxes()
+        //{
+
+        //    if (ViewState["TextBoxInfoList"] != null)
+        //    {
+        //        List<TextBox> textBoxInfoList = ViewState["TextBoxInfoList"] as List<TextBox>;
+        //        foreach (TextBox info in textBoxInfoList)
+        //        {
+        //            // Recreate the TextBox and add it to the placeholder
+        //            TextBox textBox = new TextBox();
+        //            textBox.ID = info.ID;
+        //            textBox.Text = info.Text; // Set the text of the TextBox
+        //            newPhoneNumsContainer.Controls.Add(textBox);
+        //        }
+        //    }
+
+        //}
+
         protected void AddContactBtn_Click(object sender, EventArgs e)
         {
             EmptySubmitForm();
             contactImg.ImageUrl = Common.CommonConstants.DefaultContactImageUrl;
             //AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
             //AddOrEditPhoneNumBtn.ForeColor = Color.White;
-            AddOrUpdatePhoneNumHiddenField.Value = "2";
+            //AddOrUpdatePhoneNumHiddenField.Value = "2";
 
             PhoneNumRepeater.DataSource = null;
             PhoneNumRepeater.DataSourceID = null;
@@ -669,17 +782,9 @@ namespace CRUDTEST
         {
             //if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             //{
-            //    // Find the Label control
-            //    Label lblDynamic = (Label)e.Item.FindControl("lblPhoneNumber");
+            //    TextBox txtPhoneNumber = (TextBox)e.Item.FindControl("txtAddOrEditphoneNum");
+            //    txtPhoneNumber.ID = "txtPhoneNumber_" + DataBinder.Eval(e.Item.DataItem, "ID");
 
-            //    // Get the data item bound to this RepeaterItem
-            //    var dataItem = e.Item.DataItem as PhoneNumber;
-
-            //    if (dataItem != null && lblDynamic != null)
-            //    {
-            //        // Assign the unique ID from the data source to the Label's ID
-            //        lblDynamic.ID = "lblPhoneNumber_" + dataItem.Id;
-            //    }
             //}
         }
     }

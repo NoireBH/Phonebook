@@ -33,42 +33,6 @@ namespace CRUDTEST
         protected global::System.Web.UI.ScriptManager FormScriptManager;
 
         /// <summary>
-        /// SearchUpdatePanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel SearchUpdatePanel;
-
-        /// <summary>
-        /// txtSearchContact control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSearchContact;
-
-        /// <summary>
-        /// SearchContactBtn control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton SearchContactBtn;
-
-        /// <summary>
-        /// lblNoContactFound control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNoContactFound;
-
-        /// <summary>
         /// AddContactBtnUpdatePanel control.
         /// </summary>
         /// <remarks>
@@ -211,6 +175,15 @@ namespace CRUDTEST
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater PhoneNumRepeater;
+
+        /// <summary>
+        /// newPhoneNumsContainer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl newPhoneNumsContainer;
 
         /// <summary>
         /// AddOrUpdatePhoneNumHiddenField control.
