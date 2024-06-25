@@ -27,15 +27,15 @@ namespace CRUDTEST
     {
         OracleConnection con = new OracleConnection(@"Data Source=oratest19/odbms;USER ID=EMustafov; password=manager;");
 
-        private List<PhoneNumber> DynamicPhoneNumbers
+        private List<string> DynamicPhoneNumbers
         {
             get
             {
                 if (ViewState["PhoneNumbers"] == null)
                 {
-                    ViewState["PhoneNumbers"] = new List<PhoneNumber>();
+                    ViewState["PhoneNumbers"] = new List<string>();
                 }
-                return (List<PhoneNumber>)ViewState["PhoneNumbers"];
+                return (List<string>)ViewState["PhoneNumbers"];
             }
             set
             {
@@ -122,14 +122,16 @@ namespace CRUDTEST
 
         private void RecreateTextboxes()
         {
-            PhoneNumRepeater.Controls.Clear();
+            newPhoneNumsContainer.Controls.Clear();
+            int controlsCount = 0;
             foreach (var phoneNumber in DynamicPhoneNumbers)
             {
                 TextBox dynamicTextBox = new TextBox();
-                dynamicTextBox.ID = "ControlID_" + phoneNumber.Id;
-                dynamicTextBox.Text = phoneNumber.Number;
+                dynamicTextBox.ID = "ControlID_" + controlsCount.ToString();
+                dynamicTextBox.Text = phoneNumber;
                 dynamicTextBox.Attributes["class"] = "text-center";
-                PhoneNumRepeater.Controls.Add(dynamicTextBox);
+                newPhoneNumsContainer.Controls.Add(dynamicTextBox);
+                controlsCount++;
             }
         }
 
@@ -212,7 +214,7 @@ namespace CRUDTEST
 
                     List<string> txtBoxPhoneNums = new List<string>();
 
-                    foreach (var item in PhoneNumRepeater.Controls)
+                    foreach (var item in newPhoneNumsContainer.Controls)
                     {
 
                         TextBox textbox = (TextBox)item;
@@ -323,7 +325,7 @@ namespace CRUDTEST
 
                 List<string> txtBoxPhoneNums = new List<string>();
 
-                foreach (var item in PhoneNumRepeater.Controls)
+                foreach (var item in newPhoneNumsContainer.Controls)
                 {
 
                     TextBox textbox = (TextBox)item;
@@ -521,10 +523,7 @@ namespace CRUDTEST
                 phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
             }
 
-            DynamicPhoneNumbers = phoneNumbers;
-            
-
-            PhoneNumRepeater.DataSource = phoneNumbers;
+            PhoneNumRepeater.DataSourceID = "PhoneNumbers";
             PhoneNumRepeater.DataBind();
             con.Close();
 
@@ -683,7 +682,7 @@ namespace CRUDTEST
                 throw;
             }
 
-            PhoneNumRepeater.DataSource = DynamicPhoneNumbers;
+            PhoneNumRepeater.DataSourceID = "PhoneNumbers";
             PhoneNumRepeater.DataBind();
             con.Close();
 
@@ -735,7 +734,7 @@ namespace CRUDTEST
 
                 if (!string.IsNullOrWhiteSpace(phoneNumber))
                 {
-                    DynamicPhoneNumbers.Add(new PhoneNumber(phoneNumber));
+                    DynamicPhoneNumbers.Add(phoneNumber);
                     RecreateTextboxes();
 
                 }
@@ -834,6 +833,7 @@ namespace CRUDTEST
             //AddOrUpdatePhoneNumHiddenField.Value = "2";
 
             PhoneNumRepeater.DataSource = null;
+            PhoneNumRepeater.DataSourceID = null;
             PhoneNumRepeater.DataBind();
 
             FormUpdatePanel.Update();
