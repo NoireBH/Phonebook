@@ -27,35 +27,19 @@ namespace CRUDTEST
     {
         OracleConnection con = new OracleConnection(@"Data Source=oratest19/odbms;USER ID=EMustafov; password=manager;");
 
-        private List<string> DynamicPhoneNumbers
+        private List<PhoneNumber> DynamicPhoneNumbers
         {
             get
             {
                 if (ViewState["PhoneNumbers"] == null)
                 {
-                    ViewState["PhoneNumbers"] = new List<string>();
+                    ViewState["PhoneNumbers"] = new List<PhoneNumber>();
                 }
-                return (List<string>)ViewState["PhoneNumbers"];
+                return (List<PhoneNumber>)ViewState["PhoneNumbers"];
             }
             set
             {
                 ViewState["PhoneNumbers"] = value;
-            }
-        }
-
-        private List<string> PhoneNumsToDelete
-        {
-            get
-            {
-                if (ViewState["PhoneNumsToDelete"] == null)
-                {
-                    ViewState["PhoneNumsToDelete"] = new List<string>();
-                }
-                return (List<string>)ViewState["PhoneNumbers"];
-            }
-            set
-            {
-                ViewState["PhoneNumsToDelete"] = value;
             }
         }
 
@@ -116,24 +100,25 @@ namespace CRUDTEST
 
             else
             {
-                RecreateTextboxes();
+                //RecreateTextboxes();
             }
         }
 
-        private void RecreateTextboxes()
-        {
-            newPhoneNumsContainer.Controls.Clear();
-            int controlsCount = 0;
-            foreach (var phoneNumber in DynamicPhoneNumbers)
-            {
-                TextBox dynamicTextBox = new TextBox();
-                dynamicTextBox.ID = "ControlID_" + controlsCount.ToString();
-                dynamicTextBox.Text = phoneNumber;
-                dynamicTextBox.Attributes["class"] = "text-center";
-                newPhoneNumsContainer.Controls.Add(dynamicTextBox);
-                controlsCount++;
-            }
-        }
+        //private void RecreateTextboxes()
+        //{
+        //    PhoneNumRepeater.Controls.Clear();
+        //    foreach (var phoneNumber in DynamicPhoneNumbers)
+        //    {
+
+        //        TextBox dynamicTextBox = new TextBox();
+        //        dynamicTextBox.ID = "ControlID_" + phoneNumber.Id;
+        //        dynamicTextBox.Text = phoneNumber.Number;
+        //        dynamicTextBox.Attributes["class"] = "text-center";
+        //        PhoneNumRepeater.Controls.Add(dynamicTextBox);               
+        //    }
+
+        //    PhoneNumRepeater.DataBind();
+        //}
 
         protected void TextBox4_TextChanged(object sender, EventArgs e)
         {
@@ -214,7 +199,7 @@ namespace CRUDTEST
 
                     List<string> txtBoxPhoneNums = new List<string>();
 
-                    foreach (var item in newPhoneNumsContainer.Controls)
+                    foreach (var item in PhoneNumRepeater.Controls)
                     {
 
                         TextBox textbox = (TextBox)item;
@@ -325,7 +310,7 @@ namespace CRUDTEST
 
                 List<string> txtBoxPhoneNums = new List<string>();
 
-                foreach (var item in newPhoneNumsContainer.Controls)
+                foreach (var item in PhoneNumRepeater.Controls)
                 {
 
                     TextBox textbox = (TextBox)item;
@@ -394,8 +379,6 @@ namespace CRUDTEST
         protected void ShowBtn_Click(object sender, EventArgs e)
         {
 
-            //ShowContactsBtn.Attributes.Clear();
-            //ShowContactsBtn.Attributes.Add("style", "display:none");
 
 
             try
@@ -435,15 +418,6 @@ namespace CRUDTEST
 
         }
 
-        protected void Repeater_ItemCommand1(object source, RepeaterCommandEventArgs e)
-        {
-
-        }
-
-        protected void Repeater_ItemCommand(object source, RepeaterCommandEventArgs e)
-        {
-
-        }
 
         protected void DeleteBtn_Command(object sender, CommandEventArgs e)
         {
@@ -472,42 +446,59 @@ namespace CRUDTEST
 
         protected void UpdateBtn_Command(object sender, CommandEventArgs e)
         {
-            //submitBtn.BackColor = ColorTranslator.FromHtml("#ffc107");
-            //submitBtn.ForeColor = Color.White;
-            //AddOrEditPhoneNumBtn.Text = "Add";
-            //AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
-            //AddOrEditPhoneNumBtn.ForeColor = Color.White;
 
-            string[] commandArgs = e.CommandArgument.ToString().Split(
-                new[] { ",," },
-                StringSplitOptions.RemoveEmptyEntries
-            );
-            txtFirstName.Text = commandArgs[1];
-            txtLastName.Text = commandArgs[2];
-            //txtPhoneNumber.Text = commandArgs[3];
-            txtEmailAddress.Text = commandArgs[4];
-
-            if (commandArgs[4] == "0")
+            try
             {
-                txtAge.Text = string.Empty;
+                OracleCommand cmd = new OracleCommand();
+                cmd.Parameters.AddWithValue("id", Convert.ToInt32(e.CommandArgument));
+                cmd.CommandText = "select * from CONTACTS WHERE ID =:id";
+                cmd.Connection = con;
+                con.Open();
+                OracleDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows)
+                {
+                    while (dr.Read())
+                    {
+                        txtFirstName.Text = dr["first_name"].ToString();
+                        txtLastName.Text = dr["last_name"].ToString();
+                        txtEmailAddress.Text = dr["email_address"].ToString();
+
+                        if (dr["age"].ToString() == "0")
+                        {
+                            txtAge.Text = string.Empty;
+                        }
+                        else
+                        {
+                            txtAge.Text = dr["age"].ToString();
+                        }
+
+                        if (dr["profile_picture"] != DBNull.Value)
+                        {
+                            byte[] pfpBytes = (byte[])(dr["profile_picture"]);
+                            string pfp = Convert.ToBase64String(pfpBytes);
+                            contactImg.ImageUrl = String.Format("data:image/jpg;base64,{0}", pfp);
+                        }
+                        else
+                        {
+                            contactImg.ImageUrl = CommonConstants.DefaultContactImageUrl;
+                        }
+                    }
+
+
+                }
+                else
+                {
+                    Response.Write("No Contacts In DataBase");
+                }
+                con.Close();
             }
-            else
+            catch (Exception)
             {
-                txtAge.Text = commandArgs[4];
-            }
-
-
-            if (commandArgs[5] != null)
-            {
-                contactImg.ImageUrl = commandArgs[5];
-            }
-            else
-            {
-                contactImg.ImageUrl = CommonConstants.DefaultContactImageUrl;
+                throw;
             }
 
             BtnHiddenFIeld.Value = "0";
-            HiddenIdField.Value = commandArgs[0].ToString();
+            HiddenIdField.Value = e.CommandArgument.ToString();
 
             List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
 
@@ -523,19 +514,16 @@ namespace CRUDTEST
                 phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
             }
 
-            PhoneNumRepeater.DataSourceID = "PhoneNumbers";
+            DynamicPhoneNumbers = phoneNumbers;
+
+            PhoneNumRepeater.DataSource = DynamicPhoneNumbers;
             PhoneNumRepeater.DataBind();
             con.Close();
 
-            //CancelUpdBtn.Attributes.Clear();
-            //CancelUpdBtn.Attributes.Add("style", "display:block");
-            //CancelUpdBtn.Attributes.Add("style", "color:white");
-            //CancelUpdBtn.Attributes.Add("style", "font-weight:bold");
-            //txtCreateContract.InnerText = "Edit a Contact";
-            //submitBtn.Click -= Submit_Click;
-            //submitBtn.Click += Update_Click;
+
             FormUpdatePanel.Update();
 
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
 
         }
 
@@ -553,8 +541,6 @@ namespace CRUDTEST
         {
             BtnHiddenFIeld.Value = "1";
             ChangeSubmitBtnTxtAndColor();
-            //CancelUpdBtn.Attributes.Clear();
-            //CancelUpdBtn.Attributes.Add("style", "display:none");
             EmptySubmitForm();
         }
 
@@ -565,62 +551,12 @@ namespace CRUDTEST
             submitBtn.ForeColor = Color.White;
         }
 
-        //protected void UploadImgBtn_Click(object sender, EventArgs e)
-        //{
-        //    //FileStream fls;
-        //    //fls = new FileStream(imgPath, FileMode.Open, FileAccess.Read);
-        //    ////a byte array to read the image 
-        //    //byte[] blob = new byte[fls.Length];
-        //    //fls.Read(blob, 0, System.Convert.ToInt32(fls.Length));
-        //    //fls.Close();
-
-        //    OpenFileDialog ofd = new OpenFileDialog();
-        //    ofd.Title = "Please select an image";
-        //    ofd.Filter = "JPG|*.jpg|PNG|*.png|GIF|.gif";
-        //    ofd.Multiselect = false;
-
-        //    if (ofd.ShowDialog() == DialogResult.OK)
-        //    {
-
-        //    }
-
-
-        //}
 
         protected void DetailsBtn_Command(object sender, CommandEventArgs e)
         {
             Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", e.CommandArgument));
         }
 
-        protected void HiddenEmailAddressField_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void HiddenAgeField_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void HiddenPictureField_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void UpdateBtn_Command1(object sender, CommandEventArgs e)
-        {
-
-        }
-
-        protected void TextBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void SearchContactBtn_Command(object sender, CommandEventArgs e)
-        {
-
-        }
 
         //protected void SearchContactBtn_Click(object sender, EventArgs e)
         //{
@@ -656,11 +592,6 @@ namespace CRUDTEST
 
         //}
 
-        protected void PLSQLDataSource_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
-        {
-
-        }
-
         protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
         {
 
@@ -682,7 +613,7 @@ namespace CRUDTEST
                 throw;
             }
 
-            PhoneNumRepeater.DataSourceID = "PhoneNumbers";
+            PhoneNumRepeater.DataSource = DynamicPhoneNumbers;
             PhoneNumRepeater.DataBind();
             con.Close();
 
@@ -695,8 +626,7 @@ namespace CRUDTEST
             string[] commandArgs = e.CommandArgument.ToString().Split(new char[] { ',' });
             string phoneNumber = commandArgs[0].ToString();
             string id = commandArgs[1].ToString();
-            //AddOrEditPhoneNumBtn.Text = "Update";
-            //AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#ffc107");
+
             AddOrUpdatePhoneNumHiddenField.Value = "0";
             PhoneNumberIdHiddenField.Value = id;
             txtPhoneNumber.Text = phoneNumber;
@@ -734,8 +664,8 @@ namespace CRUDTEST
 
                 if (!string.IsNullOrWhiteSpace(phoneNumber))
                 {
-                    DynamicPhoneNumbers.Add(phoneNumber);
-                    RecreateTextboxes();
+                    DynamicPhoneNumbers.Add(new PhoneNumber(phoneNumber));
+                    //RecreateTextboxes();
 
                 }
 
@@ -796,9 +726,6 @@ namespace CRUDTEST
             //PhoneNumRepeater.DataBind();
             //con.Close();
 
-            //AddOrEditPhoneNumBtn.Text = "Add";
-            //AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
-            //AddOrEditPhoneNumBtn.ForeColor = Color.White;
             txtPhoneNumber.Text = string.Empty;
             AddOrUpdatePhoneNumHiddenField.Value = "1";
 
@@ -806,34 +733,12 @@ namespace CRUDTEST
 
         }
 
-        //private void LoadPhoneNumTextBoxes()
-        //{
-
-        //    if (ViewState["TextBoxInfoList"] != null)
-        //    {
-        //        List<TextBox> textBoxInfoList = ViewState["TextBoxInfoList"] as List<TextBox>;
-        //        foreach (TextBox info in textBoxInfoList)
-        //        {
-        //            // Recreate the TextBox and add it to the placeholder
-        //            TextBox textBox = new TextBox();
-        //            textBox.ID = info.ID;
-        //            textBox.Text = info.Text; // Set the text of the TextBox
-        //            newPhoneNumsContainer.Controls.Add(textBox);
-        //        }
-        //    }
-
-        //}
-
         protected void AddContactBtn_Click(object sender, EventArgs e)
         {
             EmptySubmitForm();
             contactImg.ImageUrl = Common.CommonConstants.DefaultContactImageUrl;
-            //AddOrEditPhoneNumBtn.BackColor = ColorTranslator.FromHtml("#198754");
-            //AddOrEditPhoneNumBtn.ForeColor = Color.White;
-            //AddOrUpdatePhoneNumHiddenField.Value = "2";
 
             PhoneNumRepeater.DataSource = null;
-            PhoneNumRepeater.DataSourceID = null;
             PhoneNumRepeater.DataBind();
 
             FormUpdatePanel.Update();
@@ -849,14 +754,5 @@ namespace CRUDTEST
             return false;
         }
 
-        protected void PhoneNumRepeater_ItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-            //if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            //{
-            //    TextBox txtPhoneNumber = (TextBox)e.Item.FindControl("txtAddOrEditphoneNum");
-            //    txtPhoneNumber.ID = "txtPhoneNumber_" + DataBinder.Eval(e.Item.DataItem, "ID");
-
-            //}
-        }
     }
 }

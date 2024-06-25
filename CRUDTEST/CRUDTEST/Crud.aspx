@@ -27,6 +27,10 @@
             var file = inputElement.files[0];
             return window.URL.createObjectURL(file);
         }
+        function showContactModal() {
+            var modal = new bootstrap.Modal(document.getElementById('contactModal'));
+            modal.show();
+        }
     </script>
 
 </head>
@@ -58,16 +62,14 @@
                 </asp:UpdatePanel>--%>
 
                 <div class="phonebook-container container-fluid text-center mb-2">
-                    <%--<button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                        Add a contact</button>--%>
                     <asp:UpdatePanel ID="AddContactBtnUpdatePanel" runat="server">
                         <ContentTemplate>
                             <asp:Button ID="AddContactBtn" runat="server" Text="Add a contact" OnClick="AddContactBtn_Click"
-                                class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop" />
+                                class="btn btn-success fw-bold" />
                         </ContentTemplate>
                     </asp:UpdatePanel>
-
-                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <button onclick="showContactModal()">TEST</button>
+                    <div class="modal fade" id="contactModal">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-body">
@@ -121,23 +123,28 @@
                                                                 <asp:TextBox ID="txtPhoneNumber" runat="server"></asp:TextBox>
                                                                 <asp:Button ID="AddOrEditPhoneNumBtn" CssClass="btn btn-success mb-2" runat="server"
                                                                     Text="Save" OnCommand="AddOrEditPhoneNumBtn_Command" />
-                                                                <asp:Repeater ID="PhoneNumRepeater" runat="server" DataSourceID="PhoneNumbers" OnItemDataBound="PhoneNumRepeater_ItemDataBound">
+                                                                <asp:Repeater ID="PhoneNumRepeater" runat="server">
                                                                     <ItemTemplate>
-                                                                        <asp:TextBox ID="txtAddOrEditphoneNum" runat="server" CssClass="text-center" Text='<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>'>
-                                                                        </asp:TextBox>
+                                                                        <asp:PlaceHolder ID="PlaceHolderPhoneRepeater" runat="server">
+                                                                            <%--<asp:TextBox ID="txtAddOrEditphoneNum" runat="server" CssClass="text-center" Text='<%# DataBinder.Eval(Container.DataItem, "phone_number") %>'>
+                                                                            </asp:TextBox>--%>
+                                                                            <asp:TextBox ID="TextBox1" runat="server" CssClass="text-center" Text='<%# DataBinder.Eval(Container.DataItem, "Number") %>'>
+                                                                            </asp:TextBox>
+                                                                        </asp:PlaceHolder>
+
                                                                         <%--<div class="phone-number-buttons d-flex justify-content-center gap-3 align-items-baseline mb-2 mt-2 ">
                                                                             <asp:Button ID="RemoveNumberBtn" class="btn btn-danger fw-bold text-dark" runat="server" Text="Delete"
                                                                                 OnCommand="RemoveNumberBtn_Command"
-                                                                                CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'></asp:Button>
+                                                                                CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Id") %>'></asp:Button>
                                                                             <asp:Button ID="UpdatePhoneNumBtn" Text="Update"
                                                                                 class="btn btn-warning fw-bold text-dark" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
-                                                                                CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") + "," 
-                                                                                        + DataBinder.Eval(Container.DataItem, "ID") %>' />
+                                                                                CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Number") + "," 
+                                                                                        + DataBinder.Eval(Container.DataItem, "Id") %>' />
                                                                         </div>--%>
                                                                     </ItemTemplate>
                                                                 </asp:Repeater>
-                                                                <div id="newPhoneNumsContainer" class="new-phone-container container-fluid d-flex flex-column p-0" runat="server">
-                                                                </div>
+                                                                <%--<div id="newPhoneNumsContainer" class="new-phone-container container-fluid d-flex flex-column p-0" runat="server">
+                                                                </div>--%>
                                                             </div>
                                                             <asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" Value="1" runat="server" />
                                                             <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />
@@ -156,16 +163,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center gap-2">
-                                                    <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="Submit_Click" data-bs-dismiss="modal" />
-                                                    <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelUpdBtn_Click" Text="Cancel" data-bs-dismiss="modal"></asp:Button>
+                                                    <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="Submit_Click" />
+                                                    <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelUpdBtn_Click" Text="Cancel"></asp:Button>
                                                 </div>
                                                 <%--</div>--%>
 
-                                                <asp:HiddenField ID="BtnHiddenFIeld" Value="1" runat="server" OnValueChanged="BtnHiddenFIeld_ValueChanged" />
-                                                <asp:HiddenField ID="HiddenIdField" runat="server" OnValueChanged="HiddenIdField_ValueChanged" />
-                                                <asp:HiddenField ID="HiddenEmailAddressField" runat="server" OnValueChanged="HiddenEmailAddressField_ValueChanged" />
-                                                <asp:HiddenField ID="HiddenAgeField" runat="server" OnValueChanged="HiddenAgeField_ValueChanged" />
-                                                <asp:HiddenField ID="HiddenPictureField" runat="server" OnValueChanged="HiddenPictureField_ValueChanged" />
+                                                <asp:HiddenField ID="BtnHiddenFIeld" Value="1" runat="server" />
+                                                <asp:HiddenField ID="HiddenIdField" runat="server" />
+                                                <asp:HiddenField ID="HiddenEmailAddressField" runat="server" />
+                                                <asp:HiddenField ID="HiddenAgeField" runat="server" />
+                                                <asp:HiddenField ID="HiddenPictureField" runat="server" />
                                                 <asp:HiddenField ID="HiddenImgField" runat="server" />
 
                                             </ContentTemplate>
@@ -180,16 +187,11 @@
                     </div>
                     <h1 class="text-center">My Contacts:
                     </h1>
-                    <%--<asp:UpdatePanel ID="ShowContactsUpdatePanel" runat="server">
-                        <ContentTemplate>
-                            <asp:Button ID="ShowContactsBtn" runat="server" Text="Show Contacts" class="btn btn-success fw-bold" OnClick="ShowBtn_Click" />
-                        </ContentTemplate>
-                    </asp:UpdatePanel>--%>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
                     <asp:UpdatePanel ID="RepeaterUpdatePanel" runat="server" UpdateMode="Conditional">
                         <ContentTemplate>
-                            <asp:Repeater ID="Repeater" runat="server" OnItemCommand="Repeater_ItemCommand">
+                            <asp:Repeater ID="Repeater" runat="server">
                                 <HeaderTemplate>
                                     <table border="1" style="max-width: 500px;">
                                         <tr>
@@ -209,13 +211,10 @@
                                             (Container.DataItem, "id") %>' />
                                         </td>
                                         <td class="text-center">
-                                            <asp:Button ID="UpdateBtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" runat="server" Text="Update"
+                                            <asp:Button ID="UpdateBtn" runat="server" Text="Update"
                                                 class="btn btn-warning fw-bold text-dark" OnCommand="UpdateBtn_Command"
                                                 CommandArgument='<%# DataBinder.Eval
-                                          (Container.DataItem, "id") + ",," + DataBinder.Eval(Container.DataItem, "firstName") + ",," +
-                                          DataBinder.Eval(Container.DataItem, "lastName") + ",," 
-                                          + DataBinder.Eval(Container.DataItem, "emailAddress") + ",," + DataBinder.Eval(Container.DataItem, "age") +
-                                           ",," + DataBinder.Eval(Container.DataItem, "profilePicture")%>' />
+                                          (Container.DataItem, "id")%>' />
                                         </td>
                                         <td class="text-center">
                                             <asp:Button ID="DetailsBtn" runat="server" class="btn btn-info fw-bold text-dark" Text="Details"
@@ -236,14 +235,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/nBWZtZD4r4AX6YOt5ynLN2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <asp:SqlDataSource ID="PLSQLDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT * FROM &quot;CONTACTS&quot; ORDER BY &quot;ID&quot;" OnSelecting="PLSQLDataSource_Selecting"></asp:SqlDataSource>
+        <asp:SqlDataSource ID="PLSQLDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT * FROM &quot;CONTACTS&quot; ORDER BY &quot;ID&quot;"></asp:SqlDataSource>
         <asp:SqlDataSource ID="PhoneNumbers" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>" SelectCommand="SELECT &quot;ID&quot;, &quot;PHONE_NUMBER&quot; FROM &quot;PHONENUMBERS&quot; WHERE (&quot;CONTACT_ID&quot; = :CONTACT_ID) ORDER BY &quot;ID&quot;">
             <SelectParameters>
                 <asp:ControlParameter ControlID="HiddenIdField" Name="CONTACT_ID" PropertyName="Value" Type="Decimal" />
             </SelectParameters>
         </asp:SqlDataSource>
 
-        <%--<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT * FROM &quot;CONTACTS&quot; ORDER BY &quot;ID&quot;"></asp:SqlDataSource>--%>
+
     </form>
 </body>
 </html>
