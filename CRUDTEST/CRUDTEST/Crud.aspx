@@ -75,7 +75,9 @@
                                         <asp:UpdatePanel ID="FormUpdatePanel" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="false">
                                             <ContentTemplate>
                                                 <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
-
+                                                    <div class="alert alert-danger d-none" role="alert">
+                                                        A simple danger alert—check it out!
+                                                    </div>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblFirstName" CssClass="fw-bold" runat="server" Text="First Name:"></asp:Label>
                                                         <p class="required-field">Field is required*</p>
@@ -119,24 +121,23 @@
                                                                 <asp:TextBox ID="txtPhoneNumber" runat="server"></asp:TextBox>
                                                                 <asp:Button ID="AddOrEditPhoneNumBtn" CssClass="btn btn-success mb-2" runat="server"
                                                                     Text="Save" OnCommand="AddOrEditPhoneNumBtn_Command" />
-                                                                <asp:Repeater ID="PhoneNumRepeater" runat="server" DataSourceID="PhoneNumbers" OnItemDataBound="PhoneNumRepeater_ItemDataBound">
-                                                                    <ItemTemplate>                                                                      
-                                                                            <asp:TextBox ID="txtAddOrEditphoneNum" runat="server" CssClass="text-center" Text='<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>'>
-                                                                            </asp:TextBox>
-                                                                            <%--<div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
-                                                                                <asp:Button ID="RemoveNumberBtn" class="btn btn-danger fw-bold text-dark" runat="server" Text="Delete"
-                                                                                    OnCommand="RemoveNumberBtn_Command"
-                                                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'></asp:Button>
-                                                                                <asp:Button ID="UpdatePhoneNumBtn" Text="Update"
-                                                                                    class="btn btn-warning fw-bold text-dark" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
-                                                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") + "," 
+                                                                <asp:Repeater ID="PhoneNumRepeater" runat="server" OnItemDataBound="PhoneNumRepeater_ItemDataBound">
+                                                                    <ItemTemplate>
+                                                                        <asp:TextBox ID="txtAddOrEditphoneNum" runat="server" CssClass="text-center" Text='<%# DataBinder.Eval(Container.DataItem, "Number") %>'>
+                                                                        </asp:TextBox>
+                                                                        <div class="phone-number-buttons d-flex justify-content-center gap-3 align-items-baseline mb-2 mt-2 ">
+                                                                            <asp:Button ID="RemoveNumberBtn" class="btn btn-danger fw-bold text-dark" runat="server" Text="Delete"
+                                                                                OnCommand="RemoveNumberBtn_Command"
+                                                                                CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Id") %>'></asp:Button>
+                                                                            <asp:Button ID="UpdatePhoneNumBtn" Text="Update"
+                                                                                class="btn btn-warning fw-bold text-dark" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
+                                                                                CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Number") + "," 
                                                                                         + DataBinder.Eval(Container.DataItem, "ID") %>' />
-                                                                            </div>--%>                                                                       
+                                                                        </div>
                                                                     </ItemTemplate>
                                                                 </asp:Repeater>
-                                                                <div id="newPhoneNumsContainer" class="container-fluid d-flex flex-column" runat="server">
-
-                                                                </div>
+                                                                <%--<div id="newPhoneNumsContainer" class="new-phone-container container-fluid d-flex flex-column p-0" runat="server">
+                                                                </div>--%>
                                                             </div>
                                                             <asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" Value="1" runat="server" />
                                                             <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />

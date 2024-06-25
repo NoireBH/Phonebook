@@ -13,6 +13,11 @@ namespace CRUDTEST.Models
             this.Id = id;
         }
 
+        public PhoneNumber(string phoneNumber)
+        {
+            this.Number = phoneNumber;
+        }
+
         public int Id { get; set; }
 
         public string Number { get; set; }
