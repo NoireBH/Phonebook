@@ -133,7 +133,7 @@ namespace CRUDTEST
                         phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
                     }
 
-                    //PhoneRepeater.DataSource = phoneNumbers.OrderBy(x => x.Id);
+                    PhoneRepeater.DataSource = phoneNumbers.OrderBy(x => x.Id);
                     PhoneRepeater.DataBind();
 
                 }
@@ -150,7 +150,6 @@ namespace CRUDTEST
             }
 
             ContactDetailsDataSource.DataBind();
-            PhoneRepeater.DataBind();
 
         }
 

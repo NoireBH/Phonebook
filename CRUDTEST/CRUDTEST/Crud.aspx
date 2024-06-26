@@ -1,4 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Crud.aspx.cs" Inherits="CRUDTEST.Crud" %>
+<%--<%@ Register Src="~/UserControls/ModalUserControl.ascx" TagPrefix="uc1" TagName="Modal" %>--%>
+
+
 
 <!DOCTYPE html>
 
@@ -133,15 +136,15 @@
                                                                            
                                                                         </asp:PlaceHolder>
 
-                                                                        <%--<div class="phone-number-buttons d-flex justify-content-center gap-3 align-items-baseline mb-2 mt-2 ">
+                                                                        <div class="phone-number-buttons d-flex justify-content-center gap-3 align-items-baseline mb-2 mt-2 ">
                                                                             <asp:Button ID="RemoveNumberBtn" class="btn btn-danger fw-bold text-dark" runat="server" Text="Delete"
                                                                                 OnCommand="RemoveNumberBtn_Command"
-                                                                                CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Id") %>'></asp:Button>
+                                                                                CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Number") %>'></asp:Button>
                                                                             <asp:Button ID="UpdatePhoneNumBtn" Text="Update"
                                                                                 class="btn btn-warning fw-bold text-dark" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
                                                                                 CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Number") + "," 
                                                                                         + DataBinder.Eval(Container.DataItem, "Id") %>' />
-                                                                        </div>--%>
+                                                                        </div>
                                                                     </ItemTemplate>
                                                                 </asp:Repeater>
                                                                 <%--<div id="newPhoneNumsContainer" class="new-phone-container container-fluid d-flex flex-column p-0" runat="server">

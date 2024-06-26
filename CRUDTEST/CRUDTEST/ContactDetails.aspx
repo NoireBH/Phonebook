@@ -1,7 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ContactDetails.aspx.cs" Inherits="CRUDTEST.ContactDetails" %>
 
-<%@ Register Src="~/UserControls/AddOrEditPhoneNumberUserControl.ascx" TagPrefix="uc1" TagName="PhoneNumberAddOrEdit" %>
-
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -152,11 +150,11 @@
                         </div>
                         <asp:UpdatePanel ID="PhoneNumbersUpdatePanel" runat="server">
                             <ContentTemplate>
-                                <asp:Repeater ID="PhoneRepeater" runat="server" DataSourceID="PhoneNumbers">
+                                <asp:Repeater ID="PhoneRepeater" runat="server">
                                     <ItemTemplate>
                                         <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-3 fw-bold"
                                             style="max-width: 300px">
-                                            <%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") %>
+                                            <%# DataBinder.Eval(Container.DataItem, "Number") %>
                                             <%--<div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
                                                 <asp:LinkButton ID="RemoveNumberBtn" runat="server" OnCommand="RemoveNumberBtn_Command"
                                                     CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'>
