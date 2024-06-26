@@ -157,6 +157,7 @@ namespace CRUDTEST
             string lastName = txtLastName.Text.Trim();
             string emailAddress = txtEmailAddress.Text.Trim();
             int age = default;
+            bool ageIsInt = true;
             byte[] profilePicture = null;
             bool isDefaultProfilePicture = IsDefaultProfilePicture();
             bool hasImage = ImageUpload.HasFile;
@@ -171,9 +172,18 @@ namespace CRUDTEST
 
                 }
 
+                try
+                {
+                    age = Convert.ToInt32(txtAge.Text);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
                 if (!string.IsNullOrWhiteSpace(txtAge.Text))
                 {
-                    age = Convert.ToInt32(txtAge.Text.Trim());
+                    ageIsInt = int.TryParse(txtAge.Text, out age);
                 }
 
                 string cmdText = "insert into CONTACTS " +
@@ -242,6 +252,11 @@ namespace CRUDTEST
                     }
                     catch (Exception)
                     {
+                        if (!ageIsInt)
+                        {
+                            formAlert.InnerText = "Age must be a number!";
+                        }
+
                         formAlert.Visible = true;
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
                     }
