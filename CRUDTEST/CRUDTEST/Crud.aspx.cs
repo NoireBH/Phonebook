@@ -43,54 +43,6 @@ namespace CRUDTEST
             }
         }
 
-        private List<PhoneNumber> NewPhoneNumbers
-        {
-            get
-            {
-                if (ViewState["NewPhoneNumbers"] == null)
-                {
-                    ViewState["NewPhoneNumbers"] = new List<PhoneNumber>();
-                }
-                return (List<PhoneNumber>)ViewState["NewPhoneNumbers"];
-            }
-            set
-            {
-                ViewState["NewPhoneNumbers"] = value;
-            }
-        }
-
-        private List<PhoneNumber> PhoneNumbersToDelete
-        {
-            get
-            {
-                if (ViewState["PhoneNumbersToDelete"] == null)
-                {
-                    ViewState["PhoneNumbersToDelete"] = new List<PhoneNumber>();
-                }
-                return (List<PhoneNumber>)ViewState["PhoneNumbersToDelete"];
-            }
-            set
-            {
-                ViewState["PhoneNumbersToDelete"] = value;
-            }
-        }
-
-        private List<PhoneNumber> PhoneNumbersToUpdate
-        {
-            get
-            {
-                if (ViewState["PhoneNumbersToUpdate"] == null)
-                {
-                    ViewState["PhoneNumbersToUpdate"] = new List<PhoneNumber>();
-                }
-                return (List<PhoneNumber>)ViewState["PhoneNumbersToUpdate"];
-            }
-            set
-            {
-                ViewState["PhoneNumbersToUpdate"] = value;
-            }
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -228,27 +180,6 @@ namespace CRUDTEST
                        "(phone_number, contact_id)" +
                        " VALUES (:phone_number, :contact_id)";
 
-                        try
-                        {
-                            foreach (var phoneNum in NewPhoneNumbers)
-                            {
-                                using (OracleCommand command = new OracleCommand(cmdText, con))
-                                {
-                                    command.Parameters.AddWithValue("phone_number", phoneNum.Number);
-                                    command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
-
-                                    command.Connection.Open();
-                                    command.ExecuteNonQuery();
-                                    command.Connection.Close();
-                                }
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            formAlert.Visible = true;
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
-                        }
-
                     }
                     catch (Exception)
                     {
@@ -327,94 +258,13 @@ namespace CRUDTEST
                     cmdText = "insert into PHONENUMBERS " +
                    "(phone_number, contact_id)" +
                    " VALUES (:phone_number, :contact_id)";
-
-                    try
-                    {
-                        foreach (var phoneNum in NewPhoneNumbers)
-                        {
-
-                            using (OracleCommand command = new OracleCommand(cmdText, con))
-                            {
-                                command.Parameters.AddWithValue("phone_number", phoneNum.Number);
-                                command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
-
-                                command.Connection.Open();
-                                command.ExecuteNonQuery();
-                                command.Connection.Close();
-                            }
-
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        formAlert.InnerText = "The contact you're trying to insert a phonenumber doesn't exist!";
-                        formAlert.Visible = true;
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
-                    }
+                   
 
                     BtnHiddenFIeld.Value = "1";
                     AddOrUpdatePhoneNumHiddenField.Value = "1";
                     EmptySubmitForm();
                     FormUpdatePanel.Update();
-
-                    foreach (var phoneNum in PhoneNumbersToDelete)
-                    {
-
-                        try
-                        {
-                            OracleCommand cmd = new OracleCommand();
-
-                            cmd.Parameters.AddWithValue("id", phoneNum.Id);
-                            cmd.CommandText = "DELETE FROM PHONENUMBERS WHERE id=:id";
-                            cmd.Connection = con;
-                            con.Open();
-                            cmd.ExecuteNonQuery();
-                            cmd.Connection.Close();
-                        }
-                        catch (Exception)
-                        {
-                            formAlert.InnerText = "The contact you're trying to delete a phonenumber from doesn't exist!";
-                            formAlert.Visible = true;
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
-                        }
-                    }
-
-                    foreach (var phoneNum in PhoneNumbersToUpdate)
-                    {
-                        if (phoneNum.Id != 0)
-                        {
-                            try
-                            {
-                                OracleCommand cmd = new OracleCommand();
-
-                                cmd.Parameters.AddWithValue("id", phoneNum.Id);
-                                cmd.Parameters.AddWithValue("phoneNumber", phoneNum.Number);
-                                cmd.CommandText = "UPDATE PHONENUMBERS SET PHONE_NUMBER=:phoneNumber WHERE ID =:id";
-                                cmd.Connection = con;
-                                con.Open();
-                                cmd.ExecuteNonQuery();
-                                cmd.Connection.Close();
-                            }
-                            catch (Exception)
-                            {
-                                formAlert.InnerText = "The contact you're trying to update a phonenumber from doesn't exist!";
-                                formAlert.Visible = true;
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
-                            }
-                        }
-                        else
-                        {
-                            using (OracleCommand command = new OracleCommand(cmdText, con))
-                            {
-                                command.Parameters.AddWithValue("phone_number", phoneNum.Number);
-                                command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
-
-                                command.Connection.Open();
-                                command.ExecuteNonQuery();
-                                command.Connection.Close();
-                            }
-                        }
-                    }
+                                      
                 }
 
                 if (!requiredFieldsAreEmpty)
@@ -598,19 +448,9 @@ namespace CRUDTEST
         protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
         {
             PhoneNumber phoneToRemove = DynamicPhoneNumbers.Where(p => p.Number == e.CommandArgument.ToString()).FirstOrDefault();
-            PhoneNumber phoneInNewPhoneNumbers = NewPhoneNumbers.Where(p => p.Number == phoneToRemove.Number).FirstOrDefault();
 
             if (phoneToRemove != default)
-            {
-                if (phoneInNewPhoneNumbers != null)
-                {
-                    NewPhoneNumbers.Remove(phoneInNewPhoneNumbers);
-                }
-                else
-                {
-                    PhoneNumbersToDelete.Add(phoneToRemove);
-                }
-
+            {               
                 DynamicPhoneNumbers.Remove(phoneToRemove);
             }
 
@@ -643,7 +483,6 @@ namespace CRUDTEST
                     {
                         phoneNumAlert.Visible = false;
                         DynamicPhoneNumbers.Add(new PhoneNumber(phoneNumber));
-                        NewPhoneNumbers.Add(new PhoneNumber(phoneNumber));
                         ReBindPhoneNumDataSource();
                     }
                     else
@@ -656,14 +495,8 @@ namespace CRUDTEST
                 else if (AddOrUpdatePhoneNumHiddenField.Value == "0")
                 {
                     PhoneNumber phoneToUpdate = DynamicPhoneNumbers.Where(p => p.Number == PhoneNumberHiddenField.Value.ToString()).FirstOrDefault();
-                    PhoneNumber newPhoneNumber = NewPhoneNumbers.Where(p => p.Number == PhoneNumberHiddenField.Value.ToString()).FirstOrDefault();
 
-                    if (newPhoneNumber != null)
-                    {
-                        NewPhoneNumbers.Remove(newPhoneNumber);
-                    }
                     phoneToUpdate.Number = phoneNumber;
-                    PhoneNumbersToUpdate.Add(phoneToUpdate);
                     ReBindPhoneNumDataSource();
                 }
 
