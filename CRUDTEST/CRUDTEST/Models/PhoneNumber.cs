@@ -5,6 +5,7 @@ using System.Web;
 
 namespace CRUDTEST.Models
 {
+    [Serializable]
     public class PhoneNumber
     {
         public PhoneNumber(int id, string phoneNumber)

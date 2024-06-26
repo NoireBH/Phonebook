@@ -48,6 +48,7 @@ namespace CRUDTEST
 
             if (!IsPostBack)
             {
+
                 contactImg.Style.Add("max-width", "400px");
                 contactImg.Style.Add("max-height", "300px");
 
@@ -539,9 +540,10 @@ namespace CRUDTEST
 
         protected void CancelUpdBtn_Click(object sender, EventArgs e)
         {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "hideContactModalScript", "hideContactModal();", true);
             BtnHiddenFIeld.Value = "1";
-            ChangeSubmitBtnTxtAndColor();
             EmptySubmitForm();
+            FormUpdatePanel.Update();
         }
 
         private void ChangeSubmitBtnTxtAndColor()

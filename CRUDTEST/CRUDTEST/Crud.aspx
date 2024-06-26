@@ -31,6 +31,9 @@
             var modal = new bootstrap.Modal(document.getElementById('contactModal'));
             modal.show();
         }
+        function hideContactModal() {
+            $('#contactModal').modal('hide');
+        }
     </script>
 
 </head>
@@ -68,7 +71,6 @@
                                 class="btn btn-success fw-bold" />
                         </ContentTemplate>
                     </asp:UpdatePanel>
-                    <button onclick="showContactModal()">TEST</button>
                     <div class="modal fade" id="contactModal">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -126,10 +128,9 @@
                                                                 <asp:Repeater ID="PhoneNumRepeater" runat="server">
                                                                     <ItemTemplate>
                                                                         <asp:PlaceHolder ID="PlaceHolderPhoneRepeater" runat="server">
-                                                                            <%--<asp:TextBox ID="txtAddOrEditphoneNum" runat="server" CssClass="text-center" Text='<%# DataBinder.Eval(Container.DataItem, "phone_number") %>'>
-                                                                            </asp:TextBox>--%>
-                                                                            <asp:TextBox ID="TextBox1" runat="server" CssClass="text-center" Text='<%# DataBinder.Eval(Container.DataItem, "Number") %>'>
+                                                                            <asp:TextBox ID="txtAddOrEditphoneNum" runat="server" CssClass="text-center" Text='<%# DataBinder.Eval(Container.DataItem, "Number") %>'>
                                                                             </asp:TextBox>
+                                                                           
                                                                         </asp:PlaceHolder>
 
                                                                         <%--<div class="phone-number-buttons d-flex justify-content-center gap-3 align-items-baseline mb-2 mt-2 ">
@@ -164,7 +165,7 @@
                                                 </div>
                                                 <div class="d-flex justify-content-center gap-2">
                                                     <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="Submit_Click" />
-                                                    <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelUpdBtn_Click" Text="Cancel"></asp:Button>
+                                                    <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn btn-secondary fw-bold"  OnClick="CancelUpdBtn_Click" Text="Cancel"></asp:Button>
                                                 </div>
                                                 <%--</div>--%>
 
