@@ -96,7 +96,6 @@ namespace CRUDTEST
 
             if (!IsPostBack)
             {
-
                 contactImg.Style.Add("max-width", "400px");
                 contactImg.Style.Add("max-height", "300px");
 
@@ -119,7 +118,6 @@ namespace CRUDTEST
                             {
                                 byte[] pfpBytes = (byte[])(dr["profile_picture"]);
                                 pfp = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(pfpBytes));
-                                //contactImg.ImageUrl = String.Format("data:image/jpg;base64,{0}", pfp);
                             }
                             else
                             {
@@ -132,7 +130,6 @@ namespace CRUDTEST
 
                         Repeater.DataSource = values.OrderBy(x => x.Id);
                         Repeater.DataBind();
-
 
                     }
                     else
@@ -154,7 +151,6 @@ namespace CRUDTEST
 
             PhoneNumRepeater.DataBind();
         }
-
 
         protected void Submit_Click(object sender, EventArgs e)
         {
@@ -182,16 +178,12 @@ namespace CRUDTEST
                     age = Convert.ToInt32(txtAge.Text.Trim());
                 }
 
-
                 string cmdText = "insert into CONTACTS " +
                     "(first_Name, last_Name, email_address, age, profile_picture)" +
                     " VALUES (:first_name, :last_Name, :email_address, :age, :profile_picture) RETURNING ID INTO :newId";
 
-
                 if (BtnHiddenFIeld.Value == "1")
                 {
-
-
                     try
                     {
                         using (OracleCommand command = new OracleCommand(cmdText, con))
@@ -226,7 +218,6 @@ namespace CRUDTEST
                         cmdText = "insert into PHONENUMBERS " +
                        "(phone_number, contact_id)" +
                        " VALUES (:phone_number, :contact_id)";
-
 
                         try
                         {
@@ -305,8 +296,6 @@ namespace CRUDTEST
                                 {
                                     command.Parameters.AddWithValue("profile_picture", dbNull);
                                 }
-
-
                             }
 
                             command.Connection.Open();
@@ -323,7 +312,6 @@ namespace CRUDTEST
                     cmdText = "insert into PHONENUMBERS " +
                    "(phone_number, contact_id)" +
                    " VALUES (:phone_number, :contact_id)";
-
 
                     try
                     {
@@ -378,7 +366,6 @@ namespace CRUDTEST
 
                     foreach (var phoneNum in PhoneNumbersToUpdate)
                     {
-
                         if (phoneNum.Id != 0)
                         {
                             try
@@ -412,24 +399,19 @@ namespace CRUDTEST
                                 command.Connection.Close();
                             }
                         }
-
-
                     }
                 }
-
 
                 if (!requiredFieldsAreEmpty)
                 {
                     EmptySubmitForm();
                     Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", id));
                 }
-
             }
 
             formAlert.Visible = true;
             ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
             FormUpdatePanel.Update();
-
         }
 
         private void EmptySubmitForm()
@@ -462,8 +444,6 @@ namespace CRUDTEST
 
                     Repeater.DataSource = values.OrderBy(x => x.Id);
                     Repeater.DataBind();
-
-
                 }
                 else
                 {
@@ -480,10 +460,8 @@ namespace CRUDTEST
 
         }
 
-
         protected void DeleteBtn_Command(object sender, CommandEventArgs e)
         {
-
             try
             {
                 OracleCommand cmd = new OracleCommand();
@@ -502,13 +480,10 @@ namespace CRUDTEST
             {
                 throw;
             }
-
-
         }
 
         protected void UpdateBtn_Command(object sender, CommandEventArgs e)
         {
-
             formAlert.Visible = false;
 
             try
@@ -548,7 +523,6 @@ namespace CRUDTEST
                         }
                     }
 
-
                 }
                 else
                 {
@@ -587,7 +561,6 @@ namespace CRUDTEST
             FormUpdatePanel.Update();
 
             ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
-
         }
 
         protected void CancelUpdBtn_Click(object sender, EventArgs e)
@@ -607,7 +580,6 @@ namespace CRUDTEST
 
         protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
         {
-
             PhoneNumber phoneToRemove = DynamicPhoneNumbers.Where(p => p.Number == e.CommandArgument.ToString()).FirstOrDefault();
             PhoneNumber phoneInNewPhoneNumbers = NewPhoneNumbers.Where(p => p.Number == phoneToRemove.Number).FirstOrDefault();
 
@@ -623,14 +595,11 @@ namespace CRUDTEST
                 }
 
                 DynamicPhoneNumbers.Remove(phoneToRemove);
-
-
             }
 
             ReBindPhoneNumDataSource();
 
             FormUpdatePanel.Update();
-
         }
 
         protected void UpdatePhoneNumBtn_Command(object sender, CommandEventArgs e)
@@ -657,14 +626,11 @@ namespace CRUDTEST
                     DynamicPhoneNumbers.Add(new PhoneNumber(phoneNumber));
                     NewPhoneNumbers.Add(new PhoneNumber(phoneNumber));
                     ReBindPhoneNumDataSource();
-
                 }
                 else
                 {
                     phoneNumAlert.Visible = true;
                 }
-
-
 
             }
             else if (AddOrUpdatePhoneNumHiddenField.Value == "0")
@@ -679,14 +645,12 @@ namespace CRUDTEST
                 phoneToUpdate.Number = phoneNumber;
                 PhoneNumbersToUpdate.Add(phoneToUpdate);
                 ReBindPhoneNumDataSource();
-
             }
 
             txtPhoneNumber.Text = string.Empty;
             AddOrUpdatePhoneNumHiddenField.Value = "1";
 
             FormUpdatePanel.Update();
-
         }
 
         protected void AddContactBtn_Click(object sender, EventArgs e)
@@ -697,7 +661,6 @@ namespace CRUDTEST
 
             PhoneNumRepeater.DataSource = null;
             PhoneNumRepeater.DataBind();
-
 
             FormUpdatePanel.Update();
 

@@ -39,10 +39,8 @@
             $('#contactModal').modal('hide');
         }
     </script>
-
 </head>
 <body>
-
     <form id="form1" runat="server">
         <div class="container-fluid" style="max-width: 800px; border: 1px solid black; background-color: white">
             <div class="container-fluid">
@@ -52,22 +50,7 @@
                     </h1>
                 </header>
                 <asp:ScriptManager ID="FormScriptManager" runat="server">
-                </asp:ScriptManager>
-                <%--<asp:UpdatePanel ID="SearchUpdatePanel" runat="server">
-                    <ContentTemplate>
-                        <div class="container-fluid text-center search-contact-container mb-3">
-                            <h3>Search for a contact</h3>
-                            <div class="container-fluid d-flex justify-content-center align-items-baseline gap-2">
-                                <asp:TextBox ID="txtSearchContact" runat="server"></asp:TextBox>
-                                <asp:LinkButton ID="SearchContactBtn" runat="server" OnClick="SearchContactBtn_Click">
-                                    <i class="fa-solid fa-magnifying-glass fa-lg" style="color: #004080;"></i>
-                                </asp:LinkButton>
-                            </div>
-                            <asp:Label ID="lblNoContactFound" runat="server" CssClass="no-contact-found d-none" Text="No contact found!"></asp:Label>
-                        </div>
-                    </ContentTemplate>
-                </asp:UpdatePanel>--%>
-
+                </asp:ScriptManager>                
                 <div class="phonebook-container container-fluid text-center mb-2">
                     <asp:UpdatePanel ID="AddContactBtnUpdatePanel" runat="server">
                         <ContentTemplate>
@@ -100,13 +83,6 @@
                                                         <asp:RequiredFieldValidator ControlToValidate="txtLastName" runat="server" ValidationGroup="contactValGroup" />
 
                                                     </div>
-                                                    <%--<div class="form-group d-flex flex-column">
-                                                        <asp:Label ID="lblPhoneNumber" CssClass="fw-bold" runat="server" Text="Phone Number:"></asp:Label>
-                                                        <p class="required-field">Field is required*</p>
-                                                        <asp:TextBox ID="txtPhoneNumber" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        <%--<asp:RegularExpressionValidator ID="PhoneNumberRegex" ValidationExpression="^\+?[0-9]+$" runat="server" 
-                                                            ErrorMessage="Phone number must contain only numbers or a start with a country code ex. +359" 
-                                                            ControlToValidate="txtPhoneNumber"></asp:RegularExpressionValidator>--%>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblEmailAddress" runat="server" CssClass="fw-bold mb-3" Text="Email Address:"></asp:Label>
                                                         <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="form-control"></asp:TextBox>
@@ -121,7 +97,6 @@
                                                             ValidationExpression="\d+" ValidationGroup="contactValGroup">
                                                         </asp:RegularExpressionValidator>
                                                     </div>
-                                                    <%--<asp:Button ID="UploadImgBtn" runat="server" Text="Upload Image" OnClick="UploadImgBtn_Click" />--%>
                                                     <asp:UpdatePanel ID="PhoneNumUpdatePanel" runat="server">
                                                         <ContentTemplate>
                                                             <div class="form-group d-flex flex-column phone-numbers-container">
@@ -151,16 +126,11 @@
                                                                         </div>
                                                                     </ItemTemplate>
                                                                 </asp:Repeater>
-                                                                <%--<div id="newPhoneNumsContainer" class="new-phone-container container-fluid d-flex flex-column p-0" runat="server">
-                                                                </div>--%>
                                                             </div>
                                                             <asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" Value="1" runat="server" />
                                                             <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />
                                                             <asp:HiddenField ID="PhoneNumberHiddenField" runat="server" />
                                                         </ContentTemplate>
-                                                        <%--<Triggers>
-                                                            <asp:PostBackTrigger ControlID="AddOrEditPhoneNumBtn" />
-                                                        </Triggers>--%>
                                                     </asp:UpdatePanel>
 
                                                     <div class="form-group d-flex flex-column">
@@ -175,14 +145,8 @@
                                                     <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="Submit_Click" />
                                                     <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelUpdBtn_Click" Text="Cancel"></asp:Button>
                                                 </div>
-                                                <%--</div>--%>
-
                                                 <asp:HiddenField ID="BtnHiddenFIeld" Value="1" runat="server" />
                                                 <asp:HiddenField ID="HiddenIdField" runat="server" />
-                                                <asp:HiddenField ID="HiddenEmailAddressField" runat="server" />
-                                                <asp:HiddenField ID="HiddenAgeField" runat="server" />
-                                                <asp:HiddenField ID="HiddenPictureField" runat="server" />
-                                                <asp:HiddenField ID="HiddenImgField" runat="server" />
 
                                             </ContentTemplate>
                                             <Triggers>
@@ -206,14 +170,12 @@
                                         <tr>
                                             <td class="text-center"><b>First Name</b></td>
                                             <td class="text-center"><b>Last Name</b></td>
-                                            <%--<td class="text-center"><b>Phone Number</b></td>--%>
                                         </tr>
                                 </HeaderTemplate>
                                 <ItemTemplate>
                                     <tr>
                                         <td class="text-center"><%# DataBinder.Eval(Container.DataItem, "firstName") %> </td>
                                         <td class="text-center"><%# DataBinder.Eval(Container.DataItem, "lastName") %> </td>
-                                        <%--<td class="text-center"><%# DataBinder.Eval(Container.DataItem, "phoneNumber") %> </td>--%>
                                         <td class="text-center">
                                             <asp:Button ID="DeleteBtn" runat="server" Text="Delete" class="btn btn-danger fw-bold text-dark" OnCommand="DeleteBtn_Command"
                                                 CommandArgument='<%# DataBinder.Eval
@@ -250,8 +212,6 @@
                 <asp:ControlParameter ControlID="HiddenIdField" Name="CONTACT_ID" PropertyName="Value" Type="Decimal" />
             </SelectParameters>
         </asp:SqlDataSource>
-
-
     </form>
 </body>
 </html>

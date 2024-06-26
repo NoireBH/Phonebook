@@ -285,42 +285,6 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.HiddenField HiddenIdField;
 
         /// <summary>
-        /// HiddenEmailAddressField control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenEmailAddressField;
-
-        /// <summary>
-        /// HiddenAgeField control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenAgeField;
-
-        /// <summary>
-        /// HiddenPictureField control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenPictureField;
-
-        /// <summary>
-        /// HiddenImgField control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenImgField;
-
-        /// <summary>
         /// RepeaterUpdatePanel control.
         /// </summary>
         /// <remarks>
