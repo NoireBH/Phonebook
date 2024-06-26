@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Crud.aspx.cs" Inherits="CRUDTEST.Crud" %>
+
 <%--<%@ Register Src="~/UserControls/ModalUserControl.ascx" TagPrefix="uc1" TagName="Modal" %>--%>
 
 
@@ -82,7 +83,7 @@
                                         <asp:UpdatePanel ID="FormUpdatePanel" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="false">
                                             <ContentTemplate>
                                                 <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
-                                                    <div class="alert alert-danger d-none" role="alert">
+                                                    <div runat="server" id="formAlert" class="alert alert-danger d-none" role="alert">
                                                         A simple danger alert—check it out!
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
@@ -128,12 +129,15 @@
                                                                 <asp:TextBox ID="txtPhoneNumber" runat="server"></asp:TextBox>
                                                                 <asp:Button ID="AddOrEditPhoneNumBtn" CssClass="btn btn-success mb-2" runat="server"
                                                                     Text="Save" OnCommand="AddOrEditPhoneNumBtn_Command" />
+                                                                <div runat="server" id="phoneNumAlert" class="alert alert-danger" visible="false" role="alert">
+                                                                    Can't add an empty or already existing phonenumber!
+                                                                </div>
                                                                 <asp:Repeater ID="PhoneNumRepeater" runat="server">
                                                                     <ItemTemplate>
                                                                         <asp:PlaceHolder ID="PlaceHolderPhoneRepeater" runat="server">
                                                                             <asp:TextBox ID="txtAddOrEditphoneNum" runat="server" CssClass="text-center" Text='<%# DataBinder.Eval(Container.DataItem, "Number") %>'>
                                                                             </asp:TextBox>
-                                                                           
+
                                                                         </asp:PlaceHolder>
 
                                                                         <div class="phone-number-buttons d-flex justify-content-center gap-3 align-items-baseline mb-2 mt-2 ">
@@ -152,6 +156,7 @@
                                                             </div>
                                                             <asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" Value="1" runat="server" />
                                                             <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />
+                                                            <asp:HiddenField ID="PhoneNumberHiddenField" runat="server" />
                                                         </ContentTemplate>
                                                         <%--<Triggers>
                                                             <asp:PostBackTrigger ControlID="AddOrEditPhoneNumBtn" />
@@ -168,7 +173,7 @@
                                                 </div>
                                                 <div class="d-flex justify-content-center gap-2">
                                                     <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="Submit_Click" />
-                                                    <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn btn-secondary fw-bold"  OnClick="CancelUpdBtn_Click" Text="Cancel"></asp:Button>
+                                                    <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelUpdBtn_Click" Text="Cancel"></asp:Button>
                                                 </div>
                                                 <%--</div>--%>
 

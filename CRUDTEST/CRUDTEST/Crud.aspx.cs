@@ -155,7 +155,7 @@ namespace CRUDTEST
 
         private void ReBindPhoneNumDataSource()
         {
-            PhoneNumRepeater.DataSource = DynamicPhoneNumbers;
+            PhoneNumRepeater.DataSource = DynamicPhoneNumbers.OrderBy(x => x.Id);
 
             PhoneNumRepeater.DataBind();
         }
@@ -165,20 +165,18 @@ namespace CRUDTEST
         {
             string firstName = txtFirstName.Text.Trim();
             string lastName = txtLastName.Text.Trim();
-            //string phoneNumber = txtPhoneNumber.Text.Trim();
+
             string emailAddress = txtEmailAddress.Text.Trim();
             int age = default;
             byte[] profilePicture = null;
             bool isDefaultProfilePicture = IsDefaultProfilePicture();
             bool hasImage = ImageUpload.HasFile;
             var dbNull = DBNull.Value;
+            bool hasError = false;
 
             if (hasImage)
             {
                 profilePicture = ImageUpload.FileBytes;
-                //string pfp = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(profilePicture));
-                //contactImg.ImageUrl = String.Format("data:image/jpg;base64,{0}", pfp);
-                //RepeaterUpdatePanel.Update();
 
             }
 
@@ -192,10 +190,6 @@ namespace CRUDTEST
                 "(first_Name, last_Name, email_address, age, profile_picture)" +
                 " VALUES (:first_name, :last_Name, :email_address, :age, :profile_picture) RETURNING ID INTO :newId";
 
-            //if (!IsValid)
-            //{
-
-            //}
 
             if (BtnHiddenFIeld.Value == "1")
             {
@@ -207,7 +201,6 @@ namespace CRUDTEST
                     {
                         command.Parameters.AddWithValue("first_name", firstName);
                         command.Parameters.AddWithValue("last_name", lastName);
-                        //command.Parameters.AddWithValue("phone_number", phoneNumber);
                         command.Parameters.AddWithValue("email_address", emailAddress);
                         command.Parameters.AddWithValue("age", age);
 
@@ -256,18 +249,19 @@ namespace CRUDTEST
                     catch (Exception)
                     {
 
-                        throw;
                     }
 
                 }
                 catch (Exception)
                 {
 
-                    throw;
                 }
 
-                Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
-
+                if (!hasError)
+                {
+                    Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
+                }
+                
             }
 
             else if (BtnHiddenFIeld.Value == "0")
@@ -294,7 +288,6 @@ namespace CRUDTEST
                         command.Parameters.AddWithValue("id", id);
                         command.Parameters.AddWithValue("first_name", firstName);
                         command.Parameters.AddWithValue("last_name", lastName);
-                        //command.Parameters.AddWithValue("phone_number", phoneNumber);
                         command.Parameters.AddWithValue("email_address", emailAddress);
                         command.Parameters.AddWithValue("age", age);
 
@@ -327,14 +320,6 @@ namespace CRUDTEST
                 {
                     throw;
                 }
-
-                //string getLastInsertedPhoneNumId = "SELECT SCOPE_IDENTITY();";
-                //int lastInsertedID = -1;
-
-                //using (OracleCommand command = new OracleCommand(getLastInsertedPhoneNumId, con))
-                //{
-                //    lastInsertedID = Convert.ToInt32(command.ExecuteScalar());
-                //}
 
                 cmdText = "insert into PHONENUMBERS " +
                "(phone_number, contact_id)" +
@@ -387,7 +372,46 @@ namespace CRUDTEST
                     {
 
                         throw;
-                    }                   
+                    }
+                }
+
+                foreach (var phoneNum in PhoneNumbersToUpdate)
+                {
+
+                    if (phoneNum.Id != 0)
+                    {
+                        try
+                        {
+                            OracleCommand cmd = new OracleCommand();
+
+                            cmd.Parameters.AddWithValue("id", phoneNum.Id);
+                            cmd.Parameters.AddWithValue("phoneNumber", phoneNum.Number);
+                            cmd.CommandText = "UPDATE PHONENUMBERS SET PHONE_NUMBER=:phoneNumber WHERE ID =:id";
+                            cmd.Connection = con;
+                            con.Open();
+                            cmd.ExecuteNonQuery();
+                            cmd.Connection.Close();
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
+                    }
+                    else
+                    {
+                        using (OracleCommand command = new OracleCommand(cmdText, con))
+                        {
+                            command.Parameters.AddWithValue("phone_number", phoneNum.Number);
+                            command.Parameters.AddWithValue("contact_id", id);
+
+                            command.Connection.Open();
+                            command.ExecuteNonQuery();
+                            command.Connection.Close();
+                        }
+                    }
+
+                    
                 }
 
 
@@ -398,8 +422,8 @@ namespace CRUDTEST
             EmptySubmitForm();
             FormUpdatePanel.Update();
 
-            ShowBtn_Click(sender, e);
-        }
+            //ShowBtn_Click(sender, e);
+        }     
 
         private void EmptySubmitForm()
         {
@@ -550,8 +574,7 @@ namespace CRUDTEST
 
             DynamicPhoneNumbers = phoneNumbers;
 
-            PhoneNumRepeater.DataSource = DynamicPhoneNumbers;
-            PhoneNumRepeater.DataBind();
+            ReBindPhoneNumDataSource();
             con.Close();
 
 
@@ -565,6 +588,7 @@ namespace CRUDTEST
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "hideContactModalScript", "hideContactModal();", true);
             BtnHiddenFIeld.Value = "1";
+            AddOrUpdatePhoneNumHiddenField.Value = "1";
             EmptySubmitForm();
             FormUpdatePanel.Update();
         }
@@ -632,27 +656,7 @@ namespace CRUDTEST
 
             }
 
-
-            //try
-            //{
-            //    OracleCommand cmd = new OracleCommand();
-
-            //    cmd.Parameters.AddWithValue("id", Convert.ToInt32(e.CommandArgument));
-            //    cmd.CommandText = "DELETE FROM PHONENUMBERS WHERE id=:id";
-            //    cmd.Connection = con;
-            //    con.Open();
-            //    cmd.ExecuteNonQuery();
-            //    cmd.Connection.Close();
-
-            //}
-            //catch (Exception)
-            //{
-
-            //    throw;
-            //}
-
-            PhoneNumRepeater.DataSource = DynamicPhoneNumbers;
-            PhoneNumRepeater.DataBind();
+            ReBindPhoneNumDataSource();
 
             FormUpdatePanel.Update();
 
@@ -667,65 +671,49 @@ namespace CRUDTEST
             AddOrUpdatePhoneNumHiddenField.Value = "0";
             PhoneNumberIdHiddenField.Value = id;
             txtPhoneNumber.Text = phoneNumber;
-
+            PhoneNumberHiddenField.Value = phoneNumber;
         }
 
         protected void AddOrEditPhoneNumBtn_Command(object sender, CommandEventArgs e)
         {
             string phoneNumber = txtPhoneNumber.Text;
-            string cmdText = "insert into PHONENUMBERS " +
-                    "(phone_number, contact_id)" +
-                    " VALUES (:phone_number, :contact_id)";
 
             if (AddOrUpdatePhoneNumHiddenField.Value == "1")
             {
                 if (!string.IsNullOrWhiteSpace(phoneNumber) && !DynamicPhoneNumbers.Any(p => p.Number == phoneNumber))
                 {
-                    DynamicPhoneNumbers.Add(new PhoneNumber( phoneNumber));
-                    NewPhoneNumbers.Add(new PhoneNumber( phoneNumber));
+                    phoneNumAlert.Visible = false;
+                    DynamicPhoneNumbers.Add(new PhoneNumber(phoneNumber));
+                    NewPhoneNumbers.Add(new PhoneNumber(phoneNumber));
                     ReBindPhoneNumDataSource();
 
                 }
                 else
                 {
-                    // add a error popup
+                    phoneNumAlert.Visible = true;
                 }
+
 
 
             }
             else if (AddOrUpdatePhoneNumHiddenField.Value == "0")
             {
-               
+                PhoneNumber phoneToUpdate = DynamicPhoneNumbers.Where(p => p.Number == PhoneNumberHiddenField.Value.ToString()).FirstOrDefault();
+                PhoneNumber newPhoneNumber = NewPhoneNumbers.Where(p => p.Number == PhoneNumberHiddenField.Value.ToString()).FirstOrDefault();
 
+                if (newPhoneNumber != null)
+                {
+                    NewPhoneNumbers.Remove(newPhoneNumber);
+                }
+                phoneToUpdate.Number = phoneNumber;
+                PhoneNumbersToUpdate.Add(phoneToUpdate);
+                ReBindPhoneNumDataSource();
 
             }
-            else
-            {
-                //BulletedList1.Items.add
-            }
-
-            //List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
-
-            //OracleCommand cmdGetPhoneNums = new OracleCommand();
-            //cmdGetPhoneNums.Parameters.AddWithValue("id", HiddenIdField.Value);
-            //cmdGetPhoneNums.CommandText = "select id,  phone_number from PHONENUMBERS WHERE CONTACT_ID =:id ";
-            //cmdGetPhoneNums.Connection = con;
-            //con.Open();
-            //OracleDataReader dr2 = cmdGetPhoneNums.ExecuteReader();
-
-            //while (dr2.Read())
-            //{
-            //    phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
-            //}
-
-            //PhoneNumRepeater.DataSourceID = "PhoneNumbers";
-            //PhoneNumRepeater.DataBind();
-            //con.Close();
 
             txtPhoneNumber.Text = string.Empty;
             AddOrUpdatePhoneNumHiddenField.Value = "1";
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "addImgScript", "img();", true);
             FormUpdatePanel.Update();
 
         }

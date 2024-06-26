@@ -60,6 +60,15 @@ namespace CRUDTEST
         protected global::System.Web.UI.UpdatePanel FormUpdatePanel;
 
         /// <summary>
+        /// formAlert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl formAlert;
+
+        /// <summary>
         /// lblFirstName control.
         /// </summary>
         /// <remarks>
@@ -168,6 +177,15 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Button AddOrEditPhoneNumBtn;
 
         /// <summary>
+        /// phoneNumAlert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl phoneNumAlert;
+
+        /// <summary>
         /// PhoneNumRepeater control.
         /// </summary>
         /// <remarks>
@@ -193,6 +211,15 @@ namespace CRUDTEST
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField PhoneNumberIdHiddenField;
+
+        /// <summary>
+        /// PhoneNumberHiddenField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField PhoneNumberHiddenField;
 
         /// <summary>
         /// lblContactImagePreview control.
