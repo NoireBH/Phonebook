@@ -83,8 +83,8 @@
                                         <asp:UpdatePanel ID="FormUpdatePanel" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="false">
                                             <ContentTemplate>
                                                 <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
-                                                    <div runat="server" id="formAlert" class="alert alert-danger d-none" role="alert">
-                                                        A simple danger alert—check it out!
+                                                    <div runat="server" id="formAlert" class="alert alert-danger" visible="false" role="alert">
+                                                        Please fill out all required fields!
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblFirstName" CssClass="fw-bold" runat="server" Text="First Name:"></asp:Label>
