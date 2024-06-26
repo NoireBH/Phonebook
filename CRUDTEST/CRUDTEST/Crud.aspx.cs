@@ -148,7 +148,6 @@ namespace CRUDTEST
         private void ReBindPhoneNumDataSource()
         {
             PhoneNumRepeater.DataSource = DynamicPhoneNumbers.OrderBy(x => x.Id);
-
             PhoneNumRepeater.DataBind();
         }
 
@@ -161,8 +160,7 @@ namespace CRUDTEST
             byte[] profilePicture = null;
             bool isDefaultProfilePicture = IsDefaultProfilePicture();
             bool hasImage = ImageUpload.HasFile;
-            var dbNull = DBNull.Value;
-            int id = Convert.ToInt32(HiddenIdField.Value);
+            var dbNull = DBNull.Value;           
             bool requiredFieldsAreEmpty = String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName);
 
             if (!requiredFieldsAreEmpty)
@@ -184,6 +182,7 @@ namespace CRUDTEST
 
                 if (BtnHiddenFIeld.Value == "1")
                 {
+
                     try
                     {
                         using (OracleCommand command = new OracleCommand(cmdText, con))
@@ -272,9 +271,10 @@ namespace CRUDTEST
 
                     try
                     {
+
                         using (OracleCommand command = new OracleCommand(cmdText, con))
                         {
-                            command.Parameters.AddWithValue("id", id);
+                            command.Parameters.AddWithValue("id", Convert.ToInt32(HiddenIdField.Value));
                             command.Parameters.AddWithValue("first_name", firstName);
                             command.Parameters.AddWithValue("last_name", lastName);
                             command.Parameters.AddWithValue("email_address", emailAddress);
@@ -321,7 +321,7 @@ namespace CRUDTEST
                             using (OracleCommand command = new OracleCommand(cmdText, con))
                             {
                                 command.Parameters.AddWithValue("phone_number", phoneNum.Number);
-                                command.Parameters.AddWithValue("contact_id", id);
+                                command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
 
                                 command.Connection.Open();
                                 command.ExecuteNonQuery();
@@ -392,7 +392,7 @@ namespace CRUDTEST
                             using (OracleCommand command = new OracleCommand(cmdText, con))
                             {
                                 command.Parameters.AddWithValue("phone_number", phoneNum.Number);
-                                command.Parameters.AddWithValue("contact_id", id);
+                                command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
 
                                 command.Connection.Open();
                                 command.ExecuteNonQuery();
@@ -405,11 +405,12 @@ namespace CRUDTEST
                 if (!requiredFieldsAreEmpty)
                 {
                     EmptySubmitForm();
-                    Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", id));
+                    Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
                 }
             }
 
             formAlert.Visible = true;
+            phoneNumAlert.Visible = false;
             ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
             FormUpdatePanel.Update();
         }
@@ -566,6 +567,7 @@ namespace CRUDTEST
         protected void CancelUpdBtn_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "hideContactModalScript", "hideContactModal();", true);
+            phoneNumAlert.Visible = false;
             BtnHiddenFIeld.Value = "1";
             AddOrUpdatePhoneNumHiddenField.Value = "1";
             EmptySubmitForm();
@@ -618,37 +620,47 @@ namespace CRUDTEST
         {
             string phoneNumber = txtPhoneNumber.Text;
 
-            if (AddOrUpdatePhoneNumHiddenField.Value == "1")
+            if (phoneNumber.Length <= 15)
             {
-                if (!string.IsNullOrWhiteSpace(phoneNumber) && !DynamicPhoneNumbers.Any(p => p.Number == phoneNumber))
+                if (AddOrUpdatePhoneNumHiddenField.Value == "1")
                 {
-                    phoneNumAlert.Visible = false;
-                    DynamicPhoneNumbers.Add(new PhoneNumber(phoneNumber));
-                    NewPhoneNumbers.Add(new PhoneNumber(phoneNumber));
+                    if (!string.IsNullOrWhiteSpace(phoneNumber) && !DynamicPhoneNumbers.Any(p => p.Number == phoneNumber))
+                    {
+                        phoneNumAlert.Visible = false;
+                        DynamicPhoneNumbers.Add(new PhoneNumber(phoneNumber));
+                        NewPhoneNumbers.Add(new PhoneNumber(phoneNumber));
+                        ReBindPhoneNumDataSource();
+                    }
+                    else
+                    {
+                        phoneNumAlert.Visible = true;
+                        phoneNumAlert.InnerText = "Can't add an empty or already existing phonenumber!";
+                    }
+
+                }
+                else if (AddOrUpdatePhoneNumHiddenField.Value == "0")
+                {
+                    PhoneNumber phoneToUpdate = DynamicPhoneNumbers.Where(p => p.Number == PhoneNumberHiddenField.Value.ToString()).FirstOrDefault();
+                    PhoneNumber newPhoneNumber = NewPhoneNumbers.Where(p => p.Number == PhoneNumberHiddenField.Value.ToString()).FirstOrDefault();
+
+                    if (newPhoneNumber != null)
+                    {
+                        NewPhoneNumbers.Remove(newPhoneNumber);
+                    }
+                    phoneToUpdate.Number = phoneNumber;
+                    PhoneNumbersToUpdate.Add(phoneToUpdate);
                     ReBindPhoneNumDataSource();
                 }
-                else
-                {
-                    phoneNumAlert.Visible = true;
-                }
 
+                txtPhoneNumber.Text = string.Empty;
+                AddOrUpdatePhoneNumHiddenField.Value = "1";
             }
-            else if (AddOrUpdatePhoneNumHiddenField.Value == "0")
+
+            else
             {
-                PhoneNumber phoneToUpdate = DynamicPhoneNumbers.Where(p => p.Number == PhoneNumberHiddenField.Value.ToString()).FirstOrDefault();
-                PhoneNumber newPhoneNumber = NewPhoneNumbers.Where(p => p.Number == PhoneNumberHiddenField.Value.ToString()).FirstOrDefault();
-
-                if (newPhoneNumber != null)
-                {
-                    NewPhoneNumbers.Remove(newPhoneNumber);
-                }
-                phoneToUpdate.Number = phoneNumber;
-                PhoneNumbersToUpdate.Add(phoneToUpdate);
-                ReBindPhoneNumDataSource();
-            }
-
-            txtPhoneNumber.Text = string.Empty;
-            AddOrUpdatePhoneNumHiddenField.Value = "1";
+                phoneNumAlert.InnerText = "Phonenumber can be no more than 15 characters long!";
+                phoneNumAlert.Visible = true;
+            }            
 
             FormUpdatePanel.Update();
         }
