@@ -27,7 +27,8 @@
             var inputElement = document.getElementById("<%= ImageUpload.ClientID %>");
             var imgElement = document.getElementById("<%= contactImg.ClientID %>");
             var maxSizeInMB = 3; 
-            var maxSizeInBytes = maxSizeInMB * 1024 * 1024; 
+            var maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+
 
             if (inputElement.files && inputElement.files[0]) {
                 var file = inputElement.files[0];
@@ -40,9 +41,17 @@
                     return false; 
                 }
 
+                var fileName = file.name.toLowerCase();
+                if (!fileName.endsWith('.jpg') && !fileName.endsWith('.jpeg') && !fileName.endsWith('.png') && !fileName.endsWith('.gif')) {
+                    alert('Please upload a JPG, JPEG, PNG, or GIF image file.');
+                    inputElement.value = ''; // Clear the file input
+                    return false; // Prevent further actions
+                }
+
                 var url = window.URL.createObjectURL(file);
                 imgElement.src = url;
             }
+
         }        
         function showContactModal() {
             var modal = new bootstrap.Modal(document.getElementById('contactModal'));
