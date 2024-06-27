@@ -51,6 +51,42 @@ namespace CRUDTEST
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl AlertTopFixed;
 
         /// <summary>
+        /// searchupdatepanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel searchupdatepanel;
+
+        /// <summary>
+        /// txtsearchcontact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtsearchcontact;
+
+        /// <summary>
+        /// searchcontactbtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton searchcontactbtn;
+
+        /// <summary>
+        /// FoundContactsRepeater control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater FoundContactsRepeater;
+
+        /// <summary>
         /// AddContactBtnUpdatePanel control.
         /// </summary>
         /// <remarks>
@@ -312,13 +348,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.UpdatePanel RepeaterUpdatePanel;
 
         /// <summary>
-        /// Repeater control.
+        /// ContactsRepeater control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater Repeater;
+        protected global::System.Web.UI.WebControls.Repeater ContactsRepeater;
 
         /// <summary>
         /// PLSQLDataSource control.

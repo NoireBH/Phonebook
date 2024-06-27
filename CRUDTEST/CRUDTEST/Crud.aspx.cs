@@ -80,8 +80,8 @@ namespace CRUDTEST
                                 dr["email_address"].ToString(), Convert.ToInt32(dr["age"]), pfp));
                         }
 
-                        Repeater.DataSource = values.OrderBy(x => x.Id);
-                        Repeater.DataBind();
+                        ContactsRepeater.DataSource = values.OrderBy(x => x.Id);
+                        ContactsRepeater.DataBind();
 
                     }
                     else
@@ -105,7 +105,7 @@ namespace CRUDTEST
 
         private void ReBindPhoneNumDataSource()
         {
-            PhoneNumRepeater.DataSource = DynamicPhoneNumbers.OrderBy(x => x.Id);
+            PhoneNumRepeater.DataSource = DynamicPhoneNumbers.OrderByDescending(x => x.Id);
             PhoneNumRepeater.DataBind();
         }
 
@@ -143,18 +143,6 @@ namespace CRUDTEST
                     byte[] profilePicture = null;
                     bool hasImage = ImageUpload.HasFile;
                     var dbNull = DBNull.Value;
-
-
-                    string fileExtension = Path.GetExtension(ImageUpload.FileName).ToLower();
-
-                    if (fileExtension == ".jpg" || fileExtension == ".gif" || fileExtension == ".jpeg" || fileExtension == ".png")
-                    {
-                        hasImage = true;
-                    }
-                    else
-                    {
-                        hasImage = false;
-                    }
 
                     if (hasImage)
                     {
@@ -375,8 +363,8 @@ namespace CRUDTEST
                             dr["last_name"].ToString(), dr["email_address"].ToString(), Convert.ToInt32(dr["age"])));
                     }
 
-                    Repeater.DataSource = values.OrderBy(x => x.Id);
-                    Repeater.DataBind();
+                    ContactsRepeater.DataSource = values.OrderBy(x => x.Id);
+                    ContactsRepeater.DataBind();
                 }
                 else
                 {
@@ -526,7 +514,7 @@ namespace CRUDTEST
             {
                 AlertTopFixed.InnerText = "The contact you're trying to see the details of doesn't exist!";
                 AlertTopFixed.Visible = true;
-            }           
+            }
         }
 
         protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
@@ -623,6 +611,47 @@ namespace CRUDTEST
             {
                 AlertTopFixed.Visible = true;
             }
+
+        }
+
+        protected void SearchContactBtn_Click(object sender, EventArgs e)
+        {
+            string searchInput = txtsearchcontact.Text;
+
+            var contacts = ContactsRepeater.DataSource as List<PhoneContact>;
+
+            foreach (PhoneContact contact in contacts)
+            {
+
+            }
+
+
+
+            //try
+            //{
+            //    OracleCommand cmd = new OracleCommand();
+            //    cmd.Parameters.AddWithValue("search_input", searchInput);
+            //    cmd.CommandText = "SELECT * FROM CONTACTS WHERE LOWER(FIRST_NAME) LIKE '%' || LOWER(:search_input) || '%' OR LOWER(LAST_NAME) LIKE '%' || LOWER(:search_input) || '%'";
+            //    cmd.Connection = con;
+            //    con.Open();
+            //    OracleDataReader dr = cmd.ExecuteReader();
+            //    if (dr.HasRows)
+            //    {
+            //        List<PhoneContact> values = new List<PhoneContact>();
+
+            //        while (dr.Read())
+            //        {
+            //            var name = dr["first_name"].ToString();
+            //        }
+
+            //    }
+
+            //    con.Close();
+            //}
+            //catch (Exception)
+            //{
+            //    throw;
+            //}
 
         }
 
