@@ -112,21 +112,14 @@
                                                         <asp:Label ID="lblLastName" CssClass="fw-bold" runat="server" Text="Last Name:"></asp:Label>
                                                         <p class="required-field">Field is required*</p>
                                                         <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control"></asp:TextBox>
-
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblEmailAddress" runat="server" CssClass="fw-bold mb-3" Text="Email Address:"></asp:Label>
-                                                        <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        <asp:RegularExpressionValidator ErrorMessage="Invalid email address" ControlToValidate="txtEmailAddress" runat="server" ValidationGroup="contactValGroup" />
+                                                        <input id="textEmailAddress" runat="server" type="email" />
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
-                                                        <asp:Label ID="lblAge" runat="server" CssClass="fw-bold mb-3" Text="Age:"></asp:Label>
-                                                        <asp:TextBox ID="txtAge" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        <asp:RegularExpressionValidator ID="regexNumbersOnly"
-                                                            ControlToValidate="txtAge" runat="server"
-                                                            ErrorMessage="Only Numbers allowed"
-                                                            ValidationExpression="\d+" ValidationGroup="contactValGroup">
-                                                        </asp:RegularExpressionValidator>
+                                                        <asp:Label ID="lblAge" runat="server" CssClass="fw-bold mb-3" Text="Age:"></asp:Label>                                                       
+                                                        <input id="textAge" runat="server" type="number" min="0" max="120" />
                                                     </div>
                                                     <asp:UpdatePanel ID="PhoneNumUpdatePanel" runat="server">
                                                         <ContentTemplate>

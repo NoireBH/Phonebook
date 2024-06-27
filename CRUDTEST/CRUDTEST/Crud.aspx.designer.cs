@@ -168,13 +168,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Label lblEmailAddress;
 
         /// <summary>
-        /// txtEmailAddress control.
+        /// textEmailAddress control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEmailAddress;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl textEmailAddress;
 
         /// <summary>
         /// lblAge control.
@@ -186,22 +186,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Label lblAge;
 
         /// <summary>
-        /// txtAge control.
+        /// textAge control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAge;
-
-        /// <summary>
-        /// regexNumbersOnly control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator regexNumbersOnly;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl textAge;
 
         /// <summary>
         /// PhoneNumUpdatePanel control.

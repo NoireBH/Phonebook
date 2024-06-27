@@ -132,14 +132,14 @@ namespace CRUDTEST
                 int age = default;
                 bool ageIsInt = true;
 
-                if (!string.IsNullOrWhiteSpace(txtAge.Text))
+                if (!string.IsNullOrWhiteSpace(textAge.Value))
                 {
-                    ageIsInt = int.TryParse(txtAge.Text, out age);
+                    ageIsInt = int.TryParse(textAge.Value, out age);
                 }
 
                 if (ageIsInt)
                 {
-                    string emailAddress = txtEmailAddress.Text.Trim();
+                    string emailAddress = textEmailAddress.Value.Trim();
                     byte[] profilePicture = null;
                     bool hasImage = ImageUpload.HasFile;
                     var dbNull = DBNull.Value;
@@ -339,8 +339,8 @@ namespace CRUDTEST
         {
             txtFirstName.Text = string.Empty;
             txtLastName.Text = string.Empty;
-            txtEmailAddress.Text = string.Empty;
-            txtAge.Text = string.Empty;
+            textEmailAddress.Value = string.Empty;
+            textAge.Value = string.Empty;
             txtPhoneNumber.Text = string.Empty;
         }
 
@@ -423,15 +423,15 @@ namespace CRUDTEST
                     {
                         txtFirstName.Text = dr["first_name"].ToString();
                         txtLastName.Text = dr["last_name"].ToString();
-                        txtEmailAddress.Text = dr["email_address"].ToString();
+                        textEmailAddress.Value = dr["email_address"].ToString();
 
                         if (dr["age"].ToString() == "0")
                         {
-                            txtAge.Text = string.Empty;
+                            textAge.Value = string.Empty;
                         }
                         else
                         {
-                            txtAge.Text = dr["age"].ToString();
+                            textAge.Value = dr["age"].ToString();
                         }
 
                         if (dr["profile_picture"] != DBNull.Value)
