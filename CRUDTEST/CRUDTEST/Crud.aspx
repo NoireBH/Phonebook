@@ -36,7 +36,7 @@
                 if (fileSize > maxSizeInBytes) {
                     alert('File size must be less than ' + maxSizeInMB + ' MB.');
                     inputElement.value = ''; 
-                    imgElement.src = ''; 
+                    
                     return false; 
                 }
 
