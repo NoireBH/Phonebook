@@ -115,7 +115,6 @@ namespace CRUDTEST
                 int age = default;
                 bool ageIsInt = true;
                 byte[] profilePicture = null;
-                bool isDefaultProfilePicture = IsDefaultProfilePicture();
                 bool hasImage = ImageUpload.HasFile;
                 var dbNull = DBNull.Value;
 
@@ -148,7 +147,6 @@ namespace CRUDTEST
 
                 if (BtnHiddenFIeld.Value == "1")
                 {
-
                     try
                     {
                         using (OracleCommand command = new OracleCommand(cmdText, con))
@@ -196,49 +194,9 @@ namespace CRUDTEST
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
                     }
 
-
-                    cmdText = "DELETE FROM PHONENUMBERS WHERE CONTACT_ID =:contact_id";
-
-                    try
+                    if (DynamicPhoneNumbers.Count > 0)
                     {
-                        using (OracleCommand command = new OracleCommand(cmdText, con))
-                        {
-                            command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
-
-                            command.Connection.Open();
-                            command.ExecuteNonQuery();
-                            command.Connection.Close();
-                        }
-                    }
-                    catch (Exception)
-                    {
-
-                        throw;
-                    }
-
-                    cmdText = "insert into PHONENUMBERS " +
-                                "(phone_number, contact_id)" +
-                                " VALUES (:phone_number, :contact_id)";
-
-                    foreach (var phoneNumber in DynamicPhoneNumbers)
-                    {
-                        try
-                        {
-                            using (OracleCommand command = new OracleCommand(cmdText, con))
-                            {
-                                command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
-                                command.Parameters.AddWithValue("phone_number", phoneNumber.Number);
-
-                                command.Connection.Open();
-                                command.ExecuteNonQuery();
-                                command.Connection.Close();
-                            }
-                        }
-                        catch (Exception)
-                        {
-
-                            throw;
-                        }
+                        AddPhoneNums();
                     }
 
                     Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
@@ -262,7 +220,6 @@ namespace CRUDTEST
 
                     try
                     {
-
                         using (OracleCommand command = new OracleCommand(cmdText, con))
                         {
                             command.Parameters.AddWithValue("id", Convert.ToInt32(HiddenIdField.Value));
@@ -277,6 +234,8 @@ namespace CRUDTEST
                             }
                             else
                             {
+                                bool isDefaultProfilePicture = IsDefaultProfilePicture();
+
                                 if (!isDefaultProfilePicture)
                                 {
                                     cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
@@ -300,49 +259,11 @@ namespace CRUDTEST
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
                     }
 
-                    cmdText = "DELETE FROM PHONENUMBERS WHERE CONTACT_ID =:contact_id";
-
-                    try
+                    if (DynamicPhoneNumbers.Count > 0)
                     {
-                        using (OracleCommand command = new OracleCommand(cmdText, con))
-                        {
-                            command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
-
-                            command.Connection.Open();
-                            command.ExecuteNonQuery();
-                            command.Connection.Close();
-                        }
-                    }
-                    catch (Exception)
-                    {
-
-                        throw;
+                        AddPhoneNums();
                     }
 
-                    cmdText = "insert into PHONENUMBERS " +
-               "(phone_number, contact_id)" +
-               " VALUES (:phone_number, :contact_id)";
-
-                    foreach (var phoneNumber in DynamicPhoneNumbers)
-                    {
-                        try
-                        {
-                            using (OracleCommand command = new OracleCommand(cmdText, con))
-                            {
-                                command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
-                                command.Parameters.AddWithValue("phone_number", phoneNumber.Number);
-
-                                command.Connection.Open();
-                                command.ExecuteNonQuery();
-                                command.Connection.Close();
-                            }
-                        }
-                        catch (Exception)
-                        {
-
-                            throw;
-                        }
-                    }
 
                     BtnHiddenFIeld.Value = "1";
                     AddOrUpdatePhoneNumHiddenField.Value = "1";
@@ -358,6 +279,52 @@ namespace CRUDTEST
             phoneNumAlert.Visible = false;
             ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
             FormUpdatePanel.Update();
+        }
+
+        private void AddPhoneNums()
+        {
+            string cmdText = "DELETE FROM PHONENUMBERS WHERE CONTACT_ID =:contact_id";
+            try
+            {
+                using (OracleCommand command = new OracleCommand(cmdText, con))
+                {
+                    command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
+
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            cmdText = "insert into PHONENUMBERS " +
+                        "(phone_number, contact_id)" +
+                        " VALUES (:phone_number, :contact_id)";
+
+            foreach (var phoneNumber in DynamicPhoneNumbers)
+            {
+                try
+                {
+                    using (OracleCommand command = new OracleCommand(cmdText, con))
+                    {
+                        command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
+                        command.Parameters.AddWithValue("phone_number", phoneNumber.Number);
+
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
         }
 
         private void EmptySubmitForm()

@@ -36,116 +36,14 @@
                                     <span>Email: </span>
                                     <asp:Label ID="lblEmailAddress" runat="server"></asp:Label>
                                 </p>
-                                <%--<div class="contact-info-btn-container">
-                                    <asp:Button ID="UpdateContactBtn" data-bs-toggle="modal" data-bs-target="#contactUpdatePanel" runat="server" Text="Update"
-                                        class="btn btn-warning fw-bold text-dark" OnClick="UpdateContactBtn_Click" />
-                                    <asp:Button ID="DeleteBtn" runat="server" Text="Delete" class="btn btn-danger fw-bold text-dark" OnClick="DeleteBtn_Click" />
-                                </div>--%>
                             </ContentTemplate>
-                            <%--<Triggers>
-                                <asp:AsyncPostBackTrigger ControlID="UpdateContactBtn" EventName="Click" /> 
-                            </Triggers>--%>
                         </asp:UpdatePanel>
-
-                        <%--<div class="modal fade" id="contactUpdatePanel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <div class="text-center form-container container-fluid">
-                                            <asp:UpdatePanel ID="FormUpdatePanel" runat="server" UpdateMode="Conditional">
-                                                <ContentTemplate>
-                                                    <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
-                                                        <div class="form-group d-flex flex-column">
-                                                            <asp:Label ID="lblFirstName" CssClass="fw-bold" runat="server" Text="First Name:"></asp:Label>
-                                                            <p class="required-field">Field is required*</p>
-                                                            <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        </div>
-                                                        <div class="form-group d-flex flex-column">
-                                                            <asp:Label ID="lblLastName" CssClass="fw-bold" runat="server" Text="Last Name:"></asp:Label>
-                                                            <p class="required-field">Field is required*</p>
-                                                            <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        </div>
-                                                        <div class="form-group d-flex flex-column">
-                                                            <asp:Label ID="lblFormEmailAddress" CssClass="fw-bold" runat="server" Text="Email Address:"></asp:Label>
-                                                            <asp:TextBox ID="txtFormEmailAddress" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        </div>
-                                                        <div class="form-group d-flex flex-column">
-                                                            <asp:Label ID="lblFormAge" CssClass="fw-bold" runat="server" Text="Age:"></asp:Label>
-                                                            <asp:TextBox ID="txtAge" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        </div>
-                                                        <div class="form-group d-flex flex-column">
-                                                            <asp:Label ID="lblProfilePicture" runat="server" CssClass="fw-bold mb-3" Text="Profile Picture:"></asp:Label>
-                                                            <asp:FileUpload CssClass="text-center" ID="ImageUpload" runat="server" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex justify-content-center gap-2">
-                                                        <asp:Button ID="SubmitContactInfo" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="SubmitContactInfo_Click" data-bs-dismiss="modal" />
-                                                        <asp:Button ID="CancelUpdateBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelBtn_Click" Text="Cancel" data-bs-dismiss="modal"></asp:Button>
-                                                    </div>
-                                                </ContentTemplate>
-                                                <Triggers>
-                                                    <asp:PostBackTrigger ControlID="SubmitContactInfo" />
-                                                </Triggers>
-                                            </asp:UpdatePanel>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>--%>
-                        <%--<div class="container-fluid contact-main-phone-number-container mt-1">
-                            <h2>Main Phone number:</h2>
-                            <asp:UpdatePanel ID="MainPhoneNumUpdatePanel" runat="server">
-                                <ContentTemplate>
-                                    <div class="container d-flex justify-content-center align-items-baseline gap-2">
-                                        <asp:Label ID="lblMainPhoneNumber" runat="server" CssClass="fw-bolder">
-                                        </asp:Label>
-                                        <asp:Button ID="UpdateMainPhoneNumBtn" data-bs-toggle="modal" data-bs-target="#phoneNumModal" runat="server" Text="Update"
-                                            class="btn btn-warning fw-bold text-dark" OnClick="UpdateMainPhoneNumBtn_Click" />
-                                    </div>
-                                </ContentTemplate>
-                            </asp:UpdatePanel>
-
-
-                        </div>--%>
                         <div class="container-fluid mb-2">
                             <div class="row  d-flex flex-column align-items-center">
                                 <div class="mb-1">
                                     <h1 class="phone-number-h2">Phone numbers:
                                     </h1>
-                                </div>
-                                <%--<div>
-                                    <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#phoneNumModal">
-                                        Add a number</button>
-                                    <div class="modal fade" id="phoneNumModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-body">
-                                                    <div class="text-center form-container container-fluid">
-                                                        <asp:UpdatePanel ID="PhoneFormUpdatePanel" runat="server">
-                                                            <ContentTemplate>
-                                                                <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
-                                                                    <div class="form-group d-flex flex-column">
-                                                                        <asp:Label ID="lblPhoneNumber" CssClass="fw-bold" runat="server" Text="Phone number:"></asp:Label>
-                                                                        <p class="required-field">Field is required*</p>
-                                                                        <asp:TextBox ID="txtPhoneNumber" runat="server" CssClass="form-control"></asp:TextBox>
-                                                                        <asp:RequiredFieldValidator ControlToValidate="txtPhoneNumber" runat="server" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="d-flex justify-content-center gap-2">
-                                                                    <asp:Button ID="submitPhoneNumBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnCommand="submitPhoneNumBtn_Command" data-bs-dismiss="modal" />
-                                                                    <asp:Button ID="CancelBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelBtn_Click" Text="Cancel" data-bs-dismiss="modal"></asp:Button>
-                                                                </div>
-                                                            </ContentTemplate>
-                                                            <%--<Triggers>
-                                                                <asp:PostBackTrigger ControlID="submitPhoneNumBtn" />
-                                                            </Triggers>--%>
-                                                        <%--</asp:UpdatePanel>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>--%>
+                                </div>                               
                             </div>
                         </div>
                         <asp:UpdatePanel ID="PhoneNumbersUpdatePanel" runat="server">
@@ -154,22 +52,11 @@
                                     <ItemTemplate>
                                         <div class="container phone-number-container d-flex justify-content-center align-items-baseline gap-3 fw-bold"
                                             style="max-width: 300px">
-                                            <%# DataBinder.Eval(Container.DataItem, "Number") %>
-                                            <%--<div class="phone-number-buttons d-flex gap-3 align-items-baseline ">
-                                                <asp:LinkButton ID="RemoveNumberBtn" runat="server" OnCommand="RemoveNumberBtn_Command"
-                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ID") %>'>
-                                                    <i class="fa-solid fa-trash" style="color: #FF0000;"></i>
-                                                </asp:LinkButton>
-                                                <asp:Button ID="UpdatePhoneNumBtn" data-bs-toggle="modal" data-bs-target="#phoneNumModal" Text="Update" class="btn btn-warning fw-bold text-dark" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
-                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PHONE_NUMBER") + "," 
-                                                        + DataBinder.Eval(Container.DataItem, "ID") %>' />
-                                            </div>--%>
+                                            <%# DataBinder.Eval(Container.DataItem, "Number") %>                                          
                                         </div>
                                         <br />
                                     </ItemTemplate>
                                 </asp:Repeater>
-                                <%--<asp:HiddenField ID="AddOrUpdatePhoneNumHiddenField" Value="1" runat="server" />
-                                <asp:HiddenField ID="PhoneNumberIdHiddenField" runat="server" />--%>
                             </ContentTemplate>
                         </asp:UpdatePanel>
                         <asp:SqlDataSource ID="PhoneNumbers" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString2 %>" ProviderName="<%$ ConnectionStrings:ConnectionString2.ProviderName %>" SelectCommand="SELECT &quot;PHONE_NUMBER&quot;, &quot;ID&quot; FROM &quot;PHONENUMBERS&quot; WHERE (&quot;CONTACT_ID&quot; = :CONTACT_ID) ORDER BY &quot;ID&quot;">
@@ -185,13 +72,12 @@
         </div>
 
         <asp:Panel ID="PhoneNumberPanel" runat="server" Height="361px">
-            <asp:SqlDataSource ID="ContactDetailsDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>" SelectCommand="SELECT &quot;FIRST_NAME&quot;, &quot;LAST_NAME&quot;, &quot;PROFILE_PICTURE&quot; FROM &quot;CONTACTS&quot; WHERE (&quot;ID&quot; = :ID)" OnSelecting="ContactDetailsDataSource_Selecting">
+            <asp:SqlDataSource ID="ContactDetailsDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>" SelectCommand="SELECT &quot;FIRST_NAME&quot;, &quot;LAST_NAME&quot;, &quot;PROFILE_PICTURE&quot; FROM &quot;CONTACTS&quot; WHERE (&quot;ID&quot; = :ID)">
                 <SelectParameters>
                     <asp:QueryStringParameter DefaultValue="null" Name="ID" QueryStringField="id" Type="Decimal" />
                 </SelectParameters>
             </asp:SqlDataSource>
         </asp:Panel>
-
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
