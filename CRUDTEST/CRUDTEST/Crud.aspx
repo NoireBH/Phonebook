@@ -12,14 +12,13 @@
     <link href="Styles/style.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Crud Operations</title>
+    <title>Phonebook</title>
     <script>
         function img() {
             var inputElement = document.getElementById("<%= ImageUpload.ClientID %>");
             var imgElement = document.getElementById("<%= contactImg.ClientID %>");
             var maxSizeInMB = 3;
             var maxSizeInBytes = maxSizeInMB * 1024 * 1024;
-
 
             if (inputElement.files && inputElement.files[0]) {
                 var file = inputElement.files[0];
@@ -134,8 +133,10 @@
                                                             <div class="form-group d-flex flex-column phone-numbers-container">
                                                                 <h4 class="fw-bold mb-3">Phone numbers:</h4>
                                                                 <asp:TextBox ID="txtPhoneNumber" runat="server"></asp:TextBox>
-                                                                <asp:Button ID="AddOrEditPhoneNumBtn" CssClass="btn btn-success mb-2" runat="server"
-                                                                    Text="Save" OnCommand="AddOrEditPhoneNumBtn_Command" />
+                                                                <div>
+                                                                    <asp:Button ID="AddOrEditPhoneNumBtn" CssClass="btn btn-success mb-2 mt-2" runat="server"
+                                                                        Text="Save" OnCommand="AddOrEditPhoneNumBtn_Command" />
+                                                                </div>
                                                                 <div runat="server" id="phoneNumAlert" class="alert alert-danger fw-bolder text-black" visible="false" role="alert">
                                                                     Can't add an empty or already existing phonenumber!
                                                                 </div>
@@ -145,7 +146,6 @@
                                                                             <asp:TextBox ID="txtAddOrEditphoneNum" runat="server" CssClass="text-center" Text='<%# DataBinder.Eval(Container.DataItem, "Number") %>'>
                                                                             </asp:TextBox>
                                                                         </asp:PlaceHolder>
-
                                                                         <div class="phone-number-buttons d-flex justify-content-center gap-3 align-items-baseline mb-2 mt-2 ">
                                                                             <asp:LinkButton ID="RemoveNumberBtn" class="fw-bold text-dark" runat="server"
                                                                                 OnCommand="RemoveNumberBtn_Command"
@@ -166,7 +166,6 @@
                                                             <asp:HiddenField ID="PhoneNumberHiddenField" runat="server" />
                                                         </ContentTemplate>
                                                     </asp:UpdatePanel>
-
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblContactImagePreview" runat="server" CssClass="fw-bold mb-3" Text="Profile Picture:"></asp:Label>
                                                         <div class="contact-img-container container-fluid text-center mb-2">
@@ -181,7 +180,6 @@
                                                 </div>
                                                 <asp:HiddenField ID="BtnHiddenFIeld" Value="1" runat="server" />
                                                 <asp:HiddenField ID="HiddenIdField" runat="server" />
-
                                             </ContentTemplate>
                                             <Triggers>
                                                 <asp:PostBackTrigger ControlID="submitBtn" />
@@ -206,8 +204,8 @@
                                         <table class="table table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center"  scope="col"></th>
-                                                    <th class="text-center"  scope="col">First Name</th>
+                                                    <th class="text-center" scope="col"></th>
+                                                    <th class="text-center" scope="col">First Name</th>
                                                     <th class="text-center" scope="col">Last Name</th>
                                                 </tr>
                                             </thead>
@@ -223,12 +221,10 @@
              ("return confirm(\"Are you sure you want to delete {0} {1}?\");", Eval("firstName"), Eval("lastName")) %>'>
              <i class="fa-solid fa-trash-can" style="color: #ff0000;"></i> 
                                                     </asp:LinkButton>
-                                                
                                                     <asp:LinkButton ID="UpdateBtn" runat="server" CssClass="btn-icon" OnCommand="UpdateBtn_Command"
                                                         CommandArgument='<%# DataBinder.Eval(Container.DataItem, "id") %>'>
              <i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i> 
                                                     </asp:LinkButton>
-                                                
                                                     <asp:LinkButton ID="DetailsBtn" runat="server" CssClass="btn-icon" Text="Details"
                                                         OnCommand="DetailsBtn_Command" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "id") %>'>
              <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
@@ -236,7 +232,6 @@
                                                 </td>
                                                 <td class="text-center fw-bold"><%# DataBinder.Eval(Container.DataItem, "firstName") %> </td>
                                                 <td class="text-center fw-bold"><%# DataBinder.Eval(Container.DataItem, "lastName") %> </td>
-
                                             </tr>
                                         </tbody>
                                     </ItemTemplate>
