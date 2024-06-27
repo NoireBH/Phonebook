@@ -24,13 +24,26 @@
     </style>
     <script>
         function img() {
-            var url = inputToURL(document.getElementById("<%=ImageUpload.ClientID %>"));
-            document.getElementById("<%=contactImg.ClientID %>").src = url;
-        }
-        function inputToURL(inputElement) {
-            var file = inputElement.files[0];
-            return window.URL.createObjectURL(file);
-        }
+            var inputElement = document.getElementById("<%= ImageUpload.ClientID %>");
+            var imgElement = document.getElementById("<%= contactImg.ClientID %>");
+            var maxSizeInMB = 3; 
+            var maxSizeInBytes = maxSizeInMB * 1024 * 1024; 
+
+            if (inputElement.files && inputElement.files[0]) {
+                var file = inputElement.files[0];
+                var fileSize = file.size;
+
+                if (fileSize > maxSizeInBytes) {
+                    alert('File size must be less than ' + maxSizeInMB + ' MB.');
+                    inputElement.value = ''; 
+                    imgElement.src = ''; 
+                    return false; 
+                }
+
+                var url = window.URL.createObjectURL(file);
+                imgElement.src = url;
+            }
+        }        
         function showContactModal() {
             var modal = new bootstrap.Modal(document.getElementById('contactModal'));
             modal.show();

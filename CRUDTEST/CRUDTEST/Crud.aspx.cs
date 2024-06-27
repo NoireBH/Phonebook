@@ -115,8 +115,20 @@ namespace CRUDTEST
             string lastName = txtLastName.Text.Trim();
             bool requiredFieldsAreEmpty = String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName);
 
+
             if (!requiredFieldsAreEmpty)
             {
+                int fileSize = ImageUpload.PostedFile.ContentLength;
+                int maxSizeInBytes = 3 * 1024 * 1024; //3mb
+
+                if (fileSize > maxSizeInBytes)
+                {
+                    formAlert.InnerText = "The image you're trying to add is too big. Max image size is 3MB.";
+                    formAlert.Visible = true;
+
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
+                }
+
                 int age = default;
                 bool ageIsInt = true;
 
@@ -177,8 +189,6 @@ namespace CRUDTEST
                                 OracleParameter newIdParam = new OracleParameter("newId", OracleType.Int32);
                                 newIdParam.Direction = ParameterDirection.Output;
                                 command.Parameters.Add(newIdParam);
-
-
                                 command.Connection.Open();
                                 command.ExecuteNonQuery();
 
@@ -211,16 +221,6 @@ namespace CRUDTEST
                     else if (BtnHiddenFIeld.Value == "0")
                     {
 
-                        if (ImageUpload.HasFile)
-                        {
-                            fileExtension = Path.GetExtension(ImageUpload.FileName).ToLower();
-
-                            if (fileExtension != ".jpg" || fileExtension != ".gif" || fileExtension != ".jpeg" || fileExtension != ".png")
-                            {
-                                hasImage = false;
-                            }
-
-                        }
 
                         cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, EMAIL_ADDRESS =:email_address, AGE =:age, PROFILE_PICTURE=:profile_picture WHERE ID =:id";
 
