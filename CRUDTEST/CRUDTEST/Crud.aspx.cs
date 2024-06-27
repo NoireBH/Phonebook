@@ -86,7 +86,8 @@ namespace CRUDTEST
                     }
                     else
                     {
-                        Response.Write("No Contacts In DataBase");
+                        AlertTopFixed.InnerText = "There are currently no contacts,try adding some!";
+                        AlertTopFixed.Visible = true;
                     }
                     con.Close();
                 }
@@ -374,7 +375,8 @@ namespace CRUDTEST
                 }
                 else
                 {
-                    Response.Write("No Contacts In DataBase");
+                    AlertTopFixed.InnerText = "There are currently no contacts,try adding some!";
+                    AlertTopFixed.Visible = true;
                 }
                 con.Close();
             }
@@ -448,17 +450,18 @@ namespace CRUDTEST
                             contactImg.ImageUrl = CommonConstants.DefaultContactImageUrl;
                         }
                     }
-
                 }
                 else
                 {
-                    Response.Write("No Contacts In DataBase");
+                    AlertTopFixed.InnerText = "There are currently no contacts,try adding some!";
+                    AlertTopFixed.Visible = true;
                 }
                 con.Close();
             }
             catch (Exception)
             {
-                throw;
+                formAlert.InnerText = "The contact doesn't exist!";
+                formAlert.Visible = true;
             }
 
             BtnHiddenFIeld.Value = "0";
@@ -482,7 +485,6 @@ namespace CRUDTEST
 
             ReBindPhoneNumDataSource();
             con.Close();
-
 
             FormUpdatePanel.Update();
 
@@ -512,6 +514,11 @@ namespace CRUDTEST
             if (phoneToRemove != default)
             {
                 DynamicPhoneNumbers.Remove(phoneToRemove);
+            }
+            else
+            {
+                phoneNumAlert.InnerText = "That phonenumber doesn't exist!";
+                phoneNumAlert.Visible = true;
             }
 
             ReBindPhoneNumDataSource();
@@ -593,10 +600,9 @@ namespace CRUDTEST
             {
                 AlertTopFixed.Visible = true;
             }
-            
+
         }
 
         private bool IsDefaultProfilePicture() => contactImg.ImageUrl == CommonConstants.DefaultContactImageUrl;
-
     }
 }
