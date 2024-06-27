@@ -93,7 +93,8 @@ namespace CRUDTEST
                 }
                 catch (Exception)
                 {
-                    throw;
+                    AlertTopFixed.InnerText = "Something went wrong when trying to load your contacts, please try again!";
+                    AlertTopFixed.Visible = true;
                 }
             }
             else
@@ -193,12 +194,9 @@ namespace CRUDTEST
                         }
                         catch (Exception)
                         {
-                            if (!ageIsInt)
-                            {
-                                formAlert.InnerText = "Age must be a number!";
-                            }
-
+                            formAlert.InnerText = "Something went wrong while trying to add the contact, please try again.";
                             formAlert.Visible = true;
+
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
                         }
 
@@ -217,7 +215,7 @@ namespace CRUDTEST
                         {
                             fileExtension = Path.GetExtension(ImageUpload.FileName).ToLower();
 
-                            if (fileExtension != ".jpg" || fileExtension == ".gif" || fileExtension != ".jpeg" || fileExtension != ".png")
+                            if (fileExtension != ".jpg" || fileExtension != ".gif" || fileExtension != ".jpeg" || fileExtension != ".png")
                             {
                                 hasImage = false;
                             }
@@ -263,7 +261,9 @@ namespace CRUDTEST
                         }
                         catch (Exception)
                         {
+                            formAlert.InnerText = "Something went wrong while trying to update the contact info, please try again.";
                             formAlert.Visible = true;
+
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
                         }
 
@@ -313,8 +313,10 @@ namespace CRUDTEST
             }
             catch (Exception)
             {
+                formAlert.InnerText = "Something went wrong, please try again.";
+                formAlert.Visible = true;
 
-                throw;
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
             }
 
             cmdText = "insert into PHONENUMBERS " +
@@ -337,7 +339,10 @@ namespace CRUDTEST
                 }
                 catch (Exception)
                 {
-                    throw;
+                    formAlert.InnerText = "Something went wrong, please try again.";
+                    formAlert.Visible = true;
+
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
                 }
             }
         }
@@ -382,7 +387,8 @@ namespace CRUDTEST
             }
             catch (Exception)
             {
-                throw;
+                AlertTopFixed.InnerText = "Something went wrong when trying to display the contacts, please try again!";
+                AlertTopFixed.Visible = true;
             }
 
             FormUpdatePanel.Update();
@@ -406,7 +412,8 @@ namespace CRUDTEST
             }
             catch (Exception)
             {
-                throw;
+                AlertTopFixed.InnerText = "Something went wrong when trying to delete the contact, please try again!";
+                AlertTopFixed.Visible = true;
             }
         }
 
@@ -469,16 +476,24 @@ namespace CRUDTEST
 
             List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
 
-            OracleCommand cmdGetPhoneNums = new OracleCommand();
-            cmdGetPhoneNums.Parameters.AddWithValue("id", HiddenIdField.Value);
-            cmdGetPhoneNums.CommandText = "select id,  phone_number from PHONENUMBERS WHERE CONTACT_ID =:id ";
-            cmdGetPhoneNums.Connection = con;
-            con.Open();
-            OracleDataReader dr2 = cmdGetPhoneNums.ExecuteReader();
-
-            while (dr2.Read())
+            try
             {
-                phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
+                OracleCommand cmdGetPhoneNums = new OracleCommand();
+                cmdGetPhoneNums.Parameters.AddWithValue("id", HiddenIdField.Value);
+                cmdGetPhoneNums.CommandText = "select id,  phone_number from PHONENUMBERS WHERE CONTACT_ID =:id ";
+                cmdGetPhoneNums.Connection = con;
+                con.Open();
+                OracleDataReader dr2 = cmdGetPhoneNums.ExecuteReader();
+
+                while (dr2.Read())
+                {
+                    phoneNumbers.Add(new PhoneNumber(Convert.ToInt32(dr2["id"].ToString()), dr2["phone_number"].ToString()));
+                }
+            }
+            catch (Exception)
+            {
+                AlertTopFixed.InnerText = "Something went wrong while trying to load the phonenumbers, please try again.";
+                AlertTopFixed.Visible = true;
             }
 
             DynamicPhoneNumbers = phoneNumbers;
@@ -503,7 +518,15 @@ namespace CRUDTEST
 
         protected void DetailsBtn_Command(object sender, CommandEventArgs e)
         {
-            Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", e.CommandArgument));
+            try
+            {
+                Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", e.CommandArgument));
+            }
+            catch (Exception)
+            {
+                AlertTopFixed.InnerText = "The contact you're trying to see the details of doesn't exist!";
+                AlertTopFixed.Visible = true;
+            }           
         }
 
         protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
