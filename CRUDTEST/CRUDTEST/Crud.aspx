@@ -66,7 +66,7 @@
                                         <asp:UpdatePanel ID="FormUpdatePanel" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="false">
                                             <ContentTemplate>
                                                 <div class="container-fluid field-form d-flex  flex-column justify-content-center gap-2 mb-3" style="max-width: 500px;">
-                                                    <div runat="server" id="formAlert" class="alert alert-danger" visible="false" role="alert">
+                                                    <div runat="server" id="formAlert" class="alert alert-danger fw-bolder text-black" visible="false" role="alert">
                                                         Please fill out all required fields!
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
@@ -104,7 +104,7 @@
                                                                 <asp:TextBox ID="txtPhoneNumber" runat="server"></asp:TextBox>
                                                                 <asp:Button ID="AddOrEditPhoneNumBtn" CssClass="btn btn-success mb-2" runat="server"
                                                                     Text="Save" OnCommand="AddOrEditPhoneNumBtn_Command" />
-                                                                <div runat="server" id="phoneNumAlert" class="alert alert-danger" visible="false" role="alert">
+                                                                <div runat="server" id="phoneNumAlert" class="alert alert-danger fw-bolder text-black" visible="false" role="alert">
                                                                     Can't add an empty or already existing phonenumber!
                                                                 </div>
                                                                 <asp:Repeater ID="PhoneNumRepeater" runat="server">
@@ -179,7 +179,8 @@
                                         <td class="text-center">
                                             <asp:Button ID="DeleteBtn" runat="server" Text="Delete" class="btn btn-danger fw-bold text-dark" OnCommand="DeleteBtn_Command"
                                                 CommandArgument='<%# DataBinder.Eval
-                                            (Container.DataItem, "id") %>' />
+                                            (Container.DataItem, "id") %>' OnClientClick='<%# String.Format
+                                                    ("return confirm(\"Are you sure you want to delete {0} {1}?\");", Eval("firstName"), Eval("lastName")) %>'/>
                                         </td>
                                         <td class="text-center">
                                             <asp:Button ID="UpdateBtn" runat="server" Text="Update"

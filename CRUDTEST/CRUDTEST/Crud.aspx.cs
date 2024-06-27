@@ -111,174 +111,188 @@ namespace CRUDTEST
 
             if (!requiredFieldsAreEmpty)
             {
-                string emailAddress = txtEmailAddress.Text.Trim();
                 int age = default;
                 bool ageIsInt = true;
-                byte[] profilePicture = null;
-                bool hasImage = ImageUpload.HasFile;
-                var dbNull = DBNull.Value;
-
-
-                string fileExtension = Path.GetExtension(ImageUpload.FileName).ToLower();
-
-                if (fileExtension == ".jpg" || fileExtension == ".gif" || fileExtension == ".jpeg" || fileExtension == ".png")
-                {
-                    hasImage = true;
-                }
-                else
-                {
-                    hasImage = false;
-                }
-
-                if (hasImage)
-                {
-                    profilePicture = ImageUpload.FileBytes;
-
-                }
 
                 if (!string.IsNullOrWhiteSpace(txtAge.Text))
                 {
                     ageIsInt = int.TryParse(txtAge.Text, out age);
                 }
 
-                string cmdText = "insert into CONTACTS " +
-                    "(first_Name, last_Name, email_address, age, profile_picture)" +
-                    " VALUES (:first_name, :last_Name, :email_address, :age, :profile_picture) RETURNING ID INTO :newId";
-
-                if (BtnHiddenFIeld.Value == "1")
+                if (ageIsInt)
                 {
-                    try
+                    string emailAddress = txtEmailAddress.Text.Trim();
+                    byte[] profilePicture = null;
+                    bool hasImage = ImageUpload.HasFile;
+                    var dbNull = DBNull.Value;
+
+
+                    string fileExtension = Path.GetExtension(ImageUpload.FileName).ToLower();
+
+                    if (fileExtension == ".jpg" || fileExtension == ".gif" || fileExtension == ".jpeg" || fileExtension == ".png")
                     {
-                        using (OracleCommand command = new OracleCommand(cmdText, con))
-                        {
-                            command.Parameters.AddWithValue("first_name", firstName);
-                            command.Parameters.AddWithValue("last_name", lastName);
-                            command.Parameters.AddWithValue("email_address", emailAddress);
-                            command.Parameters.AddWithValue("age", age);
-
-                            if (hasImage)
-                            {
-                                command.Parameters.AddWithValue("profile_picture", profilePicture);
-                            }
-                            else
-                            {
-                                command.Parameters.AddWithValue("profile_picture", dbNull);
-                            }
-
-                            OracleParameter newIdParam = new OracleParameter("newId", OracleType.Int32);
-                            newIdParam.Direction = ParameterDirection.Output;
-                            command.Parameters.Add(newIdParam);
-
-
-                            command.Connection.Open();
-                            command.ExecuteNonQuery();
-
-                            HiddenIdField.Value = newIdParam.Value.ToString();
-
-                            command.Connection.Close();
-                        }
-
-                        cmdText = "insert into PHONENUMBERS " +
-                       "(phone_number, contact_id)" +
-                       " VALUES (:phone_number, :contact_id)";
-
+                        hasImage = true;
                     }
-                    catch (Exception)
+                    else
                     {
-                        if (!ageIsInt)
-                        {
-                            formAlert.InnerText = "Age must be a number!";
-                        }
-
-                        formAlert.Visible = true;
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
+                        hasImage = false;
                     }
 
-                    if (DynamicPhoneNumbers.Count > 0)
+                    if (hasImage)
                     {
-                        AddPhoneNums();
-                    }
-
-                    Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
-                }
-
-                else if (BtnHiddenFIeld.Value == "0")
-                {
-
-                    if (ImageUpload.HasFile)
-                    {
-                        fileExtension = Path.GetExtension(ImageUpload.FileName).ToLower();
-
-                        if (fileExtension != ".jpg" || fileExtension == ".gif" || fileExtension != ".jpeg" || fileExtension != ".png")
-                        {
-                            hasImage = false;
-                        }
+                        profilePicture = ImageUpload.FileBytes;
 
                     }
 
-                    cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, EMAIL_ADDRESS =:email_address, AGE =:age, PROFILE_PICTURE=:profile_picture WHERE ID =:id";
+                    string cmdText = "insert into CONTACTS " +
+                        "(first_Name, last_Name, email_address, age, profile_picture)" +
+                        " VALUES (:first_name, :last_Name, :email_address, :age, :profile_picture) RETURNING ID INTO :newId";
 
-                    try
+                    if (BtnHiddenFIeld.Value == "1")
                     {
-                        using (OracleCommand command = new OracleCommand(cmdText, con))
+                        try
                         {
-                            command.Parameters.AddWithValue("id", Convert.ToInt32(HiddenIdField.Value));
-                            command.Parameters.AddWithValue("first_name", firstName);
-                            command.Parameters.AddWithValue("last_name", lastName);
-                            command.Parameters.AddWithValue("email_address", emailAddress);
-                            command.Parameters.AddWithValue("age", age);
-
-                            if (hasImage)
+                            using (OracleCommand command = new OracleCommand(cmdText, con))
                             {
-                                command.Parameters.AddWithValue("profile_picture", profilePicture);
-                            }
-                            else
-                            {
-                                bool isDefaultProfilePicture = IsDefaultProfilePicture();
+                                command.Parameters.AddWithValue("first_name", firstName);
+                                command.Parameters.AddWithValue("last_name", lastName);
+                                command.Parameters.AddWithValue("email_address", emailAddress);
+                                command.Parameters.AddWithValue("age", age);
 
-                                if (!isDefaultProfilePicture)
+                                if (hasImage)
                                 {
-                                    cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
-                                        "EMAIL_ADDRESS =:email_address WHERE ID =:id";
-                                    command.CommandText = cmdText;
+                                    command.Parameters.AddWithValue("profile_picture", profilePicture);
                                 }
                                 else
                                 {
                                     command.Parameters.AddWithValue("profile_picture", dbNull);
                                 }
+
+                                OracleParameter newIdParam = new OracleParameter("newId", OracleType.Int32);
+                                newIdParam.Direction = ParameterDirection.Output;
+                                command.Parameters.Add(newIdParam);
+
+
+                                command.Connection.Open();
+                                command.ExecuteNonQuery();
+
+                                HiddenIdField.Value = newIdParam.Value.ToString();
+
+                                command.Connection.Close();
                             }
 
-                            command.Connection.Open();
-                            command.ExecuteNonQuery();
-                            command.Connection.Close();
+                            cmdText = "insert into PHONENUMBERS " +
+                           "(phone_number, contact_id)" +
+                           " VALUES (:phone_number, :contact_id)";
+
                         }
+                        catch (Exception)
+                        {
+                            if (!ageIsInt)
+                            {
+                                formAlert.InnerText = "Age must be a number!";
+                            }
+
+                            formAlert.Visible = true;
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
+                        }
+
+                        if (DynamicPhoneNumbers.Count > 0)
+                        {
+                            AddPhoneNums();
+                        }
+
+                        Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
                     }
-                    catch (Exception)
+
+                    else if (BtnHiddenFIeld.Value == "0")
                     {
-                        formAlert.Visible = true;
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
+
+                        if (ImageUpload.HasFile)
+                        {
+                            fileExtension = Path.GetExtension(ImageUpload.FileName).ToLower();
+
+                            if (fileExtension != ".jpg" || fileExtension == ".gif" || fileExtension != ".jpeg" || fileExtension != ".png")
+                            {
+                                hasImage = false;
+                            }
+
+                        }
+
+                        cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, EMAIL_ADDRESS =:email_address, AGE =:age, PROFILE_PICTURE=:profile_picture WHERE ID =:id";
+
+                        try
+                        {
+                            using (OracleCommand command = new OracleCommand(cmdText, con))
+                            {
+                                command.Parameters.AddWithValue("id", Convert.ToInt32(HiddenIdField.Value));
+                                command.Parameters.AddWithValue("first_name", firstName);
+                                command.Parameters.AddWithValue("last_name", lastName);
+                                command.Parameters.AddWithValue("email_address", emailAddress);
+                                command.Parameters.AddWithValue("age", age);
+
+                                if (hasImage)
+                                {
+                                    command.Parameters.AddWithValue("profile_picture", profilePicture);
+                                }
+                                else
+                                {
+                                    bool isDefaultProfilePicture = IsDefaultProfilePicture();
+
+                                    if (!isDefaultProfilePicture)
+                                    {
+                                        cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
+                                            "EMAIL_ADDRESS =:email_address WHERE ID =:id";
+                                        command.CommandText = cmdText;
+                                    }
+                                    else
+                                    {
+                                        command.Parameters.AddWithValue("profile_picture", dbNull);
+                                    }
+                                }
+
+                                command.Connection.Open();
+                                command.ExecuteNonQuery();
+                                command.Connection.Close();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            formAlert.Visible = true;
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
+                        }
+
+                        if (DynamicPhoneNumbers.Count > 0)
+                        {
+                            AddPhoneNums();
+                        }
+
+
+                        BtnHiddenFIeld.Value = "1";
+                        AddOrUpdatePhoneNumHiddenField.Value = "1";
+                        EmptySubmitForm();
+                        FormUpdatePanel.Update();
                     }
 
-                    if (DynamicPhoneNumbers.Count > 0)
-                    {
-                        AddPhoneNums();
-                    }
-
-
-                    BtnHiddenFIeld.Value = "1";
-                    AddOrUpdatePhoneNumHiddenField.Value = "1";
                     EmptySubmitForm();
-                    FormUpdatePanel.Update();
+                    Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
                 }
+                else
+                {
+                    formAlert.InnerText = "Age must be a number!";
+                }
+            }
+            else
+            {
+                formAlert.InnerText = "Please fill out all required fields!";
 
-                EmptySubmitForm();
-                Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
             }
 
             formAlert.Visible = true;
             phoneNumAlert.Visible = false;
             ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
             FormUpdatePanel.Update();
+
         }
 
         private void AddPhoneNums()
