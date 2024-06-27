@@ -95,6 +95,10 @@ namespace CRUDTEST
                     throw;
                 }
             }
+            else
+            {
+                AlertTopFixed.Visible = false;
+            }
         }
 
         private void ReBindPhoneNumDataSource()
@@ -267,7 +271,6 @@ namespace CRUDTEST
                             AddPhoneNums();
                         }
 
-
                         BtnHiddenFIeld.Value = "1";
                         AddOrUpdatePhoneNumHiddenField.Value = "1";
                         EmptySubmitForm();
@@ -285,14 +288,12 @@ namespace CRUDTEST
             else
             {
                 formAlert.InnerText = "Please fill out all required fields!";
-
             }
 
             formAlert.Visible = true;
             phoneNumAlert.Visible = false;
             ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
             FormUpdatePanel.Update();
-
         }
 
         private void AddPhoneNums()
@@ -335,7 +336,6 @@ namespace CRUDTEST
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
             }
@@ -576,16 +576,24 @@ namespace CRUDTEST
 
         protected void AddContactBtn_Click(object sender, EventArgs e)
         {
-            EmptySubmitForm();
-            formAlert.Visible = false;
-            contactImg.ImageUrl = Common.CommonConstants.DefaultContactImageUrl;
+            try
+            {
+                EmptySubmitForm();
+                formAlert.Visible = false;
+                contactImg.ImageUrl = Common.CommonConstants.DefaultContactImageUrl;
 
-            PhoneNumRepeater.DataSource = null;
-            PhoneNumRepeater.DataBind();
+                PhoneNumRepeater.DataSource = null;
+                PhoneNumRepeater.DataBind();
 
-            FormUpdatePanel.Update();
+                FormUpdatePanel.Update();
 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
+            }
+            catch (Exception)
+            {
+                AlertTopFixed.Visible = true;
+            }
+            
         }
 
         private bool IsDefaultProfilePicture() => contactImg.ImageUrl == CommonConstants.DefaultContactImageUrl;

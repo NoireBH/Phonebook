@@ -42,6 +42,16 @@
 </head>
 <body>
     <form id="form1" runat="server">
+        <asp:ScriptManager ID="FormScriptManager" runat="server">
+        </asp:ScriptManager>
+        <asp:UpdatePanel ID="AlertUpdatePanel" runat="server">
+            <ContentTemplate>
+                <div runat="server" id="AlertTopFixed" class="alert alert-danger fw-bolder text-black text-center" visible="false" role="alert">
+                    An error has occured, please try again!
+                </div>
+            </ContentTemplate>
+
+        </asp:UpdatePanel>
         <div class="container-fluid" style="max-width: 800px; border: 1px solid black; background-color: white">
             <div class="container-fluid">
                 <header class="d-flex justify-content-center align-items-baseline gap-1">
@@ -49,8 +59,6 @@
                     <h1 class="text-center" style="color: #004080;">PhoneBook
                     </h1>
                 </header>
-                <asp:ScriptManager ID="FormScriptManager" runat="server">
-                </asp:ScriptManager>                
                 <div class="phonebook-container container-fluid text-center mb-2">
                     <asp:UpdatePanel ID="AddContactBtnUpdatePanel" runat="server">
                         <ContentTemplate>
@@ -179,8 +187,9 @@
                                         <td class="text-center">
                                             <asp:Button ID="DeleteBtn" runat="server" Text="Delete" class="btn btn-danger fw-bold text-dark" OnCommand="DeleteBtn_Command"
                                                 CommandArgument='<%# DataBinder.Eval
-                                            (Container.DataItem, "id") %>' OnClientClick='<%# String.Format
-                                                    ("return confirm(\"Are you sure you want to delete {0} {1}?\");", Eval("firstName"), Eval("lastName")) %>'/>
+                                            (Container.DataItem, "id") %>'
+                                                OnClientClick='<%# String.Format
+                                                    ("return confirm(\"Are you sure you want to delete {0} {1}?\");", Eval("firstName"), Eval("lastName")) %>' />
                                         </td>
                                         <td class="text-center">
                                             <asp:Button ID="UpdateBtn" runat="server" Text="Update"

@@ -38,7 +38,15 @@
     max-width: 500px;
 }
 
-.no-contact-found{
+.no-contact-found {
     color: red;
 }
 
+.AlertTopFixed {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: 9999;
+    border-radius: 0px
+}
