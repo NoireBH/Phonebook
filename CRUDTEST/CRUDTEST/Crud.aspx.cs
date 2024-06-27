@@ -107,30 +107,34 @@ namespace CRUDTEST
         {
             string firstName = txtFirstName.Text.Trim();
             string lastName = txtLastName.Text.Trim();
-            string emailAddress = txtEmailAddress.Text.Trim();
-            int age = default;
-            bool ageIsInt = true;
-            byte[] profilePicture = null;
-            bool isDefaultProfilePicture = IsDefaultProfilePicture();
-            bool hasImage = ImageUpload.HasFile;
-            var dbNull = DBNull.Value;           
             bool requiredFieldsAreEmpty = String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName);
 
             if (!requiredFieldsAreEmpty)
             {
+                string emailAddress = txtEmailAddress.Text.Trim();
+                int age = default;
+                bool ageIsInt = true;
+                byte[] profilePicture = null;
+                bool isDefaultProfilePicture = IsDefaultProfilePicture();
+                bool hasImage = ImageUpload.HasFile;
+                var dbNull = DBNull.Value;
+
+
+                string fileExtension = Path.GetExtension(ImageUpload.FileName).ToLower();
+
+                if (fileExtension == ".jpg" || fileExtension == ".gif" || fileExtension == ".jpeg" || fileExtension == ".png")
+                {
+                    hasImage = true;
+                }
+                else
+                {
+                    hasImage = false;
+                }
+
                 if (hasImage)
                 {
                     profilePicture = ImageUpload.FileBytes;
 
-                }
-
-                try
-                {
-                    age = Convert.ToInt32(txtAge.Text);
-                }
-                catch (Exception)
-                {
-                    throw;
                 }
 
                 if (!string.IsNullOrWhiteSpace(txtAge.Text))
@@ -192,11 +196,52 @@ namespace CRUDTEST
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
                     }
 
-                    if (!requiredFieldsAreEmpty)
+
+                    cmdText = "DELETE FROM PHONENUMBERS WHERE CONTACT_ID =:contact_id";
+
+                    try
                     {
-                        Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
+                        using (OracleCommand command = new OracleCommand(cmdText, con))
+                        {
+                            command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
+
+                            command.Connection.Open();
+                            command.ExecuteNonQuery();
+                            command.Connection.Close();
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
                     }
 
+                    cmdText = "insert into PHONENUMBERS " +
+                                "(phone_number, contact_id)" +
+                                " VALUES (:phone_number, :contact_id)";
+
+                    foreach (var phoneNumber in DynamicPhoneNumbers)
+                    {
+                        try
+                        {
+                            using (OracleCommand command = new OracleCommand(cmdText, con))
+                            {
+                                command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
+                                command.Parameters.AddWithValue("phone_number", phoneNumber.Number);
+
+                                command.Connection.Open();
+                                command.ExecuteNonQuery();
+                                command.Connection.Close();
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
+                    }
+
+                    Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
                 }
 
                 else if (BtnHiddenFIeld.Value == "0")
@@ -204,7 +249,7 @@ namespace CRUDTEST
 
                     if (ImageUpload.HasFile)
                     {
-                        string fileExtension = Path.GetExtension(ImageUpload.FileName).ToLower();
+                        fileExtension = Path.GetExtension(ImageUpload.FileName).ToLower();
 
                         if (fileExtension != ".jpg" || fileExtension == ".gif" || fileExtension != ".jpeg" || fileExtension != ".png")
                         {
@@ -255,23 +300,58 @@ namespace CRUDTEST
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
                     }
 
+                    cmdText = "DELETE FROM PHONENUMBERS WHERE CONTACT_ID =:contact_id";
+
+                    try
+                    {
+                        using (OracleCommand command = new OracleCommand(cmdText, con))
+                        {
+                            command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
+
+                            command.Connection.Open();
+                            command.ExecuteNonQuery();
+                            command.Connection.Close();
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+
                     cmdText = "insert into PHONENUMBERS " +
-                   "(phone_number, contact_id)" +
-                   " VALUES (:phone_number, :contact_id)";
-                   
+               "(phone_number, contact_id)" +
+               " VALUES (:phone_number, :contact_id)";
+
+                    foreach (var phoneNumber in DynamicPhoneNumbers)
+                    {
+                        try
+                        {
+                            using (OracleCommand command = new OracleCommand(cmdText, con))
+                            {
+                                command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
+                                command.Parameters.AddWithValue("phone_number", phoneNumber.Number);
+
+                                command.Connection.Open();
+                                command.ExecuteNonQuery();
+                                command.Connection.Close();
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
+                    }
 
                     BtnHiddenFIeld.Value = "1";
                     AddOrUpdatePhoneNumHiddenField.Value = "1";
                     EmptySubmitForm();
                     FormUpdatePanel.Update();
-                                      
                 }
 
-                if (!requiredFieldsAreEmpty)
-                {
-                    EmptySubmitForm();
-                    Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
-                }
+                EmptySubmitForm();
+                Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
             }
 
             formAlert.Visible = true;
@@ -323,7 +403,6 @@ namespace CRUDTEST
             }
 
             FormUpdatePanel.Update();
-
         }
 
         protected void DeleteBtn_Command(object sender, CommandEventArgs e)
@@ -439,7 +518,6 @@ namespace CRUDTEST
             FormUpdatePanel.Update();
         }
 
-
         protected void DetailsBtn_Command(object sender, CommandEventArgs e)
         {
             Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", e.CommandArgument));
@@ -447,10 +525,11 @@ namespace CRUDTEST
 
         protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
         {
+            phoneNumAlert.Visible = false;
             PhoneNumber phoneToRemove = DynamicPhoneNumbers.Where(p => p.Number == e.CommandArgument.ToString()).FirstOrDefault();
 
             if (phoneToRemove != default)
-            {               
+            {
                 DynamicPhoneNumbers.Remove(phoneToRemove);
             }
 
@@ -461,6 +540,7 @@ namespace CRUDTEST
 
         protected void UpdatePhoneNumBtn_Command(object sender, CommandEventArgs e)
         {
+            phoneNumAlert.Visible = false;
             string[] commandArgs = e.CommandArgument.ToString().Split(new char[] { ',' });
             string phoneNumber = commandArgs[0].ToString();
             string id = commandArgs[1].ToString();
@@ -508,7 +588,7 @@ namespace CRUDTEST
             {
                 phoneNumAlert.InnerText = "Phonenumber can be no more than 15 characters long!";
                 phoneNumAlert.Visible = true;
-            }            
+            }
 
             FormUpdatePanel.Update();
         }
@@ -527,15 +607,7 @@ namespace CRUDTEST
             ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
         }
 
-        private bool IsDefaultProfilePicture()
-        {
-            if (contactImg.ImageUrl == CommonConstants.DefaultContactImageUrl)
-            {
-                return true;
-            }
-
-            return false;
-        }
+        private bool IsDefaultProfilePicture() => contactImg.ImageUrl == CommonConstants.DefaultContactImageUrl;
 
     }
 }
