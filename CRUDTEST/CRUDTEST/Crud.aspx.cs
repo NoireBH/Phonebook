@@ -111,8 +111,8 @@ namespace CRUDTEST
 
         protected void Submit_Click(object sender, EventArgs e)
         {
-            string firstName = txtFirstName.Text.Trim();
-            string lastName = txtLastName.Text.Trim();
+            string firstName = textFirstName.Value.Trim();
+            string lastName = textLastName.Value.Trim();
             bool requiredFieldsAreEmpty = String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName);
 
 
@@ -337,8 +337,8 @@ namespace CRUDTEST
 
         private void EmptySubmitForm()
         {
-            txtFirstName.Text = string.Empty;
-            txtLastName.Text = string.Empty;
+            textFirstName.Value = string.Empty;
+            textLastName.Value = string.Empty;
             textEmailAddress.Value = string.Empty;
             textAge.Value = string.Empty;
             textPhoneNumber.Value = string.Empty;
@@ -421,8 +421,8 @@ namespace CRUDTEST
                 {
                     while (dr.Read())
                     {
-                        txtFirstName.Text = dr["first_name"].ToString();
-                        txtLastName.Text = dr["last_name"].ToString();
+                        textFirstName.Value = dr["first_name"].ToString();
+                        textLastName.Value = dr["last_name"].ToString();
                         textEmailAddress.Value = dr["email_address"].ToString();
 
                         if (dr["age"].ToString() == "0")

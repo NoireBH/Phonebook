@@ -132,13 +132,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Label lblFirstName;
 
         /// <summary>
-        /// txtFirstName control.
+        /// textFirstName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFirstName;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText textFirstName;
 
         /// <summary>
         /// lblLastName control.
@@ -150,13 +150,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Label lblLastName;
 
         /// <summary>
-        /// txtLastName control.
+        /// textLastName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLastName;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText textLastName;
 
         /// <summary>
         /// lblEmailAddress control.

@@ -50,6 +50,20 @@
         function hideContactModal() {
             $('#contactModal').modal('hide');
         }
+        function validateForm() {
+            var firstName = document.getElementById('<%= textFirstName.ClientID %>').value.trim();
+            var lastName = document.getElementById('<%= textLastName.ClientID %>').value.trim();
+            var isValid = true;
+
+            if (firstName === '' || lastName === '') {
+                document.getElementById('<%= formAlert.ClientID %>').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('<%= formAlert.ClientID %>').stsyle.display = 'none';
+            }
+
+            return isValid;
+        }
     </script>
 </head>
 <body>
@@ -106,26 +120,26 @@
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblFirstName" CssClass="fw-bold" runat="server" Text="First Name:"></asp:Label>
                                                         <p class="required-field">Field is required*</p>
-                                                        <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control"></asp:TextBox>
+                                                        <input  type="text" id="textFirstName" runat="server" class="form-control" />
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblLastName" CssClass="fw-bold" runat="server" Text="Last Name:"></asp:Label>
                                                         <p class="required-field">Field is required*</p>
-                                                        <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control"></asp:TextBox>
+                                                        <input type="text" id="textLastName" runat="server" class="form-control" />
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblEmailAddress" runat="server" CssClass="fw-bold mb-3" Text="Email Address:"></asp:Label>
-                                                        <input id="textEmailAddress" runat="server" type="email" />
+                                                        <input id="textEmailAddress" runat="server" class="form-control" type="email" />
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblAge" runat="server" CssClass="fw-bold mb-3" Text="Age:"></asp:Label>
-                                                        <input id="textAge" runat="server" type="number" min="1" max="100" />
+                                                        <input id="textAge" runat="server" class="form-control" type="number" min="1" max="100" />
                                                     </div>
                                                     <asp:UpdatePanel ID="PhoneNumUpdatePanel" runat="server">
                                                         <ContentTemplate>
                                                             <div class="form-group d-flex flex-column phone-numbers-container">
                                                                 <h4 class="fw-bold mb-3">Phone numbers:</h4>
-                                                                <input runat="server" title="numbers" id="textPhoneNumber" type="text" pattern="\d*" maxlength="15" />
+                                                                <input runat="server" class="form-control" title="numbers" id="textPhoneNumber" type="text" pattern="\d*" maxlength="15" />
                                                                 <div>
                                                                     <asp:Button ID="AddOrEditPhoneNumBtn" CssClass="btn btn-success mb-2 mt-2" runat="server"
                                                                         Text="Save" OnCommand="AddOrEditPhoneNumBtn_Command" />
@@ -168,8 +182,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center gap-2">
-                                                    <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="Submit_Click" />
-                                                    <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn" formnovalidate="" OnClick="CancelUpdBtn_Click" OnClientClick="hideContactModal()" Text="Cancel"></asp:Button>
+                                                    <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClientClick="return validateForm();" OnClick="Submit_Click" />
+                                                    <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn btn-secondary" formnovalidate="" OnClick="CancelUpdBtn_Click" OnClientClick="hideContactModal()" Text="Cancel"></asp:Button>
                                                 </div>
                                                 <asp:HiddenField ID="BtnHiddenFIeld" Value="1" runat="server" />
                                                 <asp:HiddenField ID="HiddenIdField" runat="server" />
