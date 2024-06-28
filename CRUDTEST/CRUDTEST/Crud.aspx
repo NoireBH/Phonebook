@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Crud.aspx.cs" Inherits="CRUDTEST.Crud" %>
 
-<%--<%@ Register Src="~/UserControls/ModalUserControl.ascx" TagPrefix="uc1" TagName="Modal" %>--%>
+<%@ Register Src="~/UserControls/ModalUserControl.ascx" TagPrefix="uc1" TagName="Modal" %>
 
 
 
@@ -133,7 +133,7 @@
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
                                                         <asp:Label ID="lblAge" runat="server" CssClass="fw-bold mb-3" Text="Age:"></asp:Label>
-                                                        <input id="textAge" runat="server" class="form-control" type="number" min="1" max="100" />
+                                                        <input id="textAge" runat="server" class="form-control"  type="number" min="1" max="100" />
                                                     </div>
                                                     <asp:UpdatePanel ID="PhoneNumUpdatePanel" runat="server">
                                                         <ContentTemplate>
@@ -182,7 +182,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center gap-2">
-                                                    <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClientClick="return validateForm();" OnClick="Submit_Click" />
+                                                    <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClientClick="return validateForm()" OnClick="Submit_Click" />
                                                     <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn btn-secondary" formnovalidate="" OnClick="CancelUpdBtn_Click" OnClientClick="hideContactModal()" Text="Cancel"></asp:Button>
                                                 </div>
                                                 <asp:HiddenField ID="BtnHiddenFIeld" Value="1" runat="server" />
