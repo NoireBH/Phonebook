@@ -204,13 +204,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.UpdatePanel PhoneNumUpdatePanel;
 
         /// <summary>
-        /// txtPhoneNumber control.
+        /// textPhoneNumber control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPhoneNumber;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText textPhoneNumber;
 
         /// <summary>
         /// AddOrEditPhoneNumBtn control.
@@ -328,15 +328,6 @@ namespace CRUDTEST
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField HiddenIdField;
-
-        /// <summary>
-        /// RepeaterUpdatePanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel RepeaterUpdatePanel;
 
         /// <summary>
         /// ContactsRepeater control.

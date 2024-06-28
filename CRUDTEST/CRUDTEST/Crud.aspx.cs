@@ -341,7 +341,7 @@ namespace CRUDTEST
             txtLastName.Text = string.Empty;
             textEmailAddress.Value = string.Empty;
             textAge.Value = string.Empty;
-            txtPhoneNumber.Text = string.Empty;
+            textPhoneNumber.Value = string.Empty;
         }
 
         protected void ShowBtn_Click(object sender, EventArgs e)
@@ -546,13 +546,13 @@ namespace CRUDTEST
 
             AddOrUpdatePhoneNumHiddenField.Value = "0";
             PhoneNumberIdHiddenField.Value = id;
-            txtPhoneNumber.Text = phoneNumber;
+            textPhoneNumber.Value = phoneNumber;
             PhoneNumberHiddenField.Value = phoneNumber;
         }
 
         protected void AddOrEditPhoneNumBtn_Command(object sender, CommandEventArgs e)
         {
-            string phoneNumber = txtPhoneNumber.Text;
+            string phoneNumber = textPhoneNumber.Value;
 
             if (phoneNumber.Length <= 15)
             {
@@ -579,7 +579,7 @@ namespace CRUDTEST
                     ReBindPhoneNumDataSource();
                 }
 
-                txtPhoneNumber.Text = string.Empty;
+                textPhoneNumber.Value = string.Empty;
                 AddOrUpdatePhoneNumHiddenField.Value = "1";
             }
 
@@ -655,6 +655,6 @@ namespace CRUDTEST
 
         }
 
-        private bool IsDefaultProfilePicture() => contactImg.ImageUrl == CommonConstants.DefaultContactImageUrl;
+        private bool IsDefaultProfilePicture() => contactImg.ImageUrl == CommonConstants.DefaultContactImageUrl;       
     }
 }

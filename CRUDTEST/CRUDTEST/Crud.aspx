@@ -118,14 +118,14 @@
                                                         <input id="textEmailAddress" runat="server" type="email" />
                                                     </div>
                                                     <div class="form-group d-flex flex-column">
-                                                        <asp:Label ID="lblAge" runat="server" CssClass="fw-bold mb-3" Text="Age:"></asp:Label>                                                       
-                                                        <input id="textAge" runat="server" type="number" min="0" max="120" />
+                                                        <asp:Label ID="lblAge" runat="server" CssClass="fw-bold mb-3" Text="Age:"></asp:Label>
+                                                        <input id="textAge" runat="server" type="number" min="1" max="100" />
                                                     </div>
                                                     <asp:UpdatePanel ID="PhoneNumUpdatePanel" runat="server">
                                                         <ContentTemplate>
                                                             <div class="form-group d-flex flex-column phone-numbers-container">
                                                                 <h4 class="fw-bold mb-3">Phone numbers:</h4>
-                                                                <asp:TextBox ID="txtPhoneNumber" runat="server"></asp:TextBox>
+                                                                <input runat="server" title="numbers" id="textPhoneNumber" type="text" pattern="\d*" maxlength="15" />
                                                                 <div>
                                                                     <asp:Button ID="AddOrEditPhoneNumBtn" CssClass="btn btn-success mb-2 mt-2" runat="server"
                                                                         Text="Save" OnCommand="AddOrEditPhoneNumBtn_Command" />
@@ -140,12 +140,12 @@
                                                                             </asp:TextBox>
                                                                         </asp:PlaceHolder>
                                                                         <div class="phone-number-buttons d-flex justify-content-center gap-3 align-items-baseline mb-2 mt-2 ">
-                                                                            <asp:LinkButton ID="RemoveNumberBtn" class="fw-bold text-dark" runat="server"
+                                                                            <asp:LinkButton ClientIDMode="AutoID" ID="RemoveNumberBtn" class="fw-bold text-dark" runat="server"
                                                                                 OnCommand="RemoveNumberBtn_Command"
                                                                                 CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Number") %>'>
                                                                                 <i class="fa-solid fa-trash-can" style="color: #ff0000;"></i> 
                                                                             </asp:LinkButton>
-                                                                            <asp:LinkButton ID="UpdatePhoneNumBtn" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
+                                                                            <asp:LinkButton ClientIDMode="AutoID" ID="UpdatePhoneNumBtn" runat="server" OnCommand="UpdatePhoneNumBtn_Command"
                                                                                 CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Number") + "," 
                                                                                         + DataBinder.Eval(Container.DataItem, "Id") %>'>
                                                                                 <i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i> 
@@ -169,7 +169,7 @@
                                                 </div>
                                                 <div class="d-flex justify-content-center gap-2">
                                                     <asp:Button ID="submitBtn" runat="server" Text="Submit" class="btn btn-success fw-bold" OnClick="Submit_Click" />
-                                                    <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn btn-secondary fw-bold" OnClick="CancelUpdBtn_Click" Text="Cancel"></asp:Button>
+                                                    <asp:Button ID="CancelUpdBtn" runat="server" type="button" class="btn" formnovalidate="" OnClick="CancelUpdBtn_Click" OnClientClick="hideContactModal()" Text="Cancel"></asp:Button>
                                                 </div>
                                                 <asp:HiddenField ID="BtnHiddenFIeld" Value="1" runat="server" />
                                                 <asp:HiddenField ID="HiddenIdField" runat="server" />
@@ -190,7 +190,7 @@
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
                     <div class="col">
-                        <asp:UpdatePanel ID="RepeaterUpdatePanel" runat="server" UpdateMode="Conditional">
+                        <asp:UpdatePanel runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">
                             <ContentTemplate>
                                 <asp:Repeater ID="ContactsRepeater" runat="server">
                                     <HeaderTemplate>
@@ -207,18 +207,18 @@
                                         <tbody>
                                             <tr>
                                                 <td class="text-center d-flex gap-3">
-                                                    <asp:LinkButton ID="DeleteBtn" runat="server" CssClass="fw-bold text-dark btn-icon"
+                                                    <asp:LinkButton ClientIDMode="AutoID" ID="DeleteBtn" runat="server" CssClass="fw-bold text-dark btn-icon"
                                                         CommandArgument='<%# DataBinder.Eval(Container.DataItem, "id") %>'
                                                         OnCommand="DeleteBtn_Command"
                                                         OnClientClick='<%# String.Format
              ("return confirm(\"Are you sure you want to delete {0} {1}?\");", Eval("firstName"), Eval("lastName")) %>'>
              <i class="fa-solid fa-trash-can" style="color: #ff0000;"></i> 
                                                     </asp:LinkButton>
-                                                    <asp:LinkButton ID="UpdateBtn" runat="server" CssClass="btn-icon" OnCommand="UpdateBtn_Command"
+                                                    <asp:LinkButton ClientIDMode="AutoID" ID="UpdateBtn" runat="server" CssClass="btn-icon" OnCommand="UpdateBtn_Command"
                                                         CommandArgument='<%# DataBinder.Eval(Container.DataItem, "id") %>'>
              <i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i> 
                                                     </asp:LinkButton>
-                                                    <asp:LinkButton ID="DetailsBtn" runat="server" CssClass="btn-icon" Text="Details"
+                                                    <asp:LinkButton ClientIDMode="AutoID" ID="DetailsBtn" runat="server" CssClass="btn-icon" Text="Details"
                                                         OnCommand="DetailsBtn_Command" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "id") %>'>
              <i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
                                                     </asp:LinkButton>
