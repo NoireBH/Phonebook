@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿using CRUDTEST.Models;
+=======
+using CRUDTEST.Models;
+>>>>>>> ae8e9f7c5fa0e09485c70383d53cb30b203bd663
 using System;
 using System.Collections.Generic;
 using System.Data.OracleClient;

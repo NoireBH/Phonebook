@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Crud.aspx.cs" Inherits="CRUDTEST.Crud" %>
+=======
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Crud.aspx.cs" Inherits="CRUDTEST.Crud" %>
+>>>>>>> ae8e9f7c5fa0e09485c70383d53cb30b203bd663
 <%@ Register Src="~/UserControls/ModalUserControl.ascx" TagName="Modal" TagPrefix="uc1" %>
 
 
