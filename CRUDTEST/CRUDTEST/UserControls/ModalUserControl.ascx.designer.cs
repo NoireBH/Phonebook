@@ -7,12 +7,30 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CRUDTEST
+namespace CRUDTEST.UserControls
 {
 
 
-    public partial class WebUserControl1
+    public partial class ModalUserControl
     {
+
+        /// <summary>
+        /// AddContactBtnUpdatePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel AddContactBtnUpdatePanel;
+
+        /// <summary>
+        /// AddContactBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button AddContactBtn;
 
         /// <summary>
         /// FormUpdatePanel control.
@@ -24,6 +42,15 @@ namespace CRUDTEST
         protected global::System.Web.UI.UpdatePanel FormUpdatePanel;
 
         /// <summary>
+        /// formAlert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl formAlert;
+
+        /// <summary>
         /// lblFirstName control.
         /// </summary>
         /// <remarks>
@@ -33,13 +60,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Label lblFirstName;
 
         /// <summary>
-        /// txtFirstName control.
+        /// textFirstName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFirstName;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText textFirstName;
 
         /// <summary>
         /// lblLastName control.
@@ -51,13 +78,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Label lblLastName;
 
         /// <summary>
-        /// txtLastName control.
+        /// textLastName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLastName;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText textLastName;
 
         /// <summary>
         /// lblEmailAddress control.
@@ -69,13 +96,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Label lblEmailAddress;
 
         /// <summary>
-        /// txtEmailAddress control.
+        /// textEmailAddress control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEmailAddress;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl textEmailAddress;
 
         /// <summary>
         /// lblAge control.
@@ -87,22 +114,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Label lblAge;
 
         /// <summary>
-        /// txtAge control.
+        /// textAge control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAge;
-
-        /// <summary>
-        /// regexNumbersOnly control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator regexNumbersOnly;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl textAge;
 
         /// <summary>
         /// PhoneNumUpdatePanel control.
@@ -114,13 +132,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.UpdatePanel PhoneNumUpdatePanel;
 
         /// <summary>
-        /// txtPhoneNumber control.
+        /// textPhoneNumber control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPhoneNumber;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText textPhoneNumber;
 
         /// <summary>
         /// AddOrEditPhoneNumBtn control.
@@ -130,6 +148,15 @@ namespace CRUDTEST
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button AddOrEditPhoneNumBtn;
+
+        /// <summary>
+        /// phoneNumAlert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl phoneNumAlert;
 
         /// <summary>
         /// PhoneNumRepeater control.
@@ -157,6 +184,15 @@ namespace CRUDTEST
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField PhoneNumberIdHiddenField;
+
+        /// <summary>
+        /// PhoneNumberHiddenField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField PhoneNumberHiddenField;
 
         /// <summary>
         /// lblContactImagePreview control.
@@ -220,41 +256,5 @@ namespace CRUDTEST
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField HiddenIdField;
-
-        /// <summary>
-        /// HiddenEmailAddressField control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenEmailAddressField;
-
-        /// <summary>
-        /// HiddenAgeField control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenAgeField;
-
-        /// <summary>
-        /// HiddenPictureField control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenPictureField;
-
-        /// <summary>
-        /// HiddenImgField control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenImgField;
     }
 }
