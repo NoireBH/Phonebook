@@ -189,6 +189,7 @@
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="Site.Master" />
     <Content Include="Styles\style.css" />
+    <Content Include="UserControls\ModalUserControl.ascx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -242,6 +243,13 @@
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ModalUserControl.ascx.cs">
+      <DependentUpon>ModalUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\ModalUserControl.ascx.designer.cs">
+      <DependentUpon>ModalUserControl.ascx</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\PhoneContactDetailsViewModel.cs" />
     <Compile Include="ViewModels\PhoneContactViewModel.cs" />
     <Compile Include="ViewSwitcher.ascx.cs">
@@ -254,7 +262,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="UserControls\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
