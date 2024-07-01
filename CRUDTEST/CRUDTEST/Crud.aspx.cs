@@ -150,7 +150,6 @@ namespace CRUDTEST
             }
 
             ModalUserControl.UpdateFormPanelContent();
-            SearchUpdatePanel.Update();
         }
 
         protected void DeleteBtn_Command(object sender, CommandEventArgs e)
@@ -317,17 +316,18 @@ namespace CRUDTEST
 
             if (contacts.Count > 0)
             {
-                FoundContactsRepeater.DataSource = contacts;
-                FoundContactsRepeater.DataBind();
+                ContactAlert.Visible = false;
+                ContactsRepeater.DataSource = contacts;
+                ContactsRepeater.DataBind();
             }
             else
             {
-                FoundContactsRepeater.DataSource = null;
-                FoundContactsRepeater.DataBind();
-
+                ContactsRepeater.DataSource = null;
+                ContactsRepeater.DataBind();
+                ContactAlert.Visible = true;
             }
 
-            SearchUpdatePanel.Update();
+            ContactsUpdatePanel.Update();
 
         }
     }

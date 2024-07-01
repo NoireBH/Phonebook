@@ -78,15 +78,6 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.LinkButton searchcontactbtn;
 
         /// <summary>
-        /// FoundContactsRepeater control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater FoundContactsRepeater;
-
-        /// <summary>
         /// AddContactBtnUpdatePanel control.
         /// </summary>
         /// <remarks>
@@ -112,6 +103,24 @@ namespace CRUDTEST
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::CRUDTEST.UserControls.ModalUserControl ModalUserControl;
+
+        /// <summary>
+        /// ContactsUpdatePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel ContactsUpdatePanel;
+
+        /// <summary>
+        /// ContactAlert control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ContactAlert;
 
         /// <summary>
         /// ContactsRepeater control.
