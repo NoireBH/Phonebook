@@ -438,6 +438,7 @@ namespace CRUDTEST.UserControls
 
         public void ClearPhoneNumbers()
         {
+            DynamicPhoneNumbers.Clear();
             PhoneNumRepeater.DataSource = null;
             PhoneNumRepeater.DataBind();
         }

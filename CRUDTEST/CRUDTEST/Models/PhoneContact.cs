@@ -7,6 +7,7 @@ using static CRUDTEST.Common.ValidationConstants.PhoneContact;
 
 namespace CRUDTEST.Models
 {
+    [Serializable]
     public class PhoneContact
     {
         public PhoneContact(int id, string firstName, string lastName, string emailAddress, int age, string profilePicture)

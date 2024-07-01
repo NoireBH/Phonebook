@@ -29,65 +29,87 @@ namespace CRUDTEST
             }
         }
 
+        public List<PhoneContact> Contacts
+        {
+            get
+            {
+                if (ViewState["Contacts"] == null)
+                {
+                    ViewState["Contacts"] = new List<PhoneContact>();
+                }
+                return (List<PhoneContact>)ViewState["Contacts"];
+            }
+            set
+            {
+                ViewState["Contacts"] = value;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
             if (!IsPostBack)
             {
-                Image contactImg = ModalUserControl.ContactImage;
-
-                contactImg.Style.Add("max-width", "400px");
-                contactImg.Style.Add("max-height", "300px");
-
-                try
-                {
-                    OracleCommand cmd = new OracleCommand();
-                    cmd.CommandText = "select * from CONTACTS";
-                    cmd.Connection = con;
-                    con.Open();
-                    OracleDataReader dr = cmd.ExecuteReader();
-                    if (dr.HasRows)
-                    {
-                        List<PhoneContact> values = new List<PhoneContact>();
-
-                        while (dr.Read())
-                        {
-                            string pfp = null;
-
-                            if (dr["profile_picture"] != DBNull.Value)
-                            {
-                                byte[] pfpBytes = (byte[])(dr["profile_picture"]);
-                                pfp = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(pfpBytes));
-                            }
-                            else
-                            {
-                                pfp = CommonConstants.DefaultContactImageUrl;
-                            }
-
-                            values.Add(new PhoneContact(int.Parse(dr["id"].ToString()), dr["first_name"].ToString(), dr["last_name"].ToString(),
-                                dr["email_address"].ToString(), Convert.ToInt32(dr["age"]), pfp));
-                        }
-
-                        ContactsRepeater.DataSource = values.OrderBy(x => x.Id);
-                        ContactsRepeater.DataBind();
-
-                    }
-                    else
-                    {
-                        AlertTopFixed.InnerText = "There are currently no contacts,try adding some!";
-                        AlertTopFixed.Visible = true;
-                    }
-                    con.Close();
-                }
-                catch (Exception)
-                {
-                    AlertTopFixed.InnerText = "Something went wrong when trying to load your contacts, please try again!";
-                    AlertTopFixed.Visible = true;
-                }
+                LoadContacts();
             }
             else
             {
                 AlertTopFixed.Visible = false;
+            }
+        }
+
+        private void LoadContacts()
+        {
+            Image contactImg = ModalUserControl.ContactImage;
+
+            contactImg.Style.Add("max-width", "400px");
+            contactImg.Style.Add("max-height", "300px");
+
+            try
+            {
+                OracleCommand cmd = new OracleCommand();
+                cmd.CommandText = "select * from CONTACTS";
+                cmd.Connection = con;
+                con.Open();
+                OracleDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows)
+                {
+                    List<PhoneContact> values = new List<PhoneContact>();
+
+                    while (dr.Read())
+                    {
+                        string pfp = null;
+
+                        if (dr["profile_picture"] != DBNull.Value)
+                        {
+                            byte[] pfpBytes = (byte[])(dr["profile_picture"]);
+                            pfp = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(pfpBytes));
+                        }
+                        else
+                        {
+                            pfp = CommonConstants.DefaultContactImageUrl;
+                        }
+
+                        values.Add(new PhoneContact(int.Parse(dr["id"].ToString()), dr["first_name"].ToString(), dr["last_name"].ToString(),
+                            dr["email_address"].ToString(), Convert.ToInt32(dr["age"]), pfp));
+                    }
+
+                    Contacts = values;
+                    ContactsRepeater.DataSource = values.OrderBy(x => x.Id);
+                    ContactsRepeater.DataBind();
+
+                }
+                else
+                {
+                    AlertTopFixed.InnerText = "There are currently no contacts,try adding some!";
+                    AlertTopFixed.Visible = true;
+                }
+                con.Close();
+            }
+            catch (Exception)
+            {
+                AlertTopFixed.InnerText = "Something went wrong when trying to load your contacts, please try again!";
+                AlertTopFixed.Visible = true;
             }
         }
 
@@ -280,40 +302,31 @@ namespace CRUDTEST
 
         protected void SearchContactBtn_Click(object sender, EventArgs e)
         {
-            string searchInput = txtsearchcontact.Text;
 
-            var contacts = ContactsRepeater.DataSource as List<PhoneContact>;
+            string searchInput = txtsearchcontact.Text.ToLower();
+            List<PhoneContact> contacts = new List<PhoneContact>();
 
-            foreach (PhoneContact contact in contacts)
+            foreach (PhoneContact contact in Contacts)
             {
+                if (contact.FirstName.ToLower().Contains(searchInput) || 
+                    contact.LastName.ToLower().Contains(searchInput))
+                {
+                    contacts.Add(contact);
+                }
+            }
+
+            if (contacts.Count > 0)
+            {
+                FoundContactsRepeater.DataSource = contacts;
+                FoundContactsRepeater.DataBind();
+            }
+            else
+            {
+                FoundContactsRepeater.DataSource = null;
+                FoundContactsRepeater.DataBind();
 
             }
 
-            //try
-            //{
-            //    OracleCommand cmd = new OracleCommand();
-            //    cmd.Parameters.AddWithValue("search_input", searchInput);
-            //    cmd.CommandText = "SELECT * FROM CONTACTS WHERE LOWER(FIRST_NAME) LIKE '%' || LOWER(:search_input) || '%' OR LOWER(LAST_NAME) LIKE '%' || LOWER(:search_input) || '%'";
-            //    cmd.Connection = con;
-            //    con.Open();
-            //    OracleDataReader dr = cmd.ExecuteReader();
-            //    if (dr.HasRows)
-            //    {
-            //        List<PhoneContact> values = new List<PhoneContact>();
-
-            //        while (dr.Read())
-            //        {
-            //            var name = dr["first_name"].ToString();
-            //        }
-
-            //    }
-
-            //    con.Close();
-            //}
-            //catch (Exception)
-            //{
-            //    throw;
-            //}
         }
     }
 }

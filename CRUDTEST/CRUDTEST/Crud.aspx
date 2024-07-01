@@ -17,8 +17,7 @@
         <asp:UpdatePanel ID="AlertUpdatePanel" runat="server">
             <ContentTemplate>
                 <div runat="server" id="AlertTopFixed" class="alert alert-danger fw-bolder text-black text-center" visible="false" role="alert">
-                    An error has occured, please try again!
-               
+                    An error has occured, please try again!             
                 </div>
             </ContentTemplate>
         </asp:UpdatePanel>
@@ -41,6 +40,45 @@
                             </div>
                         </div>
                         <asp:Repeater ID="FoundContactsRepeater" runat="server">
+                            <HeaderTemplate>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" scope="col"></th>
+                                            <th class="text-center" scope="col">First Name</th>
+                                            <th class="text-center" scope="col">Last Name</th>
+                                        </tr>
+                                    </thead>
+                            </HeaderTemplate>
+                            <ItemTemplate>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center d-flex gap-3">
+                                            <asp:LinkButton ClientIDMode="AutoID" ID="DeleteBtn" runat="server" CssClass="fw-bold text-dark btn-icon"
+                                                CommandArgument='<%# DataBinder.Eval(Container.DataItem, "id") %>'
+                                                OnCommand="DeleteBtn_Command"
+                                                OnClientClick='<%# String.Format
+("return confirm(\"Are you sure you want to delete {0} {1}?\");", Eval("firstName"), Eval("lastName")) %>'>
+<i class="fa-solid fa-trash-can" style="color: #ff0000;"></i> 
+                                       </asp:LinkButton>
+                                            <asp:LinkButton ClientIDMode="AutoID" ID="UpdateBtn" runat="server" CssClass="btn-icon" OnCommand="UpdateBtn_Command"
+                                                CommandArgument='<%# DataBinder.Eval(Container.DataItem, "id") %>'>
+<i class="fa-solid fa-pen-to-square" style="color: #FFD43B;"></i> 
+                                       </asp:LinkButton>
+                                            <asp:LinkButton ClientIDMode="AutoID" ID="DetailsBtn" runat="server" CssClass="btn-icon" Text="Details"
+                                                OnCommand="DetailsBtn_Command" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "id") %>'>
+<i class="fa-solid fa-circle-info" style="color: #74C0FC;"></i>
+                                       </asp:LinkButton>
+                                        </td>
+                                        <td class="text-center fw-bold"><%# DataBinder.Eval(Container.DataItem, "firstName") %> </td>
+                                        <td class="text-center fw-bold"><%# DataBinder.Eval(Container.DataItem, "lastName") %> </td>
+                                    </tr>
+                                </tbody>
+                            </ItemTemplate>
+                            <FooterTemplate>
+                                </table>
+                      
+                            </FooterTemplate>
                         </asp:Repeater>
                     </ContentTemplate>
                 </asp:UpdatePanel>

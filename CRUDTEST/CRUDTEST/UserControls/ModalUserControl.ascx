@@ -53,7 +53,6 @@
     }
 </script>
 
-
 <div class="modal fade" id="contactModal">
     <div class="modal-dialog">
         <div class="modal-content">
