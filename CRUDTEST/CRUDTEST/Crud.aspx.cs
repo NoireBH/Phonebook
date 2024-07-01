@@ -19,6 +19,7 @@ using System.Data.SqlClient;
 using System.Web.UI.HtmlControls;
 using Microsoft.Ajax.Utilities;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Image = System.Web.UI.WebControls.Image;
 
 namespace CRUDTEST
 {
@@ -26,6 +27,8 @@ namespace CRUDTEST
     public partial class Crud : System.Web.UI.Page
     {
         OracleConnection con = new OracleConnection(@"Data Source=oratest19/odbms;USER ID=EMustafov; password=manager;");
+
+
 
         private List<PhoneNumber> DynamicPhoneNumbers
         {
@@ -48,6 +51,8 @@ namespace CRUDTEST
 
             if (!IsPostBack)
             {
+                Image contactImg = ModalUserControl.ContactImage;
+
                 contactImg.Style.Add("max-width", "400px");
                 contactImg.Style.Add("max-height", "300px");
 
@@ -102,7 +107,7 @@ namespace CRUDTEST
                 AlertTopFixed.Visible = false;
             }
         }
-        
+
         protected void ShowBtn_Click(object sender, EventArgs e)
         {
             try
@@ -138,7 +143,7 @@ namespace CRUDTEST
                 AlertTopFixed.Visible = true;
             }
 
-            FormUpdatePanel.Update();
+            ModalUserControl.UpdateFormPanelContent();
         }
 
         protected void DeleteBtn_Command(object sender, CommandEventArgs e)
@@ -166,7 +171,8 @@ namespace CRUDTEST
 
         protected void UpdateBtn_Command(object sender, CommandEventArgs e)
         {
-            formAlert.Visible = false;
+            ModalUserControl.FormAlert.Visible = false;
+            Image contactImg = ModalUserControl.ContactImage;
 
             try
             {
@@ -180,17 +186,17 @@ namespace CRUDTEST
                 {
                     while (dr.Read())
                     {
-                        textFirstName.Value = dr["first_name"].ToString();
-                        textLastName.Value = dr["last_name"].ToString();
-                        textEmailAddress.Value = dr["email_address"].ToString();
+                        ModalUserControl.TextFirstName.Value = dr["first_name"].ToString();
+                        ModalUserControl.TextLastName.Value = dr["last_name"].ToString();
+                        ModalUserControl.TextEmailAddress.Value = dr["email_address"].ToString();
 
                         if (dr["age"].ToString() == "0")
                         {
-                            textAge.Value = string.Empty;
+                            ModalUserControl.TextAge.Value = string.Empty;
                         }
                         else
                         {
-                            textAge.Value = dr["age"].ToString();
+                            ModalUserControl.TextAge.Value = dr["age"].ToString();
                         }
 
                         if (dr["profile_picture"] != DBNull.Value)
@@ -214,19 +220,19 @@ namespace CRUDTEST
             }
             catch (Exception)
             {
-                formAlert.InnerText = "The contact doesn't exist!";
-                formAlert.Visible = true;
+                ModalUserControl.FormAlert.InnerText = "The contact doesn't exist!";
+                ModalUserControl.FormAlert.Visible = true;
             }
 
-            BtnHiddenFIeld.Value = "0";
-            HiddenIdField.Value = e.CommandArgument.ToString();
+            ModalUserControl.AddOrUpdateBtnHiddenFieldValue = "0";
+            ModalUserControl.HiddenIdFieldValue = e.CommandArgument.ToString();
 
             List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
 
             try
             {
                 OracleCommand cmdGetPhoneNums = new OracleCommand();
-                cmdGetPhoneNums.Parameters.AddWithValue("id", HiddenIdField.Value);
+                cmdGetPhoneNums.Parameters.AddWithValue("id", ModalUserControl.HiddenIdFieldValue);
                 cmdGetPhoneNums.CommandText = "select id,  phone_number from PHONENUMBERS WHERE CONTACT_ID =:id ";
                 cmdGetPhoneNums.Connection = con;
                 con.Open();
@@ -245,10 +251,10 @@ namespace CRUDTEST
 
             DynamicPhoneNumbers = phoneNumbers;
 
-            ReBindPhoneNumDataSource();
+            ModalUserControl.ReBindPhoneNumDataSource();
             con.Close();
 
-            FormUpdatePanel.Update();
+            ModalUserControl.UpdateFormPanelContent();
 
             ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
         }
@@ -270,14 +276,14 @@ namespace CRUDTEST
         {
             try
             {
-                EmptySubmitForm();
-                formAlert.Visible = false;
+                Image contactImg = ModalUserControl.ContactImage;
+                ModalUserControl.EmptySubmitForm();
+                ModalUserControl.FormAlert.Visible = false;
                 contactImg.ImageUrl = Common.CommonConstants.DefaultContactImageUrl;
 
-                PhoneNumRepeater.DataSource = null;
-                PhoneNumRepeater.DataBind();
+                ModalUserControl.ClearPhoneNumbers();
 
-                FormUpdatePanel.Update();
+                ModalUserControl.UpdateFormPanelContent();
 
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
             }
@@ -325,334 +331,6 @@ namespace CRUDTEST
             //    throw;
             //}
 
-        }
-
-        protected void AddOrEditPhoneNumBtn_Command(object sender, CommandEventArgs e)
-        {
-            string phoneNumber = textPhoneNumber.Value;
-
-            if (phoneNumber.Length <= 15)
-            {
-                if (AddOrUpdatePhoneNumHiddenField.Value == "1")
-                {
-                    if (!string.IsNullOrWhiteSpace(phoneNumber) && !DynamicPhoneNumbers.Any(p => p.Number == phoneNumber))
-                    {
-                        phoneNumAlert.Visible = false;
-                        DynamicPhoneNumbers.Add(new PhoneNumber(phoneNumber));
-                        ReBindPhoneNumDataSource();
-                    }
-                    else
-                    {
-                        phoneNumAlert.Visible = true;
-                        phoneNumAlert.InnerText = "Can't add an empty or already existing phonenumber!";
-                    }
-
-                }
-                else if (AddOrUpdatePhoneNumHiddenField.Value == "0")
-                {
-                    PhoneNumber phoneToUpdate = DynamicPhoneNumbers.Where(p => p.Number == PhoneNumberHiddenField.Value.ToString()).FirstOrDefault();
-
-                    phoneToUpdate.Number = phoneNumber;
-                    ReBindPhoneNumDataSource();
-                }
-
-                textPhoneNumber.Value = string.Empty;
-                AddOrUpdatePhoneNumHiddenField.Value = "1";
-            }
-
-            else
-            {
-                phoneNumAlert.InnerText = "Phonenumber can be no more than 15 characters long!";
-                phoneNumAlert.Visible = true;
-            }
-
-            FormUpdatePanel.Update();
-        }
-
-        private void ReBindPhoneNumDataSource()
-        {
-            PhoneNumRepeater.DataSource = DynamicPhoneNumbers.OrderByDescending(x => x.Id);
-            PhoneNumRepeater.DataBind();
-        }
-
-        protected void Submit_Click(object sender, EventArgs e)
-        {
-            string firstName = textFirstName.Value.Trim();
-            string lastName = textLastName.Value.Trim();
-            bool requiredFieldsAreEmpty = String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName);
-
-
-            if (!requiredFieldsAreEmpty)
-            {
-                int fileSize = ImageUpload.PostedFile.ContentLength;
-                int maxSizeInBytes = 3 * 1024 * 1024; //3mb
-
-                if (fileSize > maxSizeInBytes)
-                {
-                    formAlert.InnerText = "The image you're trying to add is too big. Max image size is 3MB.";
-                    formAlert.Visible = true;
-
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
-                }
-
-                int age = default;
-                bool ageIsInt = true;
-
-                if (!string.IsNullOrWhiteSpace(textAge.Value))
-                {
-                    ageIsInt = int.TryParse(textAge.Value, out age);
-                }
-
-                if (ageIsInt)
-                {
-                    string emailAddress = textEmailAddress.Value.Trim();
-                    byte[] profilePicture = null;
-                    bool hasImage = ImageUpload.HasFile;
-                    var dbNull = DBNull.Value;
-
-                    if (hasImage)
-                    {
-                        profilePicture = ImageUpload.FileBytes;
-
-                    }
-
-                    string cmdText = "insert into CONTACTS " +
-                        "(first_Name, last_Name, email_address, age, profile_picture)" +
-                        " VALUES (:first_name, :last_Name, :email_address, :age, :profile_picture) RETURNING ID INTO :newId";
-
-                    if (BtnHiddenFIeld.Value == "1")
-                    {
-                        try
-                        {
-                            using (OracleCommand command = new OracleCommand(cmdText, con))
-                            {
-                                command.Parameters.AddWithValue("first_name", firstName);
-                                command.Parameters.AddWithValue("last_name", lastName);
-                                command.Parameters.AddWithValue("email_address", emailAddress);
-                                command.Parameters.AddWithValue("age", age);
-
-                                if (hasImage)
-                                {
-                                    command.Parameters.AddWithValue("profile_picture", profilePicture);
-                                }
-                                else
-                                {
-                                    command.Parameters.AddWithValue("profile_picture", dbNull);
-                                }
-
-                                OracleParameter newIdParam = new OracleParameter("newId", OracleType.Int32);
-                                newIdParam.Direction = ParameterDirection.Output;
-                                command.Parameters.Add(newIdParam);
-                                command.Connection.Open();
-                                command.ExecuteNonQuery();
-
-                                HiddenIdField.Value = newIdParam.Value.ToString();
-
-                                command.Connection.Close();
-                            }
-
-                            cmdText = "insert into PHONENUMBERS " +
-                           "(phone_number, contact_id)" +
-                           " VALUES (:phone_number, :contact_id)";
-
-                        }
-                        catch (Exception)
-                        {
-                            formAlert.InnerText = "Something went wrong while trying to add the contact, please try again.";
-                            formAlert.Visible = true;
-
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
-                        }
-
-                        if (DynamicPhoneNumbers.Count > 0)
-                        {
-                            AddPhoneNums();
-                        }
-
-                        Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
-                    }
-
-                    else if (BtnHiddenFIeld.Value == "0")
-                    {
-
-
-                        cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, EMAIL_ADDRESS =:email_address, AGE =:age, PROFILE_PICTURE=:profile_picture WHERE ID =:id";
-
-                        try
-                        {
-                            using (OracleCommand command = new OracleCommand(cmdText, con))
-                            {
-                                command.Parameters.AddWithValue("id", Convert.ToInt32(HiddenIdField.Value));
-                                command.Parameters.AddWithValue("first_name", firstName);
-                                command.Parameters.AddWithValue("last_name", lastName);
-                                command.Parameters.AddWithValue("email_address", emailAddress);
-                                command.Parameters.AddWithValue("age", age);
-
-                                if (hasImage)
-                                {
-                                    command.Parameters.AddWithValue("profile_picture", profilePicture);
-                                }
-                                else
-                                {
-                                    bool isDefaultProfilePicture = IsDefaultProfilePicture();
-
-                                    if (!isDefaultProfilePicture)
-                                    {
-                                        cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, AGE =:age, " +
-                                            "EMAIL_ADDRESS =:email_address WHERE ID =:id";
-                                        command.CommandText = cmdText;
-                                    }
-                                    else
-                                    {
-                                        command.Parameters.AddWithValue("profile_picture", dbNull);
-                                    }
-                                }
-
-                                command.Connection.Open();
-                                command.ExecuteNonQuery();
-                                command.Connection.Close();
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            formAlert.InnerText = "Something went wrong while trying to update the contact info, please try again.";
-                            formAlert.Visible = true;
-
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
-                        }
-
-                        if (DynamicPhoneNumbers.Count > 0)
-                        {
-                            AddPhoneNums();
-                        }
-
-                        BtnHiddenFIeld.Value = "1";
-                        AddOrUpdatePhoneNumHiddenField.Value = "1";
-                        EmptySubmitForm();
-                        FormUpdatePanel.Update();
-                    }
-
-                    EmptySubmitForm();
-                    Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
-                }
-                else
-                {
-                    formAlert.InnerText = "Age must be a number!";
-                }
-            }
-            else
-            {
-                formAlert.InnerText = "Please fill out all required fields!";
-            }
-
-            formAlert.Visible = true;
-            phoneNumAlert.Visible = false;
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
-            FormUpdatePanel.Update();
-        }
-
-        private void AddPhoneNums()
-        {
-            string cmdText = "DELETE FROM PHONENUMBERS WHERE CONTACT_ID =:contact_id";
-            try
-            {
-                using (OracleCommand command = new OracleCommand(cmdText, con))
-                {
-                    command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
-
-                    command.Connection.Open();
-                    command.ExecuteNonQuery();
-                    command.Connection.Close();
-                }
-            }
-            catch (Exception)
-            {
-                formAlert.InnerText = "Something went wrong, please try again.";
-                formAlert.Visible = true;
-
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
-            }
-
-            cmdText = "insert into PHONENUMBERS " +
-                        "(phone_number, contact_id)" +
-                        " VALUES (:phone_number, :contact_id)";
-
-            foreach (var phoneNumber in DynamicPhoneNumbers)
-            {
-                try
-                {
-                    using (OracleCommand command = new OracleCommand(cmdText, con))
-                    {
-                        command.Parameters.AddWithValue("contact_id", Convert.ToInt32(HiddenIdField.Value));
-                        command.Parameters.AddWithValue("phone_number", phoneNumber.Number);
-
-                        command.Connection.Open();
-                        command.ExecuteNonQuery();
-                        command.Connection.Close();
-                    }
-                }
-                catch (Exception)
-                {
-                    formAlert.InnerText = "Something went wrong, please try again.";
-                    formAlert.Visible = true;
-
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
-                }
-            }
-        }
-
-        private void EmptySubmitForm()
-        {
-            textFirstName.Value = string.Empty;
-            textLastName.Value = string.Empty;
-            textEmailAddress.Value = string.Empty;
-            textAge.Value = string.Empty;
-            textPhoneNumber.Value = string.Empty;
-        }
-
-        protected void CancelUpdBtn_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "hideContactModalScript", "hideContactModal();", true);
-            phoneNumAlert.Visible = false;
-            BtnHiddenFIeld.Value = "1";
-            AddOrUpdatePhoneNumHiddenField.Value = "1";
-            EmptySubmitForm();
-            FormUpdatePanel.Update();
-        }
-
-        protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
-        {
-            phoneNumAlert.Visible = false;
-            PhoneNumber phoneToRemove = DynamicPhoneNumbers.Where(p => p.Number == e.CommandArgument.ToString()).FirstOrDefault();
-
-            if (phoneToRemove != default)
-            {
-                DynamicPhoneNumbers.Remove(phoneToRemove);
-            }
-            else
-            {
-                phoneNumAlert.InnerText = "That phonenumber doesn't exist!";
-                phoneNumAlert.Visible = true;
-            }
-
-            ReBindPhoneNumDataSource();
-
-            FormUpdatePanel.Update();
-        }
-
-        protected void UpdatePhoneNumBtn_Command(object sender, CommandEventArgs e)
-        {
-            phoneNumAlert.Visible = false;
-            string[] commandArgs = e.CommandArgument.ToString().Split(new char[] { ',' });
-            string phoneNumber = commandArgs[0].ToString();
-            string id = commandArgs[1].ToString();
-
-            AddOrUpdatePhoneNumHiddenField.Value = "0";
-            PhoneNumberIdHiddenField.Value = id;
-            textPhoneNumber.Value = phoneNumber;
-            PhoneNumberHiddenField.Value = phoneNumber;
-        }
-
-        private bool IsDefaultProfilePicture() => contactImg.ImageUrl == CommonConstants.DefaultContactImageUrl;
+        }       
     }
 }

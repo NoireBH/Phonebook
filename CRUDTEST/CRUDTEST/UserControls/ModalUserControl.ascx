@@ -1,5 +1,59 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ModalUserControl.ascx.cs" Inherits="CRUDTEST.UserControls.ModalUserControl" %>
 
+<script>
+    function img() {
+        var inputElement = document.getElementById("<%= ImageUpload.ClientID %>");
+        var imgElement = document.getElementById("<%= contactImg.ClientID %>");
+        var maxSizeInMB = 3;
+        var maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+
+        if (inputElement.files && inputElement.files[0]) {
+            var file = inputElement.files[0];
+            var fileSize = file.size;
+
+            if (fileSize > maxSizeInBytes) {
+                alert('File size must be less than ' + maxSizeInMB + ' MB.');
+                inputElement.value = '';
+
+                return false;
+            }
+
+            var fileName = file.name.toLowerCase();
+            if (!fileName.endsWith('.jpg') && !fileName.endsWith('.jpeg') && !fileName.endsWith('.png') && !fileName.endsWith('.gif')) {
+                alert('Please upload a JPG, JPEG, PNG, or GIF image file.');
+                inputElement.value = '';
+                return false;
+            }
+
+            var url = window.URL.createObjectURL(file);
+            imgElement.src = url;
+        }
+
+    }
+    function showContactModal() {
+        var modal = new bootstrap.Modal(document.getElementById('contactModal'));
+        modal.show();
+    }
+    function hideContactModal() {
+        $('#contactModal').modal('hide');
+    }
+    function validateForm() {
+        var firstName = document.getElementById('<%= textFirstName.ClientID %>').value.trim();
+        var lastName = document.getElementById('<%= textLastName.ClientID %>').value.trim();
+        var isValid = true;
+
+        if (firstName === '' || lastName === '') {
+            document.getElementById('<%= formAlert.ClientID %>').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('<%= formAlert.ClientID %>').stsyle.display = 'none';
+        }
+
+        return isValid;
+    }
+</script>
+
+
 <div class="modal fade" id="contactModal">
     <div class="modal-dialog">
         <div class="modal-content">

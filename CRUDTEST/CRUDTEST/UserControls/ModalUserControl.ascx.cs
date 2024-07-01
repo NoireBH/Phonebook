@@ -1,5 +1,5 @@
 
-﻿using CRUDTEST.Models;
+using CRUDTEST.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.OracleClient;
@@ -10,12 +10,63 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using CRUDTEST.Common;
+using Image = System.Web.UI.WebControls.Image;
+using System.Web.UI.HtmlControls;
 
 namespace CRUDTEST.UserControls
 {
     public partial class ModalUserControl : System.Web.UI.UserControl
     {
         OracleConnection con = new OracleConnection(@"Data Source=oratest19/odbms;USER ID=EMustafov; password=manager;");
+
+        public Image ContactImage
+        {
+            get { return contactImg; }
+            set { contactImg = value; }
+        }
+
+        public HtmlGenericControl FormAlert
+        {
+            get { return formAlert; }
+            set { formAlert = value; }
+        }
+
+        public HtmlInputText TextFirstName
+        {
+            get { return textFirstName; }
+            set { textFirstName = value; }
+        }
+
+        public HtmlInputText TextLastName
+        {
+            get { return textLastName; }
+            set { textLastName = value; }
+        }
+
+        public HtmlInputGenericControl TextEmailAddress
+        {
+            get { return textEmailAddress; }
+            set { textEmailAddress = value; }
+        }
+
+
+        public HtmlInputGenericControl TextAge
+        {
+            get { return textAge; }
+            set { textAge = value; }
+        }
+
+        public string HiddenIdFieldValue
+        {
+            get { return HiddenIdField.Value; }
+            set { HiddenIdField.Value = value; }
+        }
+
+        public string AddOrUpdateBtnHiddenFieldValue
+        {
+            get { return BtnHiddenFIeld.Value; }
+            set { BtnHiddenFIeld.Value = value; }
+        }
 
         private List<PhoneNumber> DynamicPhoneNumbers
         {
@@ -78,12 +129,6 @@ namespace CRUDTEST.UserControls
             }
 
             FormUpdatePanel.Update();
-        }
-
-        private void ReBindPhoneNumDataSource()
-        {
-            PhoneNumRepeater.DataSource = DynamicPhoneNumbers.OrderByDescending(x => x.Id);
-            PhoneNumRepeater.DataBind();
         }
 
         protected void Submit_Click(object sender, EventArgs e)
@@ -312,7 +357,7 @@ namespace CRUDTEST.UserControls
             }
         }
 
-        private void EmptySubmitForm()
+        public void EmptySubmitForm()
         {
             textFirstName.Value = string.Empty;
             textLastName.Value = string.Empty;
@@ -365,5 +410,22 @@ namespace CRUDTEST.UserControls
         }
 
         private bool IsDefaultProfilePicture() => contactImg.ImageUrl == CommonConstants.DefaultContactImageUrl;
+
+        public void UpdateFormPanelContent()
+        {
+            FormUpdatePanel.Update();
+        }
+
+        public void ReBindPhoneNumDataSource()
+        {
+            PhoneNumRepeater.DataSource = DynamicPhoneNumbers.OrderByDescending(x => x.Id);
+            PhoneNumRepeater.DataBind();
+        }
+
+        public void ClearPhoneNumbers()
+        {
+            PhoneNumRepeater.DataSource = null;
+            PhoneNumRepeater.DataBind();
+        }
     }
 }
