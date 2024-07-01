@@ -30,19 +30,16 @@ namespace CRUDTEST
 
 
 
-        private List<PhoneNumber> DynamicPhoneNumbers
+        public List<PhoneNumber> DynamicPhoneNumbers
         {
             get
             {
-                if (ViewState["PhoneNumbers"] == null)
-                {
-                    ViewState["PhoneNumbers"] = new List<PhoneNumber>();
-                }
-                return (List<PhoneNumber>)ViewState["PhoneNumbers"];
+                return ModalUserControl.DynamicPhoneNumbers;
             }
+
             set
             {
-                ViewState["PhoneNumbers"] = value;
+                ModalUserControl.DynamicPhoneNumbers = value;
             }
         }
 
@@ -251,7 +248,9 @@ namespace CRUDTEST
 
             DynamicPhoneNumbers = phoneNumbers;
 
-            ModalUserControl.ReBindPhoneNumDataSource();
+            ModalUserControl.PhoneNumberRepeater.DataSource = DynamicPhoneNumbers.OrderByDescending(x => x.Id);
+            ModalUserControl.PhoneNumberRepeater.DataBind();
+
             con.Close();
 
             ModalUserControl.UpdateFormPanelContent();
@@ -331,6 +330,6 @@ namespace CRUDTEST
             //    throw;
             //}
 
-        }       
+        }
     }
 }

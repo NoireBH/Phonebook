@@ -68,7 +68,7 @@ namespace CRUDTEST.UserControls
             set { BtnHiddenFIeld.Value = value; }
         }
 
-        private List<PhoneNumber> DynamicPhoneNumbers
+        public List<PhoneNumber> DynamicPhoneNumbers
         {
             get
             {
@@ -82,6 +82,11 @@ namespace CRUDTEST.UserControls
             {
                 ViewState["PhoneNumbers"] = value;
             }
+        }
+
+        public Repeater PhoneNumberRepeater
+        {
+            get { return PhoneNumRepeater; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
