@@ -129,7 +129,6 @@ namespace CRUDTEST.UserControls
                         phoneNumAlert.InnerText = "Can't add an empty or already existing phonenumber!";
                     }
 
-
                 }
 
                 textPhoneNumber.Value = string.Empty;
