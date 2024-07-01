@@ -68,12 +68,12 @@
                                 <div class="form-group d-flex flex-column">
                                     <asp:Label ID="lblFirstName" CssClass="fw-bold" runat="server" Text="First Name:"></asp:Label>
                                     <p class="required-field">Field is required*</p>
-                                    <input type="text" id="textFirstName" runat="server" class="form-control" />
+                                    <input type="text" id="textFirstName" runat="server" class="form-control" minlength="1" maxlength="30"  />
                                 </div>
                                 <div class="form-group d-flex flex-column">
                                     <asp:Label ID="lblLastName" CssClass="fw-bold" runat="server" Text="Last Name:"></asp:Label>
                                     <p class="required-field">Field is required*</p>
-                                    <input type="text" id="textLastName" runat="server" class="form-control" />
+                                    <input type="text" id="textLastName" runat="server" class="form-control" minlength="1" maxlength="30"  />
                                 </div>
                                 <div class="form-group d-flex flex-column">
                                     <asp:Label ID="lblEmailAddress" runat="server" CssClass="fw-bold mb-3" Text="Email Address:"></asp:Label>

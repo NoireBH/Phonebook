@@ -151,8 +151,11 @@ namespace CRUDTEST.UserControls
             string lastName = textLastName.Value.Trim();
             bool requiredFieldsAreEmpty = String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName);
 
-
-            if (!requiredFieldsAreEmpty)
+            if (firstName.Length > 30 || lastName.Length > 30)
+            {
+                formAlert.InnerText = "First and last name needs to be no more than 30 characters long!";
+            }
+            else if (!requiredFieldsAreEmpty)
             {
                 int fileSize = ImageUpload.PostedFile.ContentLength;
                 int maxSizeInBytes = 3 * 1024 * 1024; //3mb
@@ -244,7 +247,6 @@ namespace CRUDTEST.UserControls
 
                     else if (BtnHiddenFIeld.Value == "0")
                     {
-
 
                         cmdText = "UPDATE CONTACTS SET FIRST_NAME =:first_name, LAST_NAME =:last_name, EMAIL_ADDRESS =:email_address, AGE =:age, PROFILE_PICTURE=:profile_picture WHERE ID =:id";
 
@@ -427,7 +429,7 @@ namespace CRUDTEST.UserControls
 
         public void UpdateFormPanelContent()
         {
-            FormUpdatePanel.Update();        
+            FormUpdatePanel.Update();
         }
 
         public void ReBindPhoneNumDataSource()
