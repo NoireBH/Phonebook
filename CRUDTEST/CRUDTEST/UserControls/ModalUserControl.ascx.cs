@@ -4,9 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.OracleClient;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using CRUDTEST.Common;
@@ -119,8 +117,19 @@ namespace CRUDTEST.UserControls
                 {
                     PhoneNumber phoneToUpdate = DynamicPhoneNumbers.Where(p => p.Number == PhoneNumberHiddenField.Value.ToString()).FirstOrDefault();
 
-                    phoneToUpdate.Number = phoneNumber;
-                    ReBindPhoneNumDataSource();
+                    if (!string.IsNullOrWhiteSpace(phoneNumber) && !DynamicPhoneNumbers.Any(p => p.Number == phoneNumber))
+                    {
+                        phoneNumAlert.Visible = false;
+                        phoneToUpdate.Number = phoneNumber;
+                        ReBindPhoneNumDataSource();
+                    }
+                    else
+                    {
+                        phoneNumAlert.Visible = true;
+                        phoneNumAlert.InnerText = "Can't add an empty or already existing phonenumber!";
+                    }
+
+
                 }
 
                 textPhoneNumber.Value = string.Empty;

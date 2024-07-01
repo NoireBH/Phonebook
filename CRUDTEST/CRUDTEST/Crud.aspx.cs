@@ -5,20 +5,8 @@ using System.Web.UI.WebControls;
 using System.Data.OracleClient;
 using System.Data;
 using CRUDTEST.Models;
-using System.Drawing;
-using System.Xml.Linq;
-using CRUDTEST.ViewModels;
-using System.Windows.Forms;
-using System.IO;
 using CRUDTEST.Common;
-using Label = System.Web.UI.WebControls.Label;
-using TextBox = System.Web.UI.WebControls.TextBox;
 using System.Web.UI;
-using Button = System.Web.UI.WebControls.Button;
-using System.Data.SqlClient;
-using System.Web.UI.HtmlControls;
-using Microsoft.Ajax.Utilities;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Image = System.Web.UI.WebControls.Image;
 
 namespace CRUDTEST
@@ -27,8 +15,6 @@ namespace CRUDTEST
     public partial class Crud : System.Web.UI.Page
     {
         OracleConnection con = new OracleConnection(@"Data Source=oratest19/odbms;USER ID=EMustafov; password=manager;");
-
-
 
         public List<PhoneNumber> DynamicPhoneNumbers
         {
