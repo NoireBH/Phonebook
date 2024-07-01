@@ -427,7 +427,7 @@ namespace CRUDTEST.UserControls
 
         public void UpdateFormPanelContent()
         {
-            FormUpdatePanel.Update();
+            FormUpdatePanel.Update();        
         }
 
         public void ReBindPhoneNumDataSource()

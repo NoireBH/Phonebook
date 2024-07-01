@@ -261,10 +261,9 @@ namespace CRUDTEST
         {
             try
             {
-                Image contactImg = ModalUserControl.ContactImage;
                 ModalUserControl.EmptySubmitForm();
                 ModalUserControl.FormAlert.Visible = false;
-                contactImg.ImageUrl = Common.CommonConstants.DefaultContactImageUrl;
+                ModalUserControl.ContactImage.ImageUrl = Common.CommonConstants.DefaultContactImageUrl;
 
                 ModalUserControl.ClearPhoneNumbers();
 
@@ -315,7 +314,6 @@ namespace CRUDTEST
             //{
             //    throw;
             //}
-
         }
     }
 }

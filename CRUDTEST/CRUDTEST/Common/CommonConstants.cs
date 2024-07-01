@@ -7,6 +7,6 @@ namespace CRUDTEST.Common
 {
     public static class CommonConstants
     {
-        public const string DefaultContactImageUrl = "Images/blank-pfp.png";
+        public const string DefaultContactImageUrl = "~/Images/blank-pfp.png";
     }
 }
