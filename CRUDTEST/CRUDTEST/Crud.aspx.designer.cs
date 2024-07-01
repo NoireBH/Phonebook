@@ -51,13 +51,13 @@ namespace CRUDTEST
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl AlertTopFixed;
 
         /// <summary>
-        /// searchupdatepanel control.
+        /// SearchUpdatePanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel searchupdatepanel;
+        protected global::System.Web.UI.UpdatePanel SearchUpdatePanel;
 
         /// <summary>
         /// txtsearchcontact control.

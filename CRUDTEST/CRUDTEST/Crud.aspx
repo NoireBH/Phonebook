@@ -28,7 +28,7 @@
                     <h1 class="text-center" style="color: #004080;">PhoneBook
                     </h1>
                 </header>
-                <asp:UpdatePanel ID="searchupdatepanel" runat="server">
+                <asp:UpdatePanel ID="SearchUpdatePanel" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
                         <div class="container-fluid text-center search-contact-container mb-3">
                             <h3>search for a contact</h3>
@@ -137,8 +137,7 @@
                                     </tbody>
                                 </ItemTemplate>
                                 <FooterTemplate>
-                                    </table>
-                                   
+                                    </table>                                  
                                 </FooterTemplate>
                             </asp:Repeater>
                         </ContentTemplate>

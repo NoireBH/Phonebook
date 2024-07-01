@@ -132,6 +132,7 @@ namespace CRUDTEST
                             dr["last_name"].ToString(), dr["email_address"].ToString(), Convert.ToInt32(dr["age"])));
                     }
 
+                    Contacts = values;
                     ContactsRepeater.DataSource = values.OrderBy(x => x.Id);
                     ContactsRepeater.DataBind();
                 }
@@ -149,6 +150,7 @@ namespace CRUDTEST
             }
 
             ModalUserControl.UpdateFormPanelContent();
+            SearchUpdatePanel.Update();
         }
 
         protected void DeleteBtn_Command(object sender, CommandEventArgs e)
@@ -285,10 +287,9 @@ namespace CRUDTEST
             {
                 ModalUserControl.EmptySubmitForm();
                 ModalUserControl.FormAlert.Visible = false;
-                ModalUserControl.ContactImage.ImageUrl = Common.CommonConstants.DefaultContactImageUrl;
+                ModalUserControl.ContactImage.ImageUrl = CommonConstants.DefaultContactImageUrl;
 
                 ModalUserControl.ClearPhoneNumbers();
-
                 ModalUserControl.UpdateFormPanelContent();
 
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
@@ -302,7 +303,6 @@ namespace CRUDTEST
 
         protected void SearchContactBtn_Click(object sender, EventArgs e)
         {
-
             string searchInput = txtsearchcontact.Text.ToLower();
             List<PhoneContact> contacts = new List<PhoneContact>();
 
@@ -326,6 +326,8 @@ namespace CRUDTEST
                 FoundContactsRepeater.DataBind();
 
             }
+
+            SearchUpdatePanel.Update();
 
         }
     }
