@@ -99,8 +99,6 @@ namespace CRUDTEST.UserControls
 
         protected void AddOrEditPhoneNumBtn_Command(object sender, CommandEventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "disableTextboxesScript", "disableTextBoxes();", true);
-
 
             string phoneNumber = textPhoneNumber.Value;
 
@@ -407,8 +405,6 @@ namespace CRUDTEST.UserControls
 
         protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "disableTextboxesScript", "disableTextBoxes();", true);
-
             phoneNumAlert.Visible = false;
             PhoneNumber phoneToRemove = DynamicPhoneNumbers.Where(p => p.Number == e.CommandArgument.ToString()).FirstOrDefault();
 

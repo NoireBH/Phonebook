@@ -96,15 +96,6 @@ namespace CRUDTEST
         protected global::System.Web.UI.WebControls.Button AddContactBtn;
 
         /// <summary>
-        /// ModalUserControl control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::CRUDTEST.UserControls.ModalUserControl ModalUserControl;
-
-        /// <summary>
         /// ContactsUpdatePanel control.
         /// </summary>
         /// <remarks>
@@ -112,6 +103,15 @@ namespace CRUDTEST
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel ContactsUpdatePanel;
+
+        /// <summary>
+        /// ModalUserControl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::CRUDTEST.UserControls.ModalUserControl ModalUserControl;
 
         /// <summary>
         /// ContactAlert control.

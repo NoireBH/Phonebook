@@ -48,8 +48,7 @@
                             <asp:Button ID="AddContactBtn" runat="server" Text="Add a contact" OnClick="AddContactBtn_Click"
                                 class="btn btn-success fw-bold" />
                         </ContentTemplate>
-                    </asp:UpdatePanel>
-                    <uc:Modal ID="ModalUserControl" runat="server" OnModalSelected="ModalUserControl_ModalSelected" />
+                    </asp:UpdatePanel>                    
                 </div>
             </div>
             <div class="container-fluid">
@@ -58,6 +57,7 @@
                 <div class="col">
                     <asp:UpdatePanel ID="ContactsUpdatePanel" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">
                         <ContentTemplate>
+                            <uc:Modal ID="ModalUserControl" runat="server" OnModalSelected="ModalUserControl_ModalSelected" />
                             <div runat="server" id="ContactAlert" class="alert alert-danger fw-bolder text-black text-center" visible="false" role="alert">
                                 No contacts with that name found!            
                             </div>
