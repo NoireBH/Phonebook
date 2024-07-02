@@ -48,7 +48,7 @@
                                 class="btn btn-success fw-bold" />
                         </ContentTemplate>
                     </asp:UpdatePanel>
-                    <uc:Modal ID="ModalUserControl" runat="server" />
+                    <uc:Modal ID="ModalUserControl" runat="server" OnModalSelected="ModalUserControl_ModalSelected" />
                 </div>
             </div>
             <div class="container-fluid">

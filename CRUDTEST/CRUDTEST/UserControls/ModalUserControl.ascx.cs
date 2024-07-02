@@ -18,6 +18,9 @@ namespace CRUDTEST.UserControls
     {
         OracleConnection con = new OracleConnection(@"Data Source=oratest19/odbms;USER ID=EMustafov; password=manager;");
 
+        public delegate void ModalHandler(object sender, EventArgs data);
+        public event ModalHandler ModalSelected;
+
         public Image ContactImage
         {
             get { return contactImg; }
@@ -87,6 +90,7 @@ namespace CRUDTEST.UserControls
         {
             get { return PhoneNumRepeater; }
         }
+       
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -150,7 +154,6 @@ namespace CRUDTEST.UserControls
             string firstName = textFirstName.Value.Trim();
             string lastName = textLastName.Value.Trim();
             bool requiredFieldsAreEmpty = String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName);
-            Crud mainPage = (Crud)Context.Handler;
 
             if (firstName.Length > 30 || lastName.Length > 30)
             {
@@ -213,7 +216,7 @@ namespace CRUDTEST.UserControls
                                 {
                                     command.Parameters.AddWithValue("profile_picture", dbNull);
                                 }
-                                
+
                                 OracleParameter newIdParam = new OracleParameter("newId", OracleType.Int32);
                                 newIdParam.Direction = ParameterDirection.Output;
                                 command.Parameters.Add(newIdParam);
@@ -242,8 +245,6 @@ namespace CRUDTEST.UserControls
                         {
                             AddPhoneNums();
                         }
-
-                        //Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
                     }
 
                     else if (BtnHiddenFIeld.Value == "0")
@@ -306,8 +307,17 @@ namespace CRUDTEST.UserControls
                     }
 
                     EmptySubmitForm();
+
+                    
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "hideContactModalScript", "hideContactModal();", true);
-                    mainPage.UpdateContactsUpdatePanel();
+
+                    if (this.ModalSelected != null)
+                    {
+                        EventArgs ev = new EventArgs();
+
+                        this.ModalSelected(this, ev);
+                    }
+
                 }
                 else
                 {
@@ -323,7 +333,6 @@ namespace CRUDTEST.UserControls
             //phoneNumAlert.Visible = false;
             //ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
 
-            mainPage.LoadContacts();
             FormUpdatePanel.Update();
         }
 

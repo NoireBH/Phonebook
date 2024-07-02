@@ -8,6 +8,7 @@ using CRUDTEST.Models;
 using CRUDTEST.Common;
 using System.Web.UI;
 using Image = System.Web.UI.WebControls.Image;
+using static CRUDTEST.UserControls.ModalUserControl;
 
 namespace CRUDTEST
 {
@@ -50,6 +51,7 @@ namespace CRUDTEST
 
             if (!IsPostBack)
             {
+                ModalUserControl.ModalSelected += new ModalHandler(ModalUserControl_ModalSelected);
                 LoadContacts();
             }
             else
@@ -270,7 +272,7 @@ namespace CRUDTEST
         }
 
         protected void DetailsBtn_Command(object sender, CommandEventArgs e)
-        {
+        {           
             try
             {
                 Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", e.CommandArgument));
@@ -319,7 +321,8 @@ namespace CRUDTEST
                 {
                     OracleCommand cmdGetContacts = new OracleCommand();
                     cmdGetContacts.Parameters.AddWithValue("searchInput", searchInput);
-                    cmdGetContacts.CommandText = "SELECT * FROM CONTACTS WHERE LOWER(FIRST_NAME) LIKE LOWER(:searchInput) || '%' OR LOWER(LAST_NAME) LIKE LOWER(:searchInput) || '%'";
+                    cmdGetContacts.CommandText = "SELECT * FROM CONTACTS WHERE LOWER(FIRST_NAME) LIKE LOWER(:searchInput) || '%' " +
+                        "OR LOWER(LAST_NAME) LIKE LOWER(:searchInput) || '%'";
                     cmdGetContacts.Connection = con;
                     con.Open();
                     OracleDataReader dr = cmdGetContacts.ExecuteReader();
@@ -361,10 +364,9 @@ namespace CRUDTEST
             ContactsUpdatePanel.Update();
         }
 
-        public void UpdateContactsUpdatePanel()
+        protected void ModalUserControl_ModalSelected(object sender, EventArgs e)
         {
-            ContactsUpdatePanel.Update();
+            LoadContacts();
         }
-
     }
 }
