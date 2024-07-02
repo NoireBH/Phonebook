@@ -47,6 +47,7 @@ namespace CRUDTEST
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
             if (!IsPostBack)
             {
                 LoadContacts();
@@ -64,8 +65,6 @@ namespace CRUDTEST
             contactImg.Style.Add("max-width", "400px");
             contactImg.Style.Add("max-height", "300px");
 
-            Contacts.Clear();
-
             try
             {
                 OracleCommand cmd = new OracleCommand();
@@ -75,7 +74,8 @@ namespace CRUDTEST
                 OracleDataReader dr = cmd.ExecuteReader();
                 if (dr.HasRows)
                 {
-                    
+                    List<PhoneContact> values = new List<PhoneContact>();
+
                     while (dr.Read())
                     {
                         string pfp = null;
@@ -90,11 +90,11 @@ namespace CRUDTEST
                             pfp = CommonConstants.DefaultContactImageUrl;
                         }
 
-                        Contacts.Add(new PhoneContact(int.Parse(dr["id"].ToString()), dr["first_name"].ToString(), dr["last_name"].ToString(),
+                        values.Add(new PhoneContact(int.Parse(dr["id"].ToString()), dr["first_name"].ToString(), dr["last_name"].ToString(),
                             dr["email_address"].ToString(), Convert.ToInt32(dr["age"]), pfp));
                     }
 
-                    ContactsRepeater.DataSource = Contacts.OrderBy(x => x.Id);
+                    ContactsRepeater.DataSource = values.OrderBy(x => x.Id);
                     ContactsRepeater.DataBind();
 
                 }
@@ -114,61 +114,49 @@ namespace CRUDTEST
             ContactsUpdatePanel.Update();
         }
 
-        protected void ShowBtn_Click(object sender, EventArgs e)
+        protected void ShowContactsAfterDelete(object sender, EventArgs e)
         {
+
+            //if (Contacts.Count > 0)
+            //{
+            //    ContactAlert.Visible = false;
+            //    AlertTopFixed.Visible = false;
+            //    ContactsRepeater.DataSource = Contacts.OrderBy(x => x.Id);
+            //    ContactsRepeater.DataBind();
+            //}
+
             try
             {
-                if (Contacts.Count > 0)
+                OracleCommand cmd = new OracleCommand();
+                cmd.CommandText = "select * from CONTACTS";
+                cmd.Connection = con;
+                con.Open();
+                OracleDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows)
                 {
-                    ContactAlert.Visible = false;
-                    AlertTopFixed.Visible = false;
-                    ContactsRepeater.DataSource = Contacts.OrderBy(x => x.Id);
+                    List<PhoneContact> values = new List<PhoneContact>();
+
+                    while (dr.Read())
+                    {
+                        values.Add(new PhoneContact(int.Parse(dr["id"].ToString()), dr["first_name"].ToString(),
+                            dr["last_name"].ToString(), dr["email_address"].ToString(), Convert.ToInt32(dr["age"])));
+                    }
+
+                    ContactsRepeater.DataSource = values.OrderBy(x => x.Id);
                     ContactsRepeater.DataBind();
                 }
                 else
                 {
-                    try
-                    {
-                        OracleCommand cmd = new OracleCommand();
-                        cmd.CommandText = "select * from CONTACTS";
-                        cmd.Connection = con;
-                        con.Open();
-                        OracleDataReader dr = cmd.ExecuteReader();
-                        if (dr.HasRows)
-                        {
-
-                            while (dr.Read())
-                            {
-                                Contacts.Add(new PhoneContact(int.Parse(dr["id"].ToString()), dr["first_name"].ToString(),
-                                    dr["last_name"].ToString(), dr["email_address"].ToString(), Convert.ToInt32(dr["age"])));
-                            }
-
-                            ContactsRepeater.DataSource = Contacts.OrderBy(x => x.Id);
-                            ContactsRepeater.DataBind();
-                        }
-                        else
-                        {
-                            AlertTopFixed.InnerText = "There are currently no contacts,try adding some!";
-                            AlertTopFixed.Visible = true;
-                        }
-                        con.Close();
-                    }
-                    catch (Exception)
-                    {
-                        AlertTopFixed.InnerText = "Something went wrong when trying to display the contacts, please try again!";
-                        AlertTopFixed.Visible = true;
-                    }
-
-                    ModalUserControl.UpdateFormPanelContent();
+                    AlertTopFixed.InnerText = "There are currently no contacts,try adding some!";
+                    AlertTopFixed.Visible = true;
                 }
+                con.Close();
             }
             catch (Exception)
             {
                 AlertTopFixed.InnerText = "Something went wrong when trying to display the contacts, please try again!";
                 AlertTopFixed.Visible = true;
             }
-
-            ModalUserControl.UpdateFormPanelContent();
         }
 
         protected void DeleteBtn_Command(object sender, CommandEventArgs e)
@@ -176,6 +164,7 @@ namespace CRUDTEST
             try
             {
                 OracleCommand cmd = new OracleCommand();
+
                 cmd.Parameters.AddWithValue("id", Convert.ToInt32(e.CommandArgument));
                 cmd.CommandText = "DELETE FROM CONTACTS WHERE id=:id";
                 cmd.Connection = con;
@@ -190,7 +179,7 @@ namespace CRUDTEST
                     Contacts.Remove(contactToRemove);
                 }
 
-                ShowBtn_Click(sender, e);
+                ShowContactsAfterDelete(sender, e);
 
             }
             catch (Exception)
@@ -336,6 +325,8 @@ namespace CRUDTEST
             }
             else
             {
+                var values = new List<PhoneContact>();
+
                 try
                 {
                     OracleCommand cmdGetContacts = new OracleCommand();
@@ -347,17 +338,15 @@ namespace CRUDTEST
 
                     if (dr.HasRows)
                     {
-                        Contacts.Clear();
-
                         while (dr.Read())
                         {
-                            Contacts.Add(new PhoneContact(Convert.ToInt32(dr["id"]), dr["first_name"].ToString(),
-                                dr["last_name"].ToString(), dr["email_address"].ToString(), Convert.ToInt32(dr["age"].ToString())));
+                            values.Add(new PhoneContact(Convert.ToInt32(dr["id"]), dr["first_name"].ToString(),
+                            dr["last_name"].ToString(), dr["email_address"].ToString(), Convert.ToInt32(dr["age"].ToString())));
                         }
                     }
                     else
                     {
-                        AlertTopFixed.Visible = true;
+                        ContactAlert.Visible = true;
                     }
 
                 }
@@ -367,10 +356,10 @@ namespace CRUDTEST
                     AlertTopFixed.Visible = true;
                 }
 
-                if (Contacts.Count > 0)
+                if (values.Count > 0)
                 {
                     ContactAlert.Visible = false;
-                    ContactsRepeater.DataSource = Contacts;
+                    ContactsRepeater.DataSource = values;
                     ContactsRepeater.DataBind();
                 }
                 else
