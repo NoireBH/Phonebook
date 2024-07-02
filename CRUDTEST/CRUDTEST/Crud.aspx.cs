@@ -77,21 +77,9 @@ namespace CRUDTEST
                     List<PhoneContact> values = new List<PhoneContact>();
 
                     while (dr.Read())
-                    {
-                        string pfp = null;
-
-                        if (dr["profile_picture"] != DBNull.Value)
-                        {
-                            byte[] pfpBytes = (byte[])(dr["profile_picture"]);
-                            pfp = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(pfpBytes));
-                        }
-                        else
-                        {
-                            pfp = CommonConstants.DefaultContactImageUrl;
-                        }
-
+                    {                       
                         values.Add(new PhoneContact(int.Parse(dr["id"].ToString()), dr["first_name"].ToString(), dr["last_name"].ToString(),
-                            dr["email_address"].ToString(), Convert.ToInt32(dr["age"]), pfp));
+                            dr["email_address"].ToString(), Convert.ToInt32(dr["age"])));
                     }
 
                     ContactsRepeater.DataSource = values.OrderBy(x => x.Id);
