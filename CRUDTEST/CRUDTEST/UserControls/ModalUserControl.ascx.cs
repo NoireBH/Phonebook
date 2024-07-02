@@ -150,6 +150,7 @@ namespace CRUDTEST.UserControls
             string firstName = textFirstName.Value.Trim();
             string lastName = textLastName.Value.Trim();
             bool requiredFieldsAreEmpty = String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName);
+            Crud mainPage = (Crud)Context.Handler;
 
             if (firstName.Length > 30 || lastName.Length > 30)
             {
@@ -242,7 +243,7 @@ namespace CRUDTEST.UserControls
                             AddPhoneNums();
                         }
 
-                        Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
+                        //Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
                     }
 
                     else if (BtnHiddenFIeld.Value == "0")
@@ -305,7 +306,8 @@ namespace CRUDTEST.UserControls
                     }
 
                     EmptySubmitForm();
-                    Response.Redirect(String.Format("~/ContactDetails.aspx?id={0}", Convert.ToInt32(HiddenIdField.Value)));
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "hideContactModalScript", "hideContactModal();", true);
+                    mainPage.UpdateContactsUpdatePanel();
                 }
                 else
                 {
@@ -317,9 +319,11 @@ namespace CRUDTEST.UserControls
                 formAlert.InnerText = "Please fill out all required fields!";
             }
 
-            formAlert.Visible = true;
-            phoneNumAlert.Visible = false;
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
+            //formAlert.Visible = true;
+            //phoneNumAlert.Visible = false;
+            //ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
+
+            mainPage.LoadContacts();
             FormUpdatePanel.Update();
         }
 

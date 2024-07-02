@@ -32,13 +32,13 @@
     }
     function showContactModal() {
         var modal = new bootstrap.Modal(document.getElementById('contactModal'));
-        modal.show().setAttribute('required', 'required');
+        modal.show()
 
     }
     function hideContactModal() {
-        $('#contactModal').modal('hide').removeAttribute('required');
+        $('#contactModal').modal('hide')
     }
-    function validateForm() {
+    <%--function validateForm() {
         var firstName = document.getElementById('<%= textFirstName.ClientID %>').value.trim();
         var lastName = document.getElementById('<%= textLastName.ClientID %>').value.trim();
         var isValid = true;
@@ -51,7 +51,7 @@
         }
 
         return isValid;
-    }
+    }--%>
 </script>
 
 <div class="modal fade" id="contactModal">
