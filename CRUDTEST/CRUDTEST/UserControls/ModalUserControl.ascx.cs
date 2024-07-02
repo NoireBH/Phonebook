@@ -10,6 +10,7 @@ using System.Web.UI.WebControls;
 using CRUDTEST.Common;
 using Image = System.Web.UI.WebControls.Image;
 using System.Web.UI.HtmlControls;
+using Microsoft.Ajax.Utilities;
 
 namespace CRUDTEST.UserControls
 {
@@ -211,7 +212,7 @@ namespace CRUDTEST.UserControls
                                 {
                                     command.Parameters.AddWithValue("profile_picture", dbNull);
                                 }
-
+                                
                                 OracleParameter newIdParam = new OracleParameter("newId", OracleType.Int32);
                                 newIdParam.Direction = ParameterDirection.Output;
                                 command.Parameters.Add(newIdParam);

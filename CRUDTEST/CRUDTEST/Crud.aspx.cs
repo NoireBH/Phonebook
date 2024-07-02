@@ -94,7 +94,6 @@ namespace CRUDTEST
                             dr["email_address"].ToString(), Convert.ToInt32(dr["age"]), pfp));
                     }
 
-                    Contacts = values;
                     ContactsRepeater.DataSource = values.OrderBy(x => x.Id);
                     ContactsRepeater.DataBind();
 
@@ -117,31 +116,17 @@ namespace CRUDTEST
         {
             try
             {
-                OracleCommand cmd = new OracleCommand();
-                cmd.CommandText = "select * from CONTACTS";
-                cmd.Connection = con;
-                con.Open();
-                OracleDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                if (Contacts.Count > 0)
                 {
-                    List<PhoneContact> values = new List<PhoneContact>();
-
-                    while (dr.Read())
-                    {
-                        values.Add(new PhoneContact(int.Parse(dr["id"].ToString()), dr["first_name"].ToString(),
-                            dr["last_name"].ToString(), dr["email_address"].ToString(), Convert.ToInt32(dr["age"])));
-                    }
-
-                    Contacts = values;
-                    ContactsRepeater.DataSource = values.OrderBy(x => x.Id);
+                    ContactAlert.Visible = false;
+                    AlertTopFixed.Visible = false;
+                    ContactsRepeater.DataSource = Contacts.OrderBy(x => x.Id);
                     ContactsRepeater.DataBind();
                 }
                 else
                 {
-                    AlertTopFixed.InnerText = "There are currently no contacts,try adding some!";
-                    AlertTopFixed.Visible = true;
+                    ContactAlert.Visible = true;
                 }
-                con.Close();
             }
             catch (Exception)
             {
@@ -164,6 +149,13 @@ namespace CRUDTEST
                 con.Open();
                 cmd.ExecuteNonQuery();
                 cmd.Connection.Close();
+                
+                var contactToRemove = Contacts.Where(x => x.Id == Convert.ToInt32(e.CommandArgument)).FirstOrDefault();
+
+                if (contactToRemove != null) 
+                {
+                    Contacts.Remove(contactToRemove);
+                }
 
                 ShowBtn_Click(sender, e);
 
@@ -303,32 +295,54 @@ namespace CRUDTEST
         protected void SearchContactBtn_Click(object sender, EventArgs e)
         {
             string searchInput = txtsearchcontact.Text.ToLower();
-            List<PhoneContact> contacts = new List<PhoneContact>();
 
-            foreach (PhoneContact contact in Contacts)
+            if (string.IsNullOrWhiteSpace(searchInput))
             {
-                if (contact.FirstName.ToLower().Contains(searchInput) || 
-                    contact.LastName.ToLower().Contains(searchInput))
-                {
-                    contacts.Add(contact);
-                }
-            }
-
-            if (contacts.Count > 0)
-            {
-                ContactAlert.Visible = false;
-                ContactsRepeater.DataSource = contacts;
-                ContactsRepeater.DataBind();
+                LoadContacts();
             }
             else
             {
-                ContactsRepeater.DataSource = null;
-                ContactsRepeater.DataBind();
-                ContactAlert.Visible = true;
+                try
+                {
+                    OracleCommand cmdGetContacts = new OracleCommand();
+                    cmdGetContacts.Parameters.AddWithValue("searchInput", searchInput);
+                    cmdGetContacts.CommandText = "SELECT * FROM CONTACTS WHERE LOWER(FIRST_NAME) LIKE LOWER(:searchInput) || '%' OR LOWER(LAST_NAME) LIKE LOWER(:searchInput) || '%'";
+                    cmdGetContacts.Connection = con;
+                    con.Open();
+                    OracleDataReader dr = cmdGetContacts.ExecuteReader();
+
+                    if (dr.HasRows)
+                    {
+                        while (dr.Read())
+                        {
+                            Contacts.Add(new PhoneContact(Convert.ToInt32(dr["id"]), dr["first_name"].ToString(),
+                                dr["last_name"].ToString(), dr["email_address"].ToString(), Convert.ToInt32(dr["age"].ToString())));
+                        }
+                    }
+
+                }
+                catch (Exception)
+                {
+                    AlertTopFixed.InnerText = "Something went wrong while trying to load the contacts, please try again.";
+                    AlertTopFixed.Visible = true;
+                }
+
+                if (Contacts.Count > 0)
+                {
+                    ContactAlert.Visible = false;
+                    ContactsRepeater.DataSource = Contacts;
+                    ContactsRepeater.DataBind();
+                }
+                else
+                {
+                    ContactsRepeater.DataSource = null;
+                    ContactsRepeater.DataBind();
+                    ContactAlert.Visible = true;
+                }                
             }
 
             ContactsUpdatePanel.Update();
-
         }
+
     }
 }
