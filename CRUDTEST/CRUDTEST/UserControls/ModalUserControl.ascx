@@ -39,7 +39,7 @@
     }
     function hideContactModal() {
         $('#contactModal').modal('hide')
-    }    
+    }      
 
 </script>
 
@@ -88,7 +88,7 @@
                                             <asp:Repeater ID="PhoneNumRepeater" runat="server">
                                                 <ItemTemplate>
                                                     <asp:PlaceHolder ID="PlaceHolderPhoneRepeater" runat="server">
-                                                        <asp:TextBox ID="txtAddOrEditphoneNum" runat="server" CssClass="text-center" Text='<%# DataBinder.Eval(Container.DataItem, "Number") %>'>
+                                                        <asp:TextBox ID="txtAddOrEditphoneNum" runat="server" CssClass="text-center phoneNumTextBox" Text='<%# DataBinder.Eval(Container.DataItem, "Number") %>'>
                                                         </asp:TextBox>
                                                     </asp:PlaceHolder>
                                                     <div class="phone-number-buttons d-flex justify-content-center gap-3 align-items-baseline mb-2 mt-2 ">

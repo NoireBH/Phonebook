@@ -181,6 +181,7 @@ namespace CRUDTEST
 
         protected void UpdateBtn_Command(object sender, CommandEventArgs e)
         {
+
             ModalUserControl.FormAlert.Visible = false;
             Image contactImg = ModalUserControl.ContactImage;
 

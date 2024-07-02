@@ -99,6 +99,9 @@ namespace CRUDTEST.UserControls
 
         protected void AddOrEditPhoneNumBtn_Command(object sender, CommandEventArgs e)
         {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "disableTextboxesScript", "disableTextBoxes();", true);
+
+
             string phoneNumber = textPhoneNumber.Value;
 
             if (phoneNumber.Length <= 15)
@@ -169,7 +172,7 @@ namespace CRUDTEST.UserControls
                     formAlert.InnerText = "The image you're trying to add is too big. Max image size is 3MB.";
                     formAlert.Visible = true;
 
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);                    
                 }
 
                 int age = default;
@@ -311,6 +314,8 @@ namespace CRUDTEST.UserControls
                     
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "hideContactModalScript", "hideContactModal();", true);
 
+                    FormUpdatePanel.Update();
+
                     if (this.ModalSelected != null)
                     {
                         EventArgs ev = new EventArgs();
@@ -328,12 +333,7 @@ namespace CRUDTEST.UserControls
             {
                 formAlert.InnerText = "Please fill out all required fields!";
             }
-
-            //formAlert.Visible = true;
-            //phoneNumAlert.Visible = false;
-            //ScriptManager.RegisterStartupScript(this, this.GetType(), "contactModalScript", "showContactModal();", true);
-
-            FormUpdatePanel.Update();
+           
         }
 
         private void AddPhoneNums()
@@ -407,6 +407,8 @@ namespace CRUDTEST.UserControls
 
         protected void RemoveNumberBtn_Command(object sender, CommandEventArgs e)
         {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "disableTextboxesScript", "disableTextBoxes();", true);
+
             phoneNumAlert.Visible = false;
             PhoneNumber phoneToRemove = DynamicPhoneNumbers.Where(p => p.Number == e.CommandArgument.ToString()).FirstOrDefault();
 
